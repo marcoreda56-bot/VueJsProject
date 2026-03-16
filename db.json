@@ -1,0 +1,101 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Marco Reda",
+      "email": "admin@jobboard.com",
+      "role": "admin",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Marco"
+    },
+    {
+      "id": "2",
+      "name": "Tech Solutions Inc",
+      "email": "hiring@techsolutions.com",
+      "role": "employer",
+      "company_details": {
+        "logo": "https://api.dicebear.com/7.x/initials/svg?seed=TS",
+        "bio": "Leading tech provider in MENA region.",
+        "website": "https://techsolutions.com"
+      }
+    },
+    {
+      "id": "3",
+      "name": "Ahmed Ali",
+      "email": "ahmed.dev@gmail.com",
+      "role": "candidate",
+      "profile": {
+        "title": "Full Stack Developer",
+        "resume_url": "/uploads/resumes/ahmed-cv.pdf",
+        "phone": "+20123456789",
+        "linkedin_url": "https://linkedin.com/in/ahmedali",
+        "skills": ["Vue 3", "Laravel", "Tailwind"]
+      }
+    }
+  ],
+  "jobs": [
+    {
+      "id": "101",
+      "employerId": "2",
+      "categoryId": "1",
+      "title": "Senior Full Stack Developer",
+      "description": "We are looking for a pro to handle our core systems.",
+      "responsibilities": "Building APIs, designing database schemas, mentoring.",
+      "requirements": "Proficiency in PHP, JavaScript, and MySQL.",
+      "benefits": "Competitive salary, Health insurance, Remote options.",
+      "location": "Cairo, Egypt",
+      "work_type": "hybrid",
+      "experience_level": "Senior",
+      "salary": {
+        "min": 25000,
+        "max": 35000,
+        "currency": "EGP"
+      },
+      "technologies": ["PHP", "Laravel", "Vue.js", "MySQL"],
+      "status": "published",
+      "is_approved": true,
+      "deadline": "2026-06-01",
+      "created_at": "2026-03-10T14:30:00Z",
+      "analytics": {
+        "views": 150,
+        "applications_count": 12
+      }
+    }
+  ],
+  "categories": [
+    { "id": "1", "name": "Programming", "slug": "programming" },
+    { "id": "2", "name": "Management", "slug": "management" },
+    { "id": "3", "name": "Design", "slug": "design" }
+  ],
+  "applications": [
+    {
+      "id": "1",
+      "jobId": "101",
+      "candidateId": "3",
+      "status": "applied",
+      "answers": {
+        "expected_salary": "30000",
+        "notice_period": "1 month"
+      },
+      "applied_at": "2026-03-16T10:00:00Z",
+      "payment_status": "pending"
+    }
+  ],
+  "comments": [
+    {
+      "id": "1",
+      "jobId": "101",
+      "userId": "3",
+      "content": "Is this position still open?",
+      "created_at": "2026-03-16T12:00:00Z"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "1",
+      "userId": "3",
+      "type": "application_status",
+      "message": "Your application for Senior Full Stack has been reviewed.",
+      "is_read": false
+    }
+  ]
+}
