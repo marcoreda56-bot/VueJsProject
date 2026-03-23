@@ -168,6 +168,14 @@
       "email_verified_at": "2023-01-01T00:00:00Z",
       "created_at": "2023-01-01T00:00:00Z",
       "updated_at": "2024-11-01T00:00:00Z"
+    },
+    {
+      "name": "marco reda",
+      "email": "marco@gmail.com",
+      "password": "123456",
+      "company_name": "",
+      "role": "candidate",
+      "id": "AilQdwHkr-8"
     }
   ],
   "candidates": [
@@ -185,7 +193,10 @@
       "portfolio_url": "https://ahmedkhaled.dev",
       "is_open_to_work": true,
       "preferred_job_type": "full_time",
-      "preferred_locations": ["Cairo", "Remote"],
+      "preferred_locations": [
+        "Cairo",
+        "Remote"
+      ],
       "expected_salary_min": 25000,
       "expected_salary_max": 40000,
       "currency": "EGP",
@@ -207,7 +218,11 @@
       "portfolio_url": "https://saramohamed.design",
       "is_open_to_work": true,
       "preferred_job_type": "full_time",
-      "preferred_locations": ["Giza", "Cairo", "Remote"],
+      "preferred_locations": [
+        "Giza",
+        "Cairo",
+        "Remote"
+      ],
       "expected_salary_min": 18000,
       "expected_salary_max": 28000,
       "currency": "EGP",
@@ -229,7 +244,10 @@
       "portfolio_url": null,
       "is_open_to_work": false,
       "preferred_job_type": "full_time",
-      "preferred_locations": ["Alexandria", "Remote"],
+      "preferred_locations": [
+        "Alexandria",
+        "Remote"
+      ],
       "expected_salary_min": 22000,
       "expected_salary_max": 35000,
       "currency": "EGP",
@@ -251,7 +269,9 @@
       "portfolio_url": null,
       "is_open_to_work": true,
       "preferred_job_type": "full_time",
-      "preferred_locations": ["Cairo"],
+      "preferred_locations": [
+        "Cairo"
+      ],
       "expected_salary_min": 12000,
       "expected_salary_max": 20000,
       "currency": "EGP",
@@ -273,7 +293,10 @@
       "portfolio_url": null,
       "is_open_to_work": true,
       "preferred_job_type": "full_time",
-      "preferred_locations": ["Cairo", "Remote"],
+      "preferred_locations": [
+        "Cairo",
+        "Remote"
+      ],
       "expected_salary_min": 40000,
       "expected_salary_max": 65000,
       "currency": "EGP",
@@ -295,7 +318,10 @@
       "portfolio_url": null,
       "is_open_to_work": true,
       "preferred_job_type": "internship",
-      "preferred_locations": ["Mansoura", "Cairo"],
+      "preferred_locations": [
+        "Mansoura",
+        "Cairo"
+      ],
       "expected_salary_min": 6000,
       "expected_salary_max": 10000,
       "currency": "EGP",
@@ -518,7 +544,11 @@
     {
       "id": "2",
       "user_id": 13,
-      "permissions": ["manage_jobs", "manage_users", "view_reports"],
+      "permissions": [
+        "manage_jobs",
+        "manage_users",
+        "view_reports"
+      ],
       "created_at": "2023-01-01T00:00:00Z"
     }
   ],
@@ -1397,6 +1427,20 @@
       "candidate_id": 1,
       "cover_letter": "Auto-generated application via Jobs Store",
       "status": "pending"
+    },
+    {
+      "job_id": "1",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "QJJOywC06x4"
+    },
+    {
+      "job_id": "1",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "34lJmEugG0A"
     }
   ],
   "application_stages": [
