@@ -1441,6 +1441,34 @@
       "cover_letter": "Auto-generated application via Jobs Store",
       "status": "pending",
       "id": "34lJmEugG0A"
+    },
+    {
+      "job_id": "1",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "T5K0YQKDbnM"
+    },
+    {
+      "job_id": "1",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "XXvr971I5Ss"
+    },
+    {
+      "job_id": "2",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "mdfbbeRt9yQ"
+    },
+    {
+      "job_id": "2",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "Z8iy862U0us"
     }
   ],
   "application_stages": [

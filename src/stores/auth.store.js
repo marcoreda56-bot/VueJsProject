@@ -2,23 +2,14 @@ import { defineStore } from 'pinia'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    // هنا السر: بنقرأ من الـ localStorage أول ما الـ store يتكريت
     user: JSON.parse(localStorage.getItem('user')) || null,
     token: localStorage.getItem('token') || null,
-    loading: false,
   }),
-
-  getters: {
-    // التوكن موجود؟ يبقى مسجل دخول
-    isAuthenticated: (state) => !!state.token,
-    getUserRole: (state) => state.user?.role,
-  },
-
   actions: {
-    setUser(user, token) {
-      this.user = user
+    setUser(userData, token) {
+      this.user = userData
       this.token = token
-      localStorage.setItem('user', JSON.stringify(user))
+      localStorage.setItem('user', JSON.stringify(userData))
       localStorage.setItem('token', token)
     },
     logout() {

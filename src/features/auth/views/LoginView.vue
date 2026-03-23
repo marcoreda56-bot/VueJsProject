@@ -1,83 +1,118 @@
 <template>
-  <div
-    class="w-full max-w-[450px] bg-white p-8 md:p-12 rounded-[2.5rem] shadow-lg border border-gray-100"
-  >
-    <div class="text-center mb-10">
-      <div
-        class="inline-flex items-center justify-center w-16 h-16 bg-gray-50 rounded-2xl mb-6 border border-gray-100 shadow-sm font-bold text-2xl"
-      >
-        👋
-      </div>
-      <h2 class="text-3xl font-black text-gray-900 tracking-tight">Welcome Back</h2>
-      <p class="text-gray-400 mt-2 font-medium">Log in to your dashboard</p>
-    </div>
-
-    <form @submit.prevent="handleLogin" class="space-y-6">
-      <!-- Email -->
-      <div class="space-y-1.5">
-        <label class="text-xs font-black text-gray-900 uppercase tracking-widest ml-1">Email</label>
-        <input
-          v-model="form.email"
-          type="email"
-          placeholder="marco@example.com"
-          required
-          class="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-gray-900 outline-none transition-all font-semibold"
-        />
+  <div class="flex items-center justify-center min-h-screen bg-gray-50 px-4">
+    <div class="w-full max-w-md bg-white p-10 rounded-3xl shadow-lg border border-gray-100">
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-extrabold text-gray-900">Welcome Back</h2>
+        <p class="text-sm text-gray-500 mt-2">Enter your credentials to sign in</p>
       </div>
 
-      <!-- Password -->
-      <div class="space-y-1.5">
-        <div class="flex justify-between px-1">
-          <label class="text-xs font-black text-gray-900 uppercase tracking-widest">Password</label>
-          <router-link
-            to="/auth/forgot-password"
-            class="text-[10px] font-black text-gray-300 hover:text-black uppercase tracking-wider"
-            >Forgot?</router-link
-          >
+      <!-- Form -->
+      <form @submit.prevent="handleLogin" class="space-y-6">
+        <!-- Email -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <input
+            v-model="form.email"
+            type="email"
+            placeholder="you@example.com"
+            required
+            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:border-black focus:ring-2 focus:ring-black/10 outline-none transition"
+          />
         </div>
-        <input
-          v-model="form.password"
-          type="password"
-          placeholder="••••••••"
-          required
-          class="w-full px-5 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-gray-900 outline-none transition-all font-semibold"
-        />
+
+        <!-- Password -->
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="block text-sm font-medium text-gray-700">Password</label>
+            <router-link to="/auth/forgot-password" class="text-xs text-gray-500 hover:text-black"
+              >Forgot?</router-link
+            >
+          </div>
+          <input
+            v-model="form.password"
+            type="password"
+            placeholder="••••••••"
+            required
+            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:border-black focus:ring-2 focus:ring-black/10 outline-none transition"
+          />
+        </div>
+
+        <!-- Error message -->
+        <div
+          v-if="error"
+          class="flex items-center gap-2 text-red-500 text-sm bg-red-50 p-3 rounded-lg border border-red-100"
+        >
+          <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+          {{ error }}
+        </div>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          :disabled="isLoading"
+          class="w-full py-3 bg-black text-white font-semibold rounded-xl hover:bg-gray-900 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2 transition-all"
+        >
+          <svg v-if="isLoading" class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+            <circle
+              class="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              stroke-width="4"
+            ></circle>
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            ></path>
+          </svg>
+          <span>{{ isLoading ? 'Signing in...' : 'Sign In' }}</span>
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="relative my-6">
+        <div class="absolute inset-0 flex items-center">
+          <span class="w-full border-t border-gray-200"></span>
+        </div>
+        <div class="relative flex justify-center text-xs text-gray-400 uppercase font-medium">
+          <span class="bg-white px-2">Or continue with</span>
+        </div>
       </div>
 
-      <!-- Error -->
-      <div
-        v-if="error"
-        class="text-red-500 text-xs font-bold bg-red-50 p-4 rounded-xl border border-red-100"
-      >
-        {{ error }}
+      <div class="flex gap-3 justify-center">
+        <button
+          class="flex-1 flex items-center justify-center py-2.5 border border-gray-200 rounded-xl hover:bg-gray-100 transition"
+        >
+          <span class="sr-only">Continue with Google</span>
+          G
+        </button>
+        <button
+          class="flex-1 flex items-center justify-center py-2.5 border border-gray-200 rounded-xl hover:bg-gray-100 transition"
+        >
+          <span class="sr-only">Continue with Facebook</span>
+          F
+        </button>
       </div>
 
-      <!-- Button -->
-      <button
-        type="submit"
-        :disabled="isLoading"
-        class="w-full py-4 bg-black text-white rounded-2xl font-bold text-lg hover:bg-gray-800 disabled:bg-gray-200 disabled:cursor-not-allowed transition-all shadow-xl shadow-black/10 flex justify-center items-center gap-3"
-      >
-        <span v-if="isLoading" class="animate-spin text-xl">⏳</span>
-        {{ isLoading ? 'Signing in...' : 'Sign In' }}
-      </button>
-    </form>
-
-    <p class="text-center text-sm text-gray-400 font-medium mt-10">
-      New here?
-      <router-link to="/auth/register" class="text-black font-black hover:underline"
-        >Create Account</router-link
-      >
-    </p>
+      <!-- Footer -->
+      <p class="text-center text-sm text-gray-500 mt-6">
+        Don't have an account?
+        <router-link to="/auth/register" class="text-black font-semibold hover:underline"
+          >Sign up</router-link
+        >
+      </p>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue'
-import { useAuth } from '@/composables/useAuth'
+import { reactive } from 'vue'
+import { useAuth } from '@/features/auth/composables/useAuth'
 
 const { login, isLoading, error } = useAuth()
-
 const form = reactive({ email: '', password: '' })
 
 const handleLogin = async () => {

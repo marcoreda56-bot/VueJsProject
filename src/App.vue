@@ -10,8 +10,8 @@
       </router-view>
     </main>
 
-    <footer class="text-center py-6 text-500 border-top-1 border-100 mt-8">
-      &copy; 2026 SouqMasr Jobs. Built with Vue 3 & PrimeVue.
+    <footer class="text-center py-6 text-gray-500 border-t border-gray-200 mt-8">
+      &copy; 2026 SouqMasr Jobs. Built with Vue 3.
     </footer>
   </div>
 </template>
@@ -19,22 +19,3 @@
 <script setup>
 import AppNavbar from './components/AppNavbar.vue'
 </script>
-
-<style>
-/* انيميشن بسيط للانتقال بين الصفحات */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-body {
-  margin: 0;
-  font-family: var(--font-family);
-  background-color: #f8f9fa;
-}
-</style>

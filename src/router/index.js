@@ -1,17 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { authGuard } from './guards/auth.guard'
-import { roleGuard } from './guards/role.guard'
 import { useAuthStore } from '@/stores/auth.store'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     // --- 1. Public Routes ---
-    {
-      path: '/',
-      name: 'home',
-      component: () => import('../views/HomeView.vue'),
-    },
+    { path: '/', name: 'home', component: () => import('../views/HomeView.vue') },
+    { path: '/about', name: 'about', component: () => import('../views/AboutView.vue') },
     {
       path: '/jobs',
       name: 'public.jobs',
@@ -90,25 +85,7 @@ const router = createRouter({
       ],
     },
 
-    // --- 5. Admin Routes ---
-    {
-      path: '/admin',
-      component: () => import('@/components/layout/AdminLayout.vue'),
-      meta: { requiresAuth: true, role: 'admin' },
-      children: [
-        {
-          path: 'dashboard',
-          name: 'admin.dashboard',
-          component: () => import('@/features/admin/views/AdminDashboardView.vue'),
-        },
-        {
-          path: 'users',
-          name: 'admin.users',
-          component: () => import('@/features/admin/views/ManageUsersView.vue'),
-        },
-      ],
-    },
-
+    // --- 5. Apply Route ---
     {
       path: '/apply/:id',
       name: 'jobs.apply',
@@ -116,6 +93,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
 
+    // --- 6. 404 Route ---
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
@@ -124,23 +102,28 @@ const router = createRouter({
   ],
 })
 
-// --- 🔥 التعديل الجوهري هنا ---
-router.beforeEach((to, from, next) => {
+// --- 🛡️ Navigation Guard (The Complete & Modern Way) ---
+router.beforeEach((to) => {
   const token = localStorage.getItem('token')
-  const userStr = localStorage.getItem('user')
-  const user = userStr ? JSON.parse(userStr) : null
+  const user = JSON.parse(localStorage.getItem('user'))
 
-  // 1. لو اليوزر مسجل دخول وبيحاول يروح للهوم أو صفحات الـ Auth
-  if (token && user) {
-    if (to.name === 'home' || to.meta.guestOnly) {
-      return next({ name: `${user.role}.dashboard` })
-    }
+  // 1. لو مسجل دخول وبيحاول يفتح صفحة الهوم أو صفحات الـ Auth (Login/Register)
+  // بنرجعه فوراً للدشبورد بتاعته على حسب الـ Role
+  if (token && (to.name === 'home' || to.meta.guestOnly)) {
+    return { name: `${user.role}.dashboard` }
   }
 
-  // 2. تشغيل الحراس الأساسيين بتوعك
-  authGuard(to, from, () => {
-    roleGuard(to, from, next)
-  })
+  // 2. لو الصفحة محتاجة تسجيل دخول واليوزر مش معاه Token
+  if (to.meta.requiresAuth && !token) {
+    return { name: 'login', query: { redirect: to.fullPath } }
+  }
+
+  // 3. حماية الروتس بناءً على الـ Role (عشان Candidate ميسرقش روت Employer)
+  if (to.meta.role && user && to.meta.role !== user.role) {
+    return { name: `${user.role}.dashboard` }
+  }
+
+  return true // كمل طريقك يا بطل
 })
 
 export default router
