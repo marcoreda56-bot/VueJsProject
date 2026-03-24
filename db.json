@@ -236,7 +236,8 @@
       "currency": "EGP",
       "profile_completion": 85,
       "created_at": "2024-02-14T09:00:00Z",
-      "updated_at": "2024-10-20T11:00:00Z"
+      "updated_at": "2024-10-20T11:00:00Z",
+      "title": "softwere engineer"
     },
     {
       "id": "3",
@@ -261,7 +262,8 @@
       "currency": "EGP",
       "profile_completion": 75,
       "created_at": "2024-03-05T10:00:00Z",
-      "updated_at": "2024-09-15T14:00:00Z"
+      "updated_at": "2026-03-24T19:14:11.236Z",
+      "title": "senior backend"
     },
     {
       "id": "4",
@@ -1512,6 +1514,119 @@
       "cover_letter": "Auto-generated application via Jobs Store",
       "status": "pending",
       "id": "zD0Pk3Q4JAo"
+    },
+    {
+      "job_id": "6",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "9vtB2ykP2wA"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "hello dear",
+      "status": "pending",
+      "applied_at": "2026-03-24T18:30:01.874Z",
+      "id": "63l27l6hpl0"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "3",
+      "cover_letter": "hello dear",
+      "status": "pending",
+      "applied_at": "2026-03-24T18:33:32.249Z",
+      "id": "2EiTCbe38fQ"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "hello dear",
+      "status": "pending",
+      "applied_at": "2026-03-24T18:42:12.895Z",
+      "id": "2E--69tDtT8"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "hello",
+      "status": "pending",
+      "applied_at": "2026-03-24T18:48:34.791Z",
+      "id": "0TmHW3mWtuY"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "ddd",
+      "status": "pending",
+      "applied_at": "2026-03-24T18:48:47.099Z",
+      "id": "wOZNpbCU8tI"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "5",
+      "cover_letter": "d",
+      "status": "pending",
+      "applied_at": "2026-03-24T18:50:38.065Z",
+      "id": "t_iqsXpq1uk"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "hello",
+      "candidate_snapshot": {
+        "name": "Omar Hassan",
+        "email": "omar.hassan@email.com",
+        "title": "senior backend",
+        "location": "Alexandria, Egypt",
+        "bio": "Backend developer specializing in Laravel and RESTful APIs. Experienced in building high-performance systems and integrating third-party services."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T18:54:40.676Z",
+      "id": "IpAnB39PTtI"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "d",
+      "candidate_snapshot": {
+        "name": "Omar Hassan",
+        "email": "omar.hassan@email.com",
+        "title": "senior backend",
+        "location": "Alexandria, Egypt",
+        "bio": "Backend developer specializing in Laravel and RESTful APIs. Experienced in building high-performance systems and integrating third-party services."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T18:55:04.958Z",
+      "id": "gx3i4KRP-UY"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "d",
+      "candidate_snapshot": {
+        "name": "Omar Hassan",
+        "email": "omar.hassan@email.com",
+        "title": "senior backend"
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T19:00:40.074Z",
+      "id": "TPvjKhbaJ7A"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "10",
+      "cover_letter": "hello dear",
+      "candidate_snapshot": {
+        "name": "Omar Hassan",
+        "email": "omar.hassan@email.com",
+        "title": "senior backend",
+        "location": "Alexandria, Egypt",
+        "bio": "Backend developer specializing in Laravel and RESTful APIs. Experienced in building high-performance systems and integrating third-party services."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T19:09:35.632Z",
+      "id": "ReJWJ_6Ht-I"
     }
   ],
   "application_stages": [

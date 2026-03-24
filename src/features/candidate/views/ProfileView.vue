@@ -1,177 +1,85 @@
 <template>
-  <div
-    class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 py-12 px-4 lg:px-12 font-['Plus_Jakarta_Sans',sans-serif]"
-  >
-    <div class="max-w-5xl mx-auto animate-[fadeIn_0.8s_ease-out]">
-      <div
-        class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[3rem] p-8 md:p-12 shadow-sm mb-10 flex flex-col md:flex-row items-center gap-10 relative overflow-hidden"
+  <div class="p-8 lg:p-12 animate-[fadeIn_0.5s_ease-out] max-w-6xl mx-auto">
+    <header class="mb-12 flex justify-between items-center">
+      <div>
+        <h1 class="text-4xl font-black text-slate-900 dark:text-white tracking-tighter italic mb-2">
+          My <span class="text-indigo-600">Profile</span>
+        </h1>
+        <p class="text-slate-400 font-bold text-xs uppercase tracking-[0.2em]">
+          Manage your professional identity
+        </p>
+      </div>
+      <button
+        @click="saveProfile"
+        :disabled="saving"
+        class="group relative px-10 py-4 bg-slate-900 dark:bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] overflow-hidden transition-all hover:shadow-2xl hover:shadow-indigo-500/20 active:scale-95"
       >
+        <span class="relative z-10 flex items-center gap-2">
+          <i v-if="saving" class="pi pi-spin pi-spinner"></i>
+          <i v-else class="pi pi-check"></i>
+          {{ saving ? 'Saving...' : 'Save Profile' }}
+        </span>
+      </button>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div class="lg:col-span-4 space-y-6">
         <div
-          class="absolute -right-20 -top-20 w-64 h-64 bg-indigo-500/5 blur-[100px] rounded-full"
-        ></div>
-
-        <div class="relative group">
-          <div
-            class="w-40 h-40 bg-slate-50 dark:bg-slate-800 rounded-[2.5rem] border-2 border-dashed border-slate-200 dark:border-slate-700 flex items-center justify-center text-5xl group-hover:border-indigo-500 transition-all duration-500 cursor-pointer overflow-hidden shadow-inner"
-          >
-            <span class="group-hover:scale-110 transition-transform duration-500">📸</span>
-          </div>
-          <div
-            class="absolute -bottom-2 -right-2 w-10 h-10 bg-indigo-600 text-white rounded-xl flex items-center justify-center shadow-lg cursor-pointer hover:scale-110 transition-transform"
-          >
-            <i class="pi pi-pencil text-xs"></i>
-          </div>
-        </div>
-
-        <div class="flex-1 text-center md:text-left z-10">
-          <div class="flex flex-col md:flex-row md:items-center gap-4 mb-4">
-            <h1 class="text-5xl font-black text-slate-900 dark:text-white tracking-tighter italic">
-              {{ profile.name }}
-            </h1>
-            <span
-              class="inline-flex items-center px-4 py-1 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 text-[10px] font-black uppercase tracking-widest rounded-full border border-emerald-100 dark:border-emerald-500/20 w-fit mx-auto md:mx-0"
-            >
-              Verified Talent
-            </span>
-          </div>
-
-          <p
-            class="text-indigo-600 dark:text-indigo-400 font-black text-xl italic tracking-tight mb-6"
-          >
-            {{ profile.title }}
-          </p>
-
-          <div class="flex flex-wrap justify-center md:justify-start gap-6">
-            <span
-              class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2"
-            >
-              <i class="pi pi-map-marker text-indigo-500"></i> {{ profile.location }}
-            </span>
-            <span
-              class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2"
-            >
-              <i class="pi pi-envelope text-indigo-500"></i>
-              {{ user?.email || 'marco@hiremasr.com' }}
-            </span>
-          </div>
-        </div>
-
-        <button
-          @click="isEditing = !isEditing"
-          :class="
-            isEditing
-              ? 'bg-rose-50 text-rose-600 border-rose-100'
-              : 'bg-slate-900 dark:bg-indigo-600 text-white border-transparent'
-          "
-          class="px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl transition-all active:scale-95 flex items-center gap-3 border"
+          class="p-10 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[3rem] text-center shadow-sm"
         >
-          <i :class="isEditing ? 'pi pi-times' : 'pi pi-user-edit'"></i>
-          {{ isEditing ? 'Cancel' : 'Edit Profile' }}
-        </button>
+          <div class="relative w-32 h-32 mx-auto mb-6 group">
+            <img
+              :src="userAvatar"
+              class="w-full h-full object-cover rounded-[2.5rem] shadow-2xl transition-transform group-hover:scale-105"
+              alt="Profile Picture"
+            />
+            <div
+              class="absolute inset-0 bg-black/40 rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+            >
+              <i class="pi pi-camera text-white text-xl"></i>
+            </div>
+          </div>
+          <h3 class="text-xl font-black text-slate-900 dark:text-white mb-1">
+            {{ auth.user?.name }}
+          </h3>
+          <span
+            class="px-4 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 rounded-full text-[10px] font-black uppercase tracking-widest"
+          >
+            {{ formData.title || 'Candidate' }}
+          </span>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        <div class="lg:col-span-4 space-y-10">
-          <div
-            class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] p-8 shadow-sm"
-          >
-            <h3
-              class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8 flex items-center justify-between"
+      <div class="lg:col-span-8">
+        <div
+          class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[3rem] p-10 shadow-sm"
+        >
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div
+              v-for="field in fields"
+              :key="field.label"
+              :class="field.full ? 'md:col-span-2' : ''"
             >
-              Core Skills
-              <i class="pi pi-bolt text-indigo-500"></i>
-            </h3>
-            <div class="flex flex-wrap gap-2">
-              <span
-                v-for="skill in profile.skills"
-                :key="skill"
-                class="px-4 py-2 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-black rounded-xl border border-transparent hover:border-indigo-500/30 hover:bg-white dark:hover:bg-slate-700 transition-all cursor-default uppercase tracking-widest"
+              <label
+                class="block text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-4 ml-2"
+                >{{ field.label }}</label
               >
-                {{ skill }}
-              </span>
-            </div>
-          </div>
-        </div>
 
-        <div class="lg:col-span-8 space-y-10">
-          <div
-            class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] p-10 shadow-sm relative overflow-hidden"
-          >
-            <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8">
-              Professional Summary
-            </h3>
+              <input
+                v-if="field.type !== 'textarea'"
+                v-model="formData[field.key]"
+                :type="field.type"
+                class="w-full px-8 py-5 bg-slate-50 dark:bg-slate-800/50 border border-transparent focus:border-indigo-500/30 focus:bg-white dark:focus:bg-slate-800 rounded-[1.5rem] outline-none transition-all font-bold text-slate-700 dark:text-slate-200"
+                :placeholder="field.placeholder"
+              />
 
-            <div v-if="!isEditing">
-              <p
-                class="text-slate-600 dark:text-slate-400 leading-relaxed font-bold text-lg italic tracking-tight"
-              >
-                "{{ profile.bio }}"
-              </p>
-            </div>
-            <div v-else class="space-y-6 animate-in fade-in duration-500">
               <textarea
-                v-model="profile.bio"
-                rows="4"
-                class="w-full p-6 bg-slate-50 dark:bg-slate-800/50 border-none rounded-[2rem] focus:ring-2 focus:ring-indigo-500 outline-none transition-all font-bold text-slate-900 dark:text-white"
+                v-else
+                v-model="formData[field.key]"
+                rows="5"
+                class="w-full px-8 py-5 bg-slate-50 dark:bg-slate-800/50 border border-transparent focus:border-indigo-500/30 focus:bg-white dark:focus:bg-slate-800 rounded-[2rem] outline-none transition-all font-medium text-slate-600 dark:text-slate-300"
+                placeholder="Write your professional story..."
               ></textarea>
-              <button
-                @click="saveProfile"
-                class="px-10 py-4 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-indigo-600/20 hover:bg-indigo-700 transition-all"
-              >
-                Save Biography
-              </button>
-            </div>
-          </div>
-
-          <div
-            class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[3rem] p-10 shadow-sm"
-          >
-            <div class="flex justify-between items-center mb-10">
-              <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
-                Work Experience
-              </h3>
-              <button
-                class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-indigo-600 hover:scale-110 transition-transform"
-              >
-                <i class="pi pi-plus text-xs"></i>
-              </button>
-            </div>
-
-            <div class="space-y-12">
-              <div
-                v-for="exp in profile.experience"
-                :key="exp.id"
-                class="flex gap-8 items-start group"
-              >
-                <div
-                  class="w-16 h-16 bg-slate-900 dark:bg-indigo-600 text-white rounded-[1.5rem] flex items-center justify-center font-black text-xl shadow-lg group-hover:rotate-6 transition-transform"
-                >
-                  {{ exp.company.charAt(0) }}
-                </div>
-                <div
-                  class="flex-1 border-b border-slate-50 dark:border-slate-800 pb-8 group-last:border-none"
-                >
-                  <div class="flex justify-between items-start mb-2">
-                    <h4
-                      class="font-black text-slate-900 dark:text-white text-2xl tracking-tighter italic"
-                    >
-                      {{ exp.role }}
-                    </h4>
-                    <span
-                      class="text-[10px] font-black text-indigo-500 uppercase tracking-widest bg-indigo-50 dark:bg-indigo-500/10 px-3 py-1 rounded-lg italic"
-                    >
-                      {{ exp.period }}
-                    </span>
-                  </div>
-                  <p class="text-slate-400 font-bold text-sm tracking-widest uppercase mb-4">
-                    {{ exp.company }}
-                  </p>
-                  <p class="text-slate-500 text-sm font-medium leading-relaxed">
-                    Lead development of scalable features and optimized database queries for
-                    high-performance applications.
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -181,50 +89,59 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { reactive, onMounted, ref, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth.store'
+import { useCandidateStore } from '@/stores/candidate.store'
+import Swal from 'sweetalert2'
 
 const auth = useAuthStore()
-const user = auth.user
+const candidateStore = useCandidateStore()
+const saving = ref(false)
 
-const isEditing = ref(false)
+const fields = [
+  { label: 'Job Title', key: 'title', type: 'text', placeholder: 'e.g. Senior Frontend Developer' },
+  { label: 'Location', key: 'location', type: 'text', placeholder: 'e.g. Cairo, Egypt' },
+  { label: 'Professional Bio', key: 'bio', type: 'textarea', placeholder: '', full: true },
+]
 
-const profile = reactive({
-  name: user?.name || 'Marco Reda',
-  title: 'Full Stack Developer',
-  bio: 'Passionate about building clean, scalable web applications with Vue.js, Node.js, and Laravel. Expert in crafting seamless terminal UIs and high-performance databases.',
-  location: 'Cairo, Egypt',
-  skills: [
-    'Vue.js',
-    'Angular',
-    'Laravel',
-    'Node.js',
-    'PostgreSQL',
-    'Bash Scripting',
-    'Tailwind CSS',
-  ],
-  experience: [
-    { id: 1, company: 'Freelance Hub', role: 'Full Stack Engineer', period: '2025 - Present' },
-    { id: 2, company: 'Tech Startup', role: 'Frontend Intern', period: '2024 - 2025' },
-  ],
+const formData = reactive({ title: '', location: '', bio: '' })
+
+onMounted(async () => {
+  await candidateStore.initialize()
+  if (candidateStore.profile) {
+    Object.assign(formData, {
+      title: candidateStore.profile.title || '',
+      location: candidateStore.profile.location || '',
+      bio: candidateStore.profile.bio || '',
+    })
+  }
 })
 
-const saveProfile = () => {
-  isEditing.value = false
-  // Logic to call API: profilesApi.updateCandidate(profile)
-  console.log('Profile Syncronized!', profile)
+const userAvatar = computed(() => {
+  if (auth.user?.avatar) {
+    return auth.user.avatar
+  }
+
+  const name = auth.user?.name || 'User'
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=6366f1&color=fff&bold=true`
+})
+const saveProfile = async () => {
+  saving.value = true
+  try {
+    await candidateStore.updateProfile({ ...candidateStore.profile, ...formData })
+
+    Swal.fire({
+      title: 'Success!',
+      text: 'Your profile has been polished.',
+      icon: 'success',
+      confirmButtonColor: '#6366f1',
+      buttonsStyling: true,
+      customClass: { popup: 'rounded-[2rem] font-["Plus_Jakarta_Sans"]' },
+    })
+  } catch (err) {
+    Swal.fire('Error', 'Something went wrong', 'error')
+  } finally {
+    saving.value = false
+  }
 }
 </script>
-
-<style scoped>
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>
