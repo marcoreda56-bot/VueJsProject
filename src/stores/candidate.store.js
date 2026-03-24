@@ -122,5 +122,21 @@ export const useCandidateStore = defineStore('candidate', {
         this.loading = false
       }
     },
+    async withdrawApplication(appId) {
+      this.loading = true
+      try {
+        await applicationsApi.delete(appId)
+
+        this.applications = this.applications.filter((app) => String(app.id) !== String(appId))
+
+        console.log(`Application ${appId} withdrawn successfully.`)
+        return true
+      } catch (error) {
+        console.error('Withdraw Error:', error)
+        throw error
+      } finally {
+        this.loading = false
+      }
+    },
   },
 })

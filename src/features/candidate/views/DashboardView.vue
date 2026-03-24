@@ -142,8 +142,8 @@ const candidateStore = useCandidateStore()
 const jobStore = useJobsStore()
 
 onMounted(async () => {
+  await jobStore.initialize()
   await candidateStore.initialize()
-  if (jobStore.jobs.length === 0) await jobStore.fetchJobs()
 })
 
 const userApplications = computed(() => {
