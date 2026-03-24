@@ -198,14 +198,12 @@ const candidateStore = useCandidateStore()
 const showApplyModal = ref(false)
 const coverLetter = ref('')
 
-// داتا الوظيفة
 const job = computed(() => jobsStore.jobs.find((j) => String(j.id) === String(route.params.id)))
 const companyName = computed(() => {
   const emp = jobsStore.employers.find((e) => String(e.id) === String(job.value?.employer_id))
   return emp?.company_name || 'HireMasr Partner'
 })
 
-// هل قدمنا قبل كدة؟
 const hasApplied = computed(() => {
   return candidateStore.applications.some((app) => String(app.job_id) === String(job.value?.id))
 })
@@ -227,7 +225,6 @@ const submitApplication = async () => {
   }
 
   try {
-    // 📦 هنا الـ Store بيبعت الـ Snapshot والـ Cover Letter تلقائياً
     await candidateStore.applyForJob(job.value.id, coverLetter.value)
     showApplyModal.value = false
 
