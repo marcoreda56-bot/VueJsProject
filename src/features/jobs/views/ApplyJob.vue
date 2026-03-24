@@ -62,7 +62,7 @@
         >
           <i v-if="loading" class="pi pi-spin pi-spinner text-xs"></i>
           <span v-else class="flex items-center gap-3">
-            Confirm & Send Track
+            Confirm
             <i
               class="pi pi-arrow-right text-[8px] group-hover:translate-x-1 transition-transform"
             ></i>

@@ -84,7 +84,7 @@
               @click="$router.push({ name: 'candidate.job-apply', params: { id: job.id } })"
               class="w-full py-5 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-indigo-500/20 hover:scale-[1.02] transition-all"
             >
-              Initiate Application
+              Easy apply
             </button>
           </div>
         </div>
