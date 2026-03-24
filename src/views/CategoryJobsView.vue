@@ -1,108 +1,66 @@
-<template>
-  <div
-    class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 py-20 px-6 lg:px-12 font-['Plus_Jakarta_Sans',sans-serif]"
-  >
-    <div class="max-w-7xl mx-auto text-center mb-16 animate-[fadeIn_0.6s_ease-out]">
-      <div
-        class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-500/10 rounded-full mb-5 border border-indigo-100 dark:border-indigo-500/20"
-      >
-        <span
-          class="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.3em]"
-          >Industry Clusters</span
-        >
-      </div>
-      <h1
-        class="text-5xl md:text-7xl font-black text-slate-900 dark:text-white tracking-tighter italic leading-tight mb-4"
-      >
-        Browse by<span class="text-indigo-600">.</span>Category
-      </h1>
-      <p
-        class="text-slate-500 dark:text-slate-400 font-bold text-lg max-w-lg mx-auto leading-relaxed"
-      >
-        Select your specialization to find the
-        <span
-          class="text-slate-900 dark:text-white underline decoration-indigo-500/30 decoration-4 italic"
-          >perfect technical match</span
-        >.
-      </p>
-    </div>
-
-    <div class="max-w-7xl mx-auto">
-      <div v-if="jobStore.loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        <div
-          v-for="i in 8"
-          :key="i"
-          class="h-48 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] animate-pulse"
-        ></div>
-      </div>
-
-      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-        <div
-          v-for="cat in jobStore.categories"
-          :key="cat.id"
-          @click="goToCategory(cat.id)"
-          class="group relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-8 rounded-[2.5rem] text-center transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:shadow-indigo-500/5 cursor-pointer overflow-hidden flex flex-col items-center justify-center"
-        >
-          <div
-            class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"
-          ></div>
-
-          <div
-            class="w-20 h-20 bg-slate-50 dark:bg-slate-800/50 rounded-[1.5rem] flex items-center justify-center mb-6 border border-transparent group-hover:bg-indigo-600 group-hover:rotate-[-10deg] group-hover:scale-110 shadow-sm transition-all duration-500"
-          >
-            <i
-              :class="cat.icon || 'pi pi-folder'"
-              class="text-3xl text-slate-300 group-hover:text-white transition-colors duration-500"
-            ></i>
-          </div>
-
-          <h3
-            class="text-xl font-black text-slate-900 dark:text-white tracking-tight group-hover:text-indigo-600 transition-colors mb-4"
-          >
-            {{ cat.name }}
-          </h3>
-
-          <div
-            class="inline-flex items-center gap-2 px-4 py-1.5 bg-slate-50 dark:bg-slate-800 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-500/10 rounded-full border border-slate-100 dark:border-slate-700 group-hover:border-indigo-100 transition-all"
-          >
-            <span
-              class="text-[10px] font-black text-indigo-600 dark:text-indigo-400 tracking-widest"
-            >
-              {{ jobStore.jobCountByCategory(cat.id) }} JOBS
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup>
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useJobsStore } from '../stores/jobs.js'
 import { useRouter } from 'vue-router'
+import JobCard from '@/features/jobs/components/JobCard.vue'
+import { useRoute } from 'vue-router'
 
 const jobStore = useJobsStore()
 const router = useRouter()
+const route = useRoute()
+const categoryId = computed(() => Number(route.params.id))
+const currentCategory = computed(() =>
+  jobStore.categories.find((cat) => Number(cat.id) === categoryId.value),
+)
+const jobs = computed(() => jobStore.jobsByCategory(categoryId.value))
 
 onMounted(() => {
   jobStore.initialize()
 })
 
-const goToCategory = (id) => {
-  router.push({ name: 'jobs', query: { categoryId: id } })
-}
+const goBack = () => router.push({ name: 'categories' })
 </script>
 
-<style>
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>
+<template>
+  <div class="font-['Plus_Jakarta_Sans',sans-serif]">
+    <button
+      @click="goBack"
+      class="mb-6 text-xs font-black uppercase tracking-[0.16em] text-slate-500 hover:text-sky-700 dark:hover:text-sky-300"
+    >
+      <i class="pi pi-arrow-left mr-2"></i>Back to categories
+    </button>
+
+    <header
+      class="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 mb-8"
+    >
+      <h1 class="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+        {{ currentCategory?.name || 'Category Jobs' }}
+      </h1>
+      <p class="mt-2 text-slate-500 dark:text-slate-400">
+        {{ jobs.length }} open position(s) in this category.
+      </p>
+    </header>
+
+    <div v-if="jobStore.loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div
+        v-for="i in 6"
+        :key="i"
+        class="h-[250px] rounded-3xl bg-slate-100 dark:bg-slate-800 animate-pulse"
+      ></div>
+    </div>
+
+    <div v-else-if="jobs.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <JobCard v-for="job in jobs" :key="job.id" :job="job" />
+    </div>
+
+    <div v-else class="text-center py-20 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+      <p class="text-slate-500 dark:text-slate-400">No jobs found for this category yet.</p>
+      <button
+        @click="router.push({ name: 'public.jobs' })"
+        class="mt-4 rounded-xl bg-sky-600 px-5 py-2.5 text-xs font-black uppercase tracking-[0.16em] text-white hover:bg-sky-700"
+      >
+        Browse all jobs
+      </button>
+    </div>
+  </div>
+</template>

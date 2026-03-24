@@ -1,94 +1,57 @@
 <template>
-  <div
-    class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 py-20 px-6 lg:px-12 font-['Plus_Jakarta_Sans',sans-serif]"
-  >
-    <div class="max-w-5xl mx-auto text-center mb-24 animate-[fadeIn_0.8s_ease-out]">
-      <div
-        class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-500/10 rounded-full mb-6 border border-indigo-100 dark:border-indigo-500/20"
-      >
-        <span
-          class="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.3em]"
-          >Our Mission</span
-        >
-      </div>
-      <h1
-        class="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter italic leading-none mb-8"
-      >
-        We bridge the<br />
-        <span class="text-indigo-600">talent gap.</span>
-      </h1>
-      <p
-        class="text-slate-500 dark:text-slate-400 font-bold text-xl max-w-2xl mx-auto leading-relaxed"
-      >
-        HireMasr is not just a job board; it's a
-        <span class="text-slate-900 dark:text-white underline decoration-indigo-500/30 decoration-4"
-          >tech ecosystem</span
-        >
-        designed to connect Egypt's brightest minds with global opportunities.
+  <div class="font-['Plus_Jakarta_Sans',sans-serif]">
+    <div
+      class="rounded-[2rem] bg-gradient-to-br from-sky-600 via-sky-700 to-cyan-700 px-6 py-12 sm:p-12 text-white mb-10"
+    >
+      <p class="text-xs uppercase tracking-[0.18em] font-black text-sky-100">About HireMasr</p>
+      <h1 class="mt-4 text-4xl sm:text-5xl font-black tracking-tight max-w-2xl">We connect great talent with serious employers.</h1>
+      <p class="mt-4 text-sky-100 max-w-2xl leading-relaxed">
+        HireMasr is a modern hiring platform focused on quality, speed, and trust across Egypt's tech ecosystem.
       </p>
     </div>
 
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-32">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-14">
       <div
         v-for="stat in stats"
         :key="stat.label"
-        class="bg-white dark:bg-slate-900 p-10 rounded-[3rem] border border-slate-100 dark:border-slate-800 text-center group hover:-translate-y-2 transition-all duration-500 shadow-sm"
+        class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800 text-center shadow-sm"
       >
-        <div
-          class="text-5xl font-black text-indigo-600 italic mb-2 tracking-tighter group-hover:scale-110 transition-transform"
-        >
-          {{ stat.value }}
-        </div>
-        <p class="text-slate-400 font-black uppercase tracking-[0.2em] text-[10px]">
+        <div class="text-4xl font-black text-sky-700 dark:text-sky-300 mb-2 tracking-tight">{{ stat.value }}</div>
+        <p class="text-slate-500 font-black uppercase tracking-[0.16em] text-[10px]">
           {{ stat.label }}
         </p>
       </div>
     </div>
 
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-      <div class="space-y-8 px-4">
-        <h2 class="text-4xl font-black text-slate-900 dark:text-white tracking-tighter italic">
-          Built by developers,<br />
-          <span class="text-indigo-600">for the industry.</span>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div class="space-y-5">
+        <h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+          Built for people, not just resumes.
         </h2>
-
-        <div class="space-y-6">
-          <div v-for="value in values" :key="value.title" class="flex gap-6 group">
-            <div
-              class="w-14 h-14 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500 shrink-0"
-            >
-              <i :class="value.icon" class="text-xl"></i>
+        <div class="space-y-4">
+          <div v-for="value in values" :key="value.title" class="flex gap-4">
+            <div class="w-11 h-11 bg-sky-50 dark:bg-sky-900/20 rounded-xl flex items-center justify-center text-sky-700 dark:text-sky-300 shrink-0">
+              <i :class="value.icon" class="text-lg"></i>
             </div>
             <div>
-              <h4
-                class="text-lg font-black text-slate-900 dark:text-white italic tracking-tight mb-1"
-              >
-                {{ value.title }}
-              </h4>
-              <p class="text-slate-500 dark:text-slate-400 font-medium text-sm leading-relaxed">
-                {{ value.desc }}
-              </p>
+              <h4 class="text-base font-black text-slate-900 dark:text-white">{{ value.title }}</h4>
+              <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">{{ value.desc }}</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="relative hidden lg:block">
-        <div
-          class="w-full aspect-square bg-slate-900 dark:bg-indigo-600/5 rounded-[4rem] relative overflow-hidden group"
-        >
-          <div class="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-transparent"></div>
-          <div
-            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[15rem] font-black text-white/5 italic select-none"
-          >
-            HM
-          </div>
-          <div
-            class="absolute bottom-12 left-12 right-12 bg-white/10 backdrop-blur-md border border-white/10 p-6 rounded-3xl animate-pulse"
-          >
-            <div class="w-12 h-2 bg-white/20 rounded-full mb-3"></div>
-            <div class="w-24 h-2 bg-white/20 rounded-full"></div>
-          </div>
+      <div class="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8">
+        <h3 class="text-xl font-black text-slate-900 dark:text-white">What we focus on</h3>
+        <ul class="mt-4 space-y-3 text-slate-600 dark:text-slate-300">
+          <li class="flex gap-2"><i class="pi pi-check text-sky-600 mt-1"></i> Clear, trustworthy job information.</li>
+          <li class="flex gap-2"><i class="pi pi-check text-sky-600 mt-1"></i> Better quality matches between candidates and teams.</li>
+          <li class="flex gap-2"><i class="pi pi-check text-sky-600 mt-1"></i> Fast and friendly application experience.</li>
+        </ul>
+        <div class="mt-6 rounded-2xl bg-sky-50 dark:bg-sky-900/20 p-4 border border-sky-100 dark:border-sky-800/40">
+          <p class="text-sm text-slate-700 dark:text-slate-200">
+            We are continuously improving the product based on candidate and employer feedback.
+          </p>
         </div>
       </div>
     </div>
@@ -120,16 +83,3 @@ const values = [
   },
 ]
 </script>
-
-<style scoped>
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>

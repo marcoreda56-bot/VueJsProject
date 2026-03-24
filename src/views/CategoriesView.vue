@@ -1,33 +1,18 @@
 <template>
-  <div
-    class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 py-16 px-6 lg:px-12 font-['Plus_Jakarta_Sans',sans-serif]"
-  >
-    <div class="max-w-7xl mx-auto text-center mb-16 animate-[fadeIn_0.6s_ease-out]">
-      <div
-        class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-500/10 rounded-full mb-4 border border-indigo-100 dark:border-indigo-500/20"
-      >
-        <span
-          class="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.2em]"
-          >Tech Ecosystem</span
-        >
-      </div>
-      <h1
-        class="text-5xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tighter italic leading-none mb-4"
-      >
-        Explore<span class="text-indigo-600">.</span>Categories
-      </h1>
-      <p class="text-slate-500 dark:text-slate-400 font-bold text-lg max-w-md mx-auto">
-        Find your niche and browse jobs by your
-        <span class="text-indigo-600 italic">technical expertise</span>.
+  <div class="font-['Plus_Jakarta_Sans',sans-serif]">
+    <header class="mb-10">
+      <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-white">Job Categories</h1>
+      <p class="mt-3 text-slate-500 dark:text-slate-400 max-w-2xl">
+        Choose a category to see matching opportunities and narrow your search.
       </p>
-    </div>
+    </header>
 
-    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
       <template v-if="loading">
         <div
           v-for="i in 8"
           :key="i"
-          class="h-64 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] p-8 flex flex-col items-center justify-center space-y-4 animate-pulse"
+          class="h-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 flex flex-col items-center justify-center space-y-4 animate-pulse"
         >
           <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl"></div>
           <div class="h-6 w-3/4 bg-slate-100 dark:bg-slate-800 rounded-lg"></div>
@@ -40,34 +25,30 @@
           v-for="cat in categories"
           :key="cat.id"
           @click="goToCategory(cat.id)"
-          class="group relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-8 rounded-[2.5rem] text-center transition-all duration-500 hover:-translate-y-3 hover:shadow-2xl hover:shadow-indigo-500/5 cursor-pointer flex flex-col items-center justify-center overflow-hidden"
+          class="group relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 rounded-3xl text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-sky-200 dark:hover:border-sky-700 cursor-pointer flex flex-col items-center justify-center overflow-hidden"
         >
           <div
-            class="absolute -bottom-12 -right-12 w-24 h-24 bg-indigo-500/5 blur-3xl group-hover:bg-indigo-500/20 transition-all duration-500"
-          ></div>
-
-          <div
-            class="w-20 h-20 bg-slate-50 dark:bg-slate-800/50 rounded-[1.5rem] flex items-center justify-center mb-6 border border-transparent group-hover:bg-indigo-600 group-hover:rotate-[-8deg] group-hover:scale-110 shadow-sm transition-all duration-500"
+            class="w-16 h-16 bg-sky-50 dark:bg-sky-900/20 rounded-2xl flex items-center justify-center mb-5 border border-transparent group-hover:bg-sky-600 transition-all duration-300"
           >
             <i
               :class="cat.icon || 'pi pi-tag'"
-              class="text-3xl text-slate-300 group-hover:text-white transition-colors duration-500"
+              class="text-2xl text-sky-700 dark:text-sky-300 group-hover:text-white transition-colors duration-300"
             ></i>
           </div>
 
           <h3
-            class="text-xl font-black text-slate-900 dark:text-white tracking-tight mb-2 group-hover:text-indigo-600 transition-colors"
+            class="text-lg font-black text-slate-900 dark:text-white tracking-tight mb-2 group-hover:text-sky-700 dark:group-hover:text-sky-300 transition-colors"
           >
             {{ cat.name }}
           </h3>
 
           <div
-            class="mt-4 px-4 py-1.5 bg-slate-50 dark:bg-slate-800 group-hover:bg-indigo-50 dark:group-hover:bg-indigo-500/10 rounded-full border border-slate-100 dark:border-slate-700 group-hover:border-indigo-100 dark:group-hover:border-indigo-500/20 transition-all"
+            class="mt-2 px-4 py-1.5 bg-slate-50 dark:bg-slate-800 rounded-full border border-slate-100 dark:border-slate-700"
           >
             <span
-              class="text-[10px] font-black text-slate-400 dark:text-slate-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 uppercase tracking-widest transition-colors"
+              class="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest"
             >
-              Explore Now
+              Explore now
             </span>
           </div>
         </div>
@@ -97,23 +78,8 @@ const fetchAllCategories = async () => {
 }
 
 const goToCategory = (id) => {
-  router.push(`/categories/${id}`)
+  router.push({ name: 'public.category-jobs', params: { id } })
 }
 
-onMounted(() => {
-  fetchAllCategories()
-})
+onMounted(fetchAllCategories)
 </script>
-
-<style>
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>

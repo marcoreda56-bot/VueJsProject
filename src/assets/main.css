@@ -1,1 +1,25 @@
 @import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --brand-primary: #0284c7;
+  --brand-primary-soft: #e0f2fe;
+  --brand-accent: #0f766e;
+  --surface-page: #f8fafc;
+  --surface-card: #ffffff;
+}
+
+html.dark {
+  --surface-page: #020617;
+  --surface-card: #0f172a;
+}
+
+body {
+  background: var(--surface-page);
+  color: #0f172a;
+}
+
+html.dark body {
+  color: #e2e8f0;
+}

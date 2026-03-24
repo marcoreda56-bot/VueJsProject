@@ -1,122 +1,119 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-50 px-4">
-    <div class="w-full max-w-md bg-white p-10 rounded-3xl shadow-lg border border-gray-100">
-      <!-- Header -->
-      <div class="text-center mb-8">
-        <h2 class="text-3xl font-extrabold text-gray-900">Welcome Back</h2>
-        <p class="text-sm text-gray-500 mt-2">Enter your credentials to sign in</p>
+  <div class="w-full bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-7 sm:p-8 animate-[fadeIn_0.3s_ease-out]">
+    <div class="mb-8">
+      <h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Sign in</h2>
+      <p class="text-sm mt-2 text-slate-500 dark:text-slate-400">Access your account dashboard.</p>
+    </div>
+
+    <form @submit.prevent="handleLogin" class="space-y-5">
+      <div class="space-y-2">
+        <label for="login-email" class="text-xs font-bold text-slate-600 dark:text-slate-300">Email</label>
+        <input
+          id="login-email"
+          v-model.trim="form.email"
+          type="email"
+          placeholder="you@example.com"
+          required
+          :aria-invalid="Boolean(fieldErrors.email)"
+          class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border-2 rounded-xl outline-none transition-all font-medium text-slate-700 dark:text-slate-200 placeholder:text-slate-400"
+          :class="
+            fieldErrors.email
+              ? 'border-red-300 dark:border-red-500/40 focus:ring-4 focus:ring-red-500/10'
+              : 'border-transparent focus:bg-white dark:focus:bg-slate-900 focus:border-sky-600/20 focus:ring-4 focus:ring-sky-600/5'
+          "
+        />
+        <p v-if="fieldErrors.email" class="text-xs font-semibold text-red-500 px-1">
+          {{ fieldErrors.email }}
+        </p>
       </div>
 
-      <!-- Form -->
-      <form @submit.prevent="handleLogin" class="space-y-6">
-        <!-- Email -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-          <input
-            v-model="form.email"
-            type="email"
-            placeholder="you@example.com"
-            required
-            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:border-black focus:ring-2 focus:ring-black/10 outline-none transition"
-          />
+      <div class="space-y-2">
+        <div class="flex justify-between items-center">
+          <label for="login-password" class="text-xs font-bold text-slate-600 dark:text-slate-300">Password</label>
+          <router-link
+            to="/auth/forgot-password"
+            class="text-xs font-semibold text-slate-400 hover:text-sky-600"
+          >
+            Forgot?
+          </router-link>
         </div>
-
-        <!-- Password -->
-        <div>
-          <div class="flex justify-between items-center mb-1">
-            <label class="block text-sm font-medium text-gray-700">Password</label>
-            <router-link to="/auth/forgot-password" class="text-xs text-gray-500 hover:text-black"
-              >Forgot?</router-link
-            >
-          </div>
+        <div class="relative">
           <input
+            id="login-password"
             v-model="form.password"
-            type="password"
+            :type="showPassword ? 'text' : 'password'"
             placeholder="••••••••"
             required
-            class="w-full px-4 py-3 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:border-black focus:ring-2 focus:ring-black/10 outline-none transition"
+            :aria-invalid="Boolean(fieldErrors.password)"
+            class="w-full px-4 py-3 pr-20 bg-slate-50 dark:bg-slate-800/50 border-2 rounded-xl outline-none transition-all font-medium text-slate-700 dark:text-slate-200 placeholder:text-slate-400"
+            :class="
+              fieldErrors.password
+                ? 'border-red-300 dark:border-red-500/40 focus:ring-4 focus:ring-red-500/10'
+                : 'border-transparent focus:bg-white dark:focus:bg-slate-900 focus:border-sky-600/20 focus:ring-4 focus:ring-sky-600/5'
+            "
           />
+          <button
+            type="button"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-semibold text-slate-400 hover:text-sky-600 transition-colors"
+            @click="showPassword = !showPassword"
+          >
+            {{ showPassword ? 'Hide' : 'Show' }}
+          </button>
         </div>
-
-        <!-- Error message -->
-        <div
-          v-if="error"
-          class="flex items-center gap-2 text-red-500 text-sm bg-red-50 p-3 rounded-lg border border-red-100"
-        >
-          <span class="w-2 h-2 bg-red-500 rounded-full"></span>
-          {{ error }}
-        </div>
-
-        <!-- Submit -->
-        <button
-          type="submit"
-          :disabled="isLoading"
-          class="w-full py-3 bg-black text-white font-semibold rounded-xl hover:bg-gray-900 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2 transition-all"
-        >
-          <svg v-if="isLoading" class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-            <circle
-              class="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              stroke-width="4"
-            ></circle>
-            <path
-              class="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
-          <span>{{ isLoading ? 'Signing in...' : 'Sign In' }}</span>
-        </button>
-      </form>
-
-      <!-- Divider -->
-      <div class="relative my-6">
-        <div class="absolute inset-0 flex items-center">
-          <span class="w-full border-t border-gray-200"></span>
-        </div>
-        <div class="relative flex justify-center text-xs text-gray-400 uppercase font-medium">
-          <span class="bg-white px-2">Or continue with</span>
-        </div>
+        <p v-if="fieldErrors.password" class="text-xs font-semibold text-red-500 px-1">
+          {{ fieldErrors.password }}
+        </p>
       </div>
 
-      <div class="flex gap-3 justify-center">
-        <button
-          class="flex-1 flex items-center justify-center py-2.5 border border-gray-200 rounded-xl hover:bg-gray-100 transition"
-        >
-          <span class="sr-only">Continue with Google</span>
-          G
-        </button>
-        <button
-          class="flex-1 flex items-center justify-center py-2.5 border border-gray-200 rounded-xl hover:bg-gray-100 transition"
-        >
-          <span class="sr-only">Continue with Facebook</span>
-          F
-        </button>
+      <div
+        v-if="error"
+        class="flex items-center gap-2 text-red-600 dark:text-red-300 text-sm bg-red-50 dark:bg-red-500/10 p-3 rounded-xl border border-red-100 dark:border-red-500/20"
+      >
+        <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+        {{ error }}
       </div>
 
-      <!-- Footer -->
-      <p class="text-center text-sm text-gray-500 mt-6">
-        Don't have an account?
-        <router-link to="/auth/register" class="text-black font-semibold hover:underline"
-          >Sign up</router-link
-        >
-      </p>
-    </div>
+      <button
+        type="submit"
+        :disabled="isLoading"
+        class="w-full py-3.5 bg-sky-600 text-white rounded-xl font-black text-sm uppercase tracking-[0.16em] hover:bg-sky-700 disabled:opacity-50 transition-all flex justify-center items-center gap-2"
+      >
+        <i v-if="isLoading" class="pi pi-spin pi-spinner text-lg"></i>
+        <span>{{ isLoading ? 'Signing in...' : 'Sign In' }}</span>
+      </button>
+    </form>
   </div>
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import { useAuth } from '@/features/auth/composables/useAuth'
 
+const route = useRoute()
 const { login, isLoading, error } = useAuth()
 const form = reactive({ email: '', password: '' })
+const showPassword = ref(false)
+const fieldErrors = reactive({ email: '', password: '' })
+
+const validate = () => {
+  fieldErrors.email = ''
+  fieldErrors.password = ''
+
+  if (!form.email) fieldErrors.email = 'Email is required'
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+    fieldErrors.email = 'Enter a valid email address'
+
+  if (!form.password) fieldErrors.password = 'Password is required'
+  else if (form.password.length < 6) fieldErrors.password = 'Use at least 6 characters'
+
+  return !fieldErrors.email && !fieldErrors.password
+}
 
 const handleLogin = async () => {
-  if (!form.email || !form.password) return
+  if (!validate()) return
   await login(form.email, form.password)
 }
 </script>
+
+<style></style>

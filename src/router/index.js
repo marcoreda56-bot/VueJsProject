@@ -7,6 +7,12 @@ const router = createRouter({
     // --- 1. Public Routes ---
     { path: '/', name: 'home', component: () => import('../views/HomeView.vue') },
     { path: '/about', name: 'about', component: () => import('../views/AboutView.vue') },
+    { path: '/categories', name: 'categories', component: () => import('../views/CategoriesView.vue') },
+    {
+      path: '/categories/:id',
+      name: 'public.category-jobs',
+      component: () => import('../views/CategoryJobsView.vue'),
+    },
     {
       path: '/jobs',
       name: 'public.jobs',

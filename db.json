@@ -1469,6 +1469,20 @@
       "cover_letter": "Auto-generated application via Jobs Store",
       "status": "pending",
       "id": "Z8iy862U0us"
+    },
+    {
+      "job_id": "1",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "7jyinUdQb8g"
+    },
+    {
+      "job_id": "1",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "NIMXwgpQS-M"
     }
   ],
   "application_stages": [
