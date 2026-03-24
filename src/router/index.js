@@ -1,10 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuthStore } from '@/stores/auth.store'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // --- 1. Public Routes ---
+    // 1. Public Routes
     { path: '/', name: 'home', component: () => import('../views/HomeView.vue') },
     { path: '/about', name: 'about', component: () => import('../views/AboutView.vue') },
     {
@@ -12,13 +11,8 @@ const router = createRouter({
       name: 'public.jobs',
       component: () => import('@/features/jobs/views/JobListView.vue'),
     },
-    {
-      path: '/jobs/:id',
-      name: 'job.detail',
-      component: () => import('../views/JobDetailView.vue'),
-    },
 
-    // --- 2. Auth Routes (Guest Only) ---
+    // 2. Auth Routes (Guest Only)
     {
       path: '/auth',
       component: () => import('@/components/layout/AuthLayout.vue'),
@@ -37,16 +31,31 @@ const router = createRouter({
       ],
     },
 
-    // --- 3. Candidate Routes ---
+    // 3. Candidate Routes
     {
       path: '/candidate',
       component: () => import('@/components/layout/CandidateLayout.vue'),
-      meta: { requiresAuth: true, role: 'candidate' },
+      meta: { requiresAuth: true, role: 'candidate', hideNavbar: true },
       children: [
         {
           path: 'dashboard',
           name: 'candidate.dashboard',
-          component: () => import('@/features/candidate/views/CandidateDashboardView.vue'),
+          component: () => import('@/features/candidate/views/DashboardView.vue'),
+        },
+        {
+          path: 'find-jobs',
+          name: 'candidate.find-jobs',
+          component: () => import('@/features/jobs/views/JobListView.vue'),
+        },
+        {
+          path: 'jobs/:id',
+          name: 'candidate.job-details',
+          component: () => import('@/features/jobs/views/JobDetailsView.vue'),
+        },
+        {
+          path: 'jobs/:id/apply',
+          name: 'candidate.job-apply',
+          component: () => import('@/features/jobs/views/ApplyJob.vue'),
         },
         {
           path: 'profile',
@@ -61,11 +70,11 @@ const router = createRouter({
       ],
     },
 
-    // --- 4. Employer Routes ---
+    // 4. Employer Routes
     {
       path: '/employer',
       component: () => import('@/components/layout/EmployerLayout.vue'),
-      meta: { requiresAuth: true, role: 'employer' },
+      meta: { requiresAuth: true, role: 'employer', hideNavbar: true },
       children: [
         {
           path: 'dashboard',
@@ -85,15 +94,6 @@ const router = createRouter({
       ],
     },
 
-    // --- 5. Apply Route ---
-    {
-      path: '/apply/:id',
-      name: 'jobs.apply',
-      component: () => import('@/features/jobs/views/ApplyView.vue'),
-      meta: { requiresAuth: true },
-    },
-
-    // --- 6. 404 Route ---
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
@@ -102,7 +102,7 @@ const router = createRouter({
   ],
 })
 
-// Navigation Guard (The Complete & Modern Way) ---
+// Navigation Guard
 router.beforeEach((to) => {
   const token = localStorage.getItem('token')
   const user = JSON.parse(localStorage.getItem('user'))

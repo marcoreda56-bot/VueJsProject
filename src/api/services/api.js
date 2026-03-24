@@ -20,7 +20,7 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.error('🚀 HireMasr API Error:', error.response?.data || error.message)
+    console.error('HireMasr API Error:', error.response?.data || error.message)
     return Promise.reject(error)
   },
 )
@@ -65,7 +65,6 @@ export const jobsApi = {
   delete: (id) => api.delete(`/jobs/${id}`),
 }
 
-// --- Categories ---
 export const categoriesApi = {
   getAll: () => api.get('/categories'),
   getById: (id) => api.get(`/categories/${id}`),

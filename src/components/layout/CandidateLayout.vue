@@ -1,70 +1,66 @@
 <template>
-  <div class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Plus_Jakarta_Sans',sans-serif]">
-    <!-- <header class="sticky top-0 z-50 px-6 py-4">
-      <div
-        class="max-w-7xl mx-auto backdrop-blur-md bg-white/70 dark:bg-slate-900/70 border border-slate-200/50 dark:border-slate-800 rounded-2xl px-6 py-3 flex justify-between items-center shadow-[0_8px_30px_rgb(0,0,0,0.02)] transition-all"
-      >
-        <div class="flex items-center gap-3 group cursor-pointer">
-          <div
-            class="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200 dark:shadow-none transition-transform group-hover:scale-110"
-          >
-            <i class="pi pi-user text-white text-sm"></i>
-          </div>
-          <h1
-            class="font-black text-xl tracking-tighter text-slate-900 dark:text-white italic uppercase"
-          >
-            Portal<span class="text-indigo-600">.</span>
-          </h1>
-        </div>
-
-        <div class="flex items-center gap-4">
-          <div class="hidden sm:flex flex-col items-end mr-2">
-            <span
-              class="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none"
-              >Candidate</span
-            >
-            <span class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight"
-              >Marco Reda</span
-            >
-          </div>
-
-          <div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1"></div>
-
-          <button
-            class="flex items-center gap-2 px-4 py-2 text-sm font-black text-slate-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl transition-all uppercase tracking-wider group"
-          >
-            <span>Logout</span>
-            <i class="pi pi-sign-out text-xs group-hover:translate-x-1 transition-transform"></i>
-          </button>
-        </div>
+  <div
+    class="flex min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Plus_Jakarta_Sans',sans-serif]"
+  >
+    <aside
+      class="w-80 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 hidden lg:flex flex-col sticky top-0 h-screen z-50"
+    >
+      <div class="p-10 mb-6">
+        <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tighter italic">
+          Hire<span class="text-indigo-600">Masr.</span>
+        </h2>
       </div>
-    </header> -->
 
-    <main class="max-w-7xl mx-auto py-8 px-6 animate-[fadeIn_0.5s_ease-out]">
-      <router-view v-slot="{ Component }">
-        <transition
-          enter-active-class="transition duration-300 ease-out"
-          enter-from-class="transform translate-y-4 opacity-0"
-          enter-to-class="transform translate-y-0 opacity-100"
-          leave-active-class="transition duration-200 ease-in"
-          leave-from-class="transform translate-y-0 opacity-100"
-          leave-to-class="transform translate-y-4 opacity-0"
-          mode="out-in"
+      <nav class="flex-1 px-6 space-y-3">
+        <router-link
+          v-for="link in navLinks"
+          :key="link.path"
+          :to="link.path"
+          class="flex items-center gap-4 px-6 py-4 rounded-[1.5rem] font-black text-[10px] uppercase tracking-[0.2em] transition-all group no-underline"
+          active-class="bg-indigo-600 text-white shadow-xl shadow-indigo-600/20"
+          :class="
+            $route.path !== link.path
+              ? 'text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
+              : ''
+          "
         >
-          <component :is="Component" />
-        </transition>
-      </router-view>
+          <i :class="link.icon" class="text-lg"></i>
+          {{ link.name }}
+        </router-link>
+      </nav>
+
+      <div class="p-8 border-t border-slate-50 dark:border-slate-800">
+        <button
+          @click="handleLogout"
+          class="w-full flex items-center gap-4 px-6 py-4 rounded-[1.5rem] text-rose-500 font-black text-[10px] uppercase tracking-[0.2em] hover:bg-rose-50 dark:hover:bg-rose-500/10 transition-all"
+        >
+          <i class="pi pi-power-off"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto relative">
+      <router-view />
     </main>
   </div>
 </template>
 
-<style>
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+<script setup>
+import { useAuthStore } from '@/stores/auth.store'
+import { useRouter } from 'vue-router'
+
+const auth = useAuthStore()
+const router = useRouter()
+
+const navLinks = [
+  { name: 'Dashboard', path: '/candidate/dashboard', icon: 'pi pi-th-large' },
+  { name: 'My Applications', path: '/candidate/applications', icon: 'pi pi-send' },
+  { name: 'Profile Settings', path: '/candidate/profile', icon: 'pi pi-user' },
+  { name: 'Find Jobs', path: '/candidate/find-jobs', icon: 'pi pi-search' },
+]
+
+const handleLogout = () => {
+  auth.logout()
+  router.push({ name: 'home' })
 }
-</style>
+</script>

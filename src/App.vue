@@ -1,6 +1,6 @@
 <template>
   <div class="app-container min-h-screen bg-gray-50">
-    <AppNavbar />
+    <AppNavbar v-if="!$route.meta.hideNavbar" />
 
     <main class="container mx-auto py-6">
       <router-view v-slot="{ Component }">
@@ -11,7 +11,7 @@
     </main>
 
     <footer class="text-center py-6 text-gray-500 border-t border-gray-200 mt-8">
-      &copy; 2026 SouqMasr Jobs. Built with Vue 3.
+      &copy; 2026 HireMasr Jobs. Built with Vue 3.
     </footer>
   </div>
 </template>

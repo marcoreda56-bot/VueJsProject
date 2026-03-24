@@ -3,21 +3,18 @@ import { defineStore } from 'pinia'
 import { jobsApi, categoriesApi, applicationsApi, employersApi } from '@/api/services/api'
 
 export const useJobsStore = defineStore('jobs', () => {
-  // State
   const jobs = ref([])
   const categories = ref([])
   const employers = ref([])
   const loading = ref(false)
   const error = ref(null)
-  const currentUserId = ref(null) // Simulate logged-in user
+  const currentUserId = ref(null)
 
-  // Getters
   const activeJobs = () => jobs.value.filter((job) => job.status === 'active')
   const featuredJobs = () => activeJobs().slice(0, 6)
   const jobsByCategory = (categoryId) => jobs.value.filter((job) => job.category_id === categoryId)
   const jobCountByCategory = (categoryId) => jobsByCategory(categoryId).length
 
-  // Actions
   const fetchActiveJobs = async () => {
     try {
       loading.value = true
@@ -36,7 +33,6 @@ export const useJobsStore = defineStore('jobs', () => {
     try {
       const response = await categoriesApi.getActive()
       categories.value = response.data
-      // Enrich with job counts
       categories.value.forEach((cat) => {
         cat.jobs_count = jobCountByCategory(cat.id)
       })
@@ -86,7 +82,6 @@ export const useJobsStore = defineStore('jobs', () => {
     return applications.value?.filter((app) => app.job_id === jobId) || []
   }
 
-  // Init
   const initialize = async () => {
     await Promise.all([fetchActiveJobs(), fetchAllCategories(), fetchEmployers()])
   }
