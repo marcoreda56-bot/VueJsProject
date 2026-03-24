@@ -1,11 +1,11 @@
-<template>
+<template >
   <div
     class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 flex font-['Plus_Jakarta_Sans',sans-serif]"
   >
     <aside
       class="w-72 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 p-8 hidden lg:flex flex-col sticky top-0 h-screen transition-all duration-300"
     >
-      <div class="flex items-center gap-3 mb-12 group cursor-pointer px-2">
+      <!-- <div class="flex items-center gap-3 mb-12 group cursor-pointer px-2">
         <div
           class="w-10 h-10 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-200 dark:shadow-none transition-transform group-hover:rotate-6"
         >
@@ -16,7 +16,7 @@
         >
           Jobs<span class="text-indigo-600">.</span>App
         </span>
-      </div>
+      </div> -->
 
       <nav class="flex-1 space-y-2">
         <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 ml-4">

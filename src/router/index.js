@@ -102,28 +102,24 @@ const router = createRouter({
   ],
 })
 
-// --- 🛡️ Navigation Guard (The Complete & Modern Way) ---
+// Navigation Guard (The Complete & Modern Way) ---
 router.beforeEach((to) => {
   const token = localStorage.getItem('token')
   const user = JSON.parse(localStorage.getItem('user'))
 
-  // 1. لو مسجل دخول وبيحاول يفتح صفحة الهوم أو صفحات الـ Auth (Login/Register)
-  // بنرجعه فوراً للدشبورد بتاعته على حسب الـ Role
   if (token && (to.name === 'home' || to.meta.guestOnly)) {
     return { name: `${user.role}.dashboard` }
   }
 
-  // 2. لو الصفحة محتاجة تسجيل دخول واليوزر مش معاه Token
   if (to.meta.requiresAuth && !token) {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
 
-  // 3. حماية الروتس بناءً على الـ Role (عشان Candidate ميسرقش روت Employer)
   if (to.meta.role && user && to.meta.role !== user.role) {
     return { name: `${user.role}.dashboard` }
   }
 
-  return true // كمل طريقك يا بطل
+  return true
 })
 
 export default router

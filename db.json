@@ -176,6 +176,14 @@
       "company_name": "",
       "role": "candidate",
       "id": "AilQdwHkr-8"
+    },
+    {
+      "name": "Marco",
+      "email": "marcoreda56@gmail.com",
+      "password": "#2452001",
+      "company_name": "",
+      "role": "candidate",
+      "id": "Ksnf5VD9EEg"
     }
   ],
   "candidates": [
@@ -1469,6 +1477,41 @@
       "cover_letter": "Auto-generated application via Jobs Store",
       "status": "pending",
       "id": "Z8iy862U0us"
+    },
+    {
+      "job_id": "1",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "R7eSlYCLXhw"
+    },
+    {
+      "job_id": "1",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "IQ2sKKUsxUk"
+    },
+    {
+      "job_id": "6",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "mDazOEBZXWk"
+    },
+    {
+      "job_id": "6",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "eGtexkxLdD8"
+    },
+    {
+      "job_id": "6",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "zD0Pk3Q4JAo"
     }
   ],
   "application_stages": [

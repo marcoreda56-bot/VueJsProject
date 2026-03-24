@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Plus_Jakarta_Sans',sans-serif]">
-    <header class="sticky top-0 z-50 px-6 py-4">
+    <!-- <header class="sticky top-0 z-50 px-6 py-4">
       <div
         class="max-w-7xl mx-auto backdrop-blur-md bg-white/70 dark:bg-slate-900/70 border border-slate-200/50 dark:border-slate-800 rounded-2xl px-6 py-3 flex justify-between items-center shadow-[0_8px_30px_rgb(0,0,0,0.02)] transition-all"
       >
@@ -38,7 +38,7 @@
           </button>
         </div>
       </div>
-    </header>
+    </header> -->
 
     <main class="max-w-7xl mx-auto py-8 px-6 animate-[fadeIn_0.5s_ease-out]">
       <router-view v-slot="{ Component }">

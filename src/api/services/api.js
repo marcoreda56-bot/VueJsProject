@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-// 1. الأساس: إنشاء الـ Axios Instance مع الإعدادات الاحترافية
 const api = axios.create({
   baseURL: 'http://localhost:3000',
   timeout: 10000,
@@ -10,7 +9,6 @@ const api = axios.create({
   },
 })
 
-// 2. المحرك: إضافة التوكن أوتوماتيكياً لكل طلب (Interceptors)
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
   if (token) {
@@ -19,20 +17,14 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// معالجة الأخطاء بشكل موحد
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.error('🚀 API Error:', error.response?.data || error.message)
+    console.error('🚀 HireMasr API Error:', error.response?.data || error.message)
     return Promise.reject(error)
   },
 )
 
-/** * 3. الخدمات (Services): كل Model لوحده
- * بنستخدم الـ Export عشان ننادي عليهم في الـ Composables
- */
-
-// --- Users & Auth ---
 export const usersApi = {
   login: (email, password) => api.get(`/users?email=${email}&password=${password}`),
   register: (data) => api.post('/users', data),
@@ -41,9 +33,27 @@ export const usersApi = {
   update: (id, data) => api.put(`/users/${id}`, data),
   delete: (id) => api.delete(`/users/${id}`),
   getByRole: (role) => api.get(`/users?role=${role}`),
+  getCandidates: () => api.get('/users?role=candidate'),
+  getEmployers: () => api.get('/users?role=employer'),
+  getAdmins: () => api.get('/users?role=admin'),
 }
 
-// --- Jobs (The Core) ---
+export const candidatesApi = {
+  getAll: () => api.get('/candidates'),
+  getById: (id) => api.get(`/candidates/${id}`),
+  create: (data) => api.post('/candidates', data),
+  update: (id, data) => api.put(`/candidates/${id}`, data),
+  delete: (id) => api.delete(`/candidates/${id}`),
+}
+
+export const employersApi = {
+  getAll: () => api.get('/employers'),
+  getById: (id) => api.get(`/employers/${id}`),
+  create: (data) => api.post('/employers', data),
+  update: (id, data) => api.put(`/employers/${id}`, data),
+  delete: (id) => api.delete(`/employers/${id}`),
+}
+
 export const jobsApi = {
   getAll: () => api.get('/jobs'),
   getById: (id) => api.get(`/jobs/${id}`),
@@ -55,19 +65,13 @@ export const jobsApi = {
   delete: (id) => api.delete(`/jobs/${id}`),
 }
 
-// --- Candidates & Employers Profiles ---
-export const profilesApi = {
-  // Candidates
-  getCandidates: () => api.get('/candidates'),
-  getCandidateById: (id) => api.get(`/candidates/${id}`),
-  createCandidate: (data) => api.post('/candidates', data),
-
-  // Employers
-  getEmployers: () => api.get('/employers'),
-  getEmployerById: (id) => api.get(`/employers/${id}`),
+// --- Categories ---
+export const categoriesApi = {
+  getAll: () => api.get('/categories'),
+  getById: (id) => api.get(`/categories/${id}`),
+  getActive: () => api.get('/categories?is_active=true'),
 }
 
-// --- Applications (تقديمات الوظائف) ---
 export const applicationsApi = {
   getAll: () => api.get('/applications'),
   getById: (id) => api.get(`/applications/${id}`),
@@ -75,15 +79,19 @@ export const applicationsApi = {
   getByCandidate: (candidateId) => api.get(`/applications?candidate_id=${candidateId}`),
   create: (data) => api.post('/applications', data),
   updateStatus: (id, status) => api.patch(`/applications/${id}`, { status }),
+  delete: (id) => api.delete(`/applications/${id}`),
 }
 
-// --- Categories & Skills ---
-export const metaApi = {
-  getCategories: () => api.get('/categories'),
-  getSkills: () => api.get('/skills'),
-  getJobSkills: (jobId) => api.get(`/job_skills?job_id=${jobId}`),
-  getCandidateSkills: (candidateId) => api.get(`/candidate_skills?candidate_id=${candidateId}`),
+export const skillsApi = {
+  getAll: () => api.get('/skills'),
 }
 
-// تصدير الـ Instance الأساسي كـ Default
+export const candidateSkillsApi = {
+  getByCandidate: (candidateId) => api.get(`/candidate_skills?candidate_id=${candidateId}`),
+}
+
+export const jobSkillsApi = {
+  getByJob: (jobId) => api.get(`/job_skills?job_id=${jobId}`),
+}
+
 export default api

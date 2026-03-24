@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { jobsApi, categoriesApi, applicationsApi, employersApi } from '../api/api.js'
+import { jobsApi, categoriesApi, applicationsApi, employersApi } from '@/api/services/api'
 
 export const useJobsStore = defineStore('jobs', () => {
   // State
