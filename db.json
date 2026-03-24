@@ -175,7 +175,7 @@
       "password": "123456",
       "company_name": "",
       "role": "candidate",
-      "id": "AilQdwHkr-8"
+      "id": "14"
     },
     {
       "name": "Marco",
@@ -183,7 +183,7 @@
       "password": "#2452001",
       "company_name": "",
       "role": "candidate",
-      "id": "Ksnf5VD9EEg"
+      "id": "15"
     },
     {
       "name": "marco",
@@ -191,7 +191,7 @@
       "password": "123456",
       "company_name": "",
       "role": "candidate",
-      "id": "Vbfyp7DU1co"
+      "id": "16"
     },
     {
       "name": "mahmoud",
@@ -199,7 +199,24 @@
       "password": "123456",
       "company_name": "",
       "role": "candidate",
-      "id": "KupEhge2G8g"
+      "id": "17"
+    },
+    {
+      "name": "mar.ma",
+      "email": "ma@gmail.com",
+      "password": "123456",
+      "company_name": "",
+      "role": "candidate",
+      "id": "18"
+    },
+    {
+      "name": "mona",
+      "email": "mona@gmail.com",
+      "password": "123456",
+      "role": "candidate",
+      "company_name": "",
+      "created_at": "2026-03-24T22:14:06.956Z",
+      "id": "USykNG9iZ9g"
     }
   ],
   "candidates": [
@@ -354,7 +371,11 @@
       "currency": "EGP",
       "profile_completion": 40,
       "created_at": "2024-06-01T12:00:00Z",
-      "updated_at": "2024-06-01T12:00:00Z"
+      "updated_at": "2026-03-24T22:08:58.579Z",
+      "title": "",
+      "skills": [
+        "node js"
+      ]
     },
     {
       "id": "9d88E6oi_sg",
@@ -403,6 +424,14 @@
       "bio": "Welcome to HireMasr! Complete your profile to stand out.",
       "skills": [],
       "updated_at": "2026-03-24T21:30:20.817Z"
+    },
+    {
+      "id": "1wvDbszNeQ8",
+      "title": "s",
+      "location": "Egypt",
+      "bio": "",
+      "skills": [],
+      "updated_at": "2026-03-24T22:02:04.203Z"
     }
   ],
   "candidate_education": [
@@ -1743,6 +1772,21 @@
       "status": "pending",
       "applied_at": "2026-03-24T21:27:03.328Z",
       "id": "C-7Dr0TjoAc"
+    },
+    {
+      "candidate_id": "6",
+      "job_id": "3",
+      "cover_letter": "hello",
+      "candidate_snapshot": {
+        "name": "Laila Farouk",
+        "email": "laila.farouk@email.com",
+        "title": "Professional Candidate",
+        "location": "Mansoura, Egypt",
+        "bio": "Fresh graduate with strong portfolio in branding and visual identity design."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T22:09:21.102Z",
+      "id": "_IxEtjmH8Wg"
     }
   ],
   "application_stages": [

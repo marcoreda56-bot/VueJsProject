@@ -1,4 +1,3 @@
-// src/composables/useAuth.js
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.store'
@@ -11,7 +10,6 @@ export function useAuth() {
   const isLoading = ref(false)
   const error = ref(null)
 
-  // تسجيل الدخول
   async function login(email, password) {
     if (!email || !password) {
       error.value = 'Please enter email and password'
@@ -30,10 +28,8 @@ export function useAuth() {
         return
       }
 
-      // حفظ البيانات
       auth.setUser(user, 'mock-jwt-token-123')
 
-      // Redirect حسب role
       router.push({ name: `${user.role}.dashboard` })
     } catch (err) {
       console.error(err)
@@ -43,7 +39,6 @@ export function useAuth() {
     }
   }
 
-  // تسجيل حساب جديد
   async function register(formData, role) {
     if (!formData.email || !formData.password) {
       error.value = 'Email and password are required'
@@ -60,7 +55,15 @@ export function useAuth() {
         return false
       }
 
-      const newUser = { ...formData, role, id: Date.now() }
+      const newUser = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: role,
+        company_name: formData.company_name || '',
+        created_at: new Date().toISOString(),
+      }
+
       const response = await api.post('/users', newUser)
 
       if (response.data) {
@@ -77,7 +80,6 @@ export function useAuth() {
     }
   }
 
-  // تسجيل الخروج
   function logout() {
     auth.logout()
     router.push('/auth/login')

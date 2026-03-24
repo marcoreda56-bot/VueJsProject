@@ -19,6 +19,7 @@
     "@primeuix/themes": "^2.0.3",
     "@tailwindcss/postcss": "^4.2.2",
     "axios": "^1.13.6",
+    "json-server-auth": "^2.1.0",
     "pinia": "^3.0.4",
     "primeflex": "^4.0.0",
     "primeicons": "^7.0.0",
