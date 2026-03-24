@@ -184,6 +184,14 @@
       "company_name": "",
       "role": "candidate",
       "id": "Ksnf5VD9EEg"
+    },
+    {
+      "name": "Nesma",
+      "email": "nesmaeid422@gmail.com",
+      "password": "mo@@@###$$$&&&",
+      "company_name": "",
+      "role": "candidate",
+      "id": "s97csuwlRT8"
     }
   ],
   "candidates": [
@@ -1512,6 +1520,34 @@
       "cover_letter": "Auto-generated application via Jobs Store",
       "status": "pending",
       "id": "zD0Pk3Q4JAo"
+    },
+    {
+      "job_id": "11",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "Niv6giSA_Ko"
+    },
+    {
+      "job_id": "11",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "Fb_lsB33I7s"
+    },
+    {
+      "job_id": "11",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "pwEfAn65ZJo"
+    },
+    {
+      "job_id": "11",
+      "candidate_id": 1,
+      "cover_letter": "Auto-generated application via Jobs Store",
+      "status": "pending",
+      "id": "uMGGSC99psw"
     }
   ],
   "application_stages": [
