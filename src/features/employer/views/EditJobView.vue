@@ -10,16 +10,32 @@
           >
             <i class="pi pi-arrow-left text-sm"></i>
           </button>
-          <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Employer Portal</p>
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Back to My Jobs</p>
         </div>
         <h1 class="text-5xl font-black text-slate-900 dark:text-white tracking-tighter italic leading-tight">
-          Post a <span class="text-indigo-600">New Job</span>
+          Edit <span class="text-indigo-600">Job</span>
         </h1>
-        <p class="text-slate-500 font-medium mt-2">Fill in all fields to reach the best candidates.</p>
+        <p class="text-slate-500 font-medium mt-2">Update your job listing details below.</p>
+      </div>
+
+      <!-- Loading State -->
+      <div v-if="loading" class="text-center py-24 text-slate-400 font-bold italic text-lg">
+        Loading job details...
+      </div>
+
+      <!-- Not Found -->
+      <div v-else-if="!form" class="text-center py-24">
+        <h3 class="text-3xl font-black text-slate-900 dark:text-white italic mb-4">Job Not Found</h3>
+        <button
+          @click="$router.push({ name: 'employer.manage-jobs' })"
+          class="px-8 py-4 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-500 transition-all"
+        >
+          Go Back
+        </button>
       </div>
 
       <!-- Form Card -->
-      <form @submit.prevent="handleSubmit" class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] p-10 shadow-sm space-y-8">
+      <form v-else @submit.prevent="handleSubmit" class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] p-10 shadow-sm space-y-8">
 
         <!-- Section: Basic Details -->
         <div>
@@ -33,8 +49,7 @@
                 v-model="form.title"
                 type="text"
                 required
-                placeholder="e.g. Senior Frontend Developer"
-                class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-300"
+                class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
               />
             </div>
             <div>
@@ -54,8 +69,7 @@
                 v-model="form.location"
                 type="text"
                 required
-                placeholder="e.g. Cairo, Egypt"
-                class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-300"
+                class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
               />
             </div>
             <div>
@@ -103,8 +117,7 @@
                 v-model.number="form.salary_min"
                 type="number"
                 min="0"
-                placeholder="e.g. 15000"
-                class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-300"
+                class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
               />
             </div>
             <div>
@@ -113,8 +126,7 @@
                 v-model.number="form.salary_max"
                 type="number"
                 min="0"
-                placeholder="e.g. 30000"
-                class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-300"
+                class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
               />
             </div>
           </div>
@@ -152,7 +164,6 @@
                 <i class="pi pi-times text-[9px]"></i>
               </button>
             </span>
-            <span v-if="form.technologies.length === 0" class="text-slate-300 text-xs font-medium italic">No technologies added yet</span>
           </div>
         </div>
 
@@ -165,8 +176,7 @@
             v-model="form.description"
             required
             rows="5"
-            placeholder="Describe the role, team, and what a typical day looks like..."
-            class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-300 resize-none leading-relaxed"
+            class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all resize-none leading-relaxed"
           ></textarea>
         </div>
 
@@ -179,8 +189,7 @@
             v-model="form.requirements"
             required
             rows="5"
-            placeholder="List the skills, experience, and qualifications needed..."
-            class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-300 resize-none leading-relaxed"
+            class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all resize-none leading-relaxed"
           ></textarea>
         </div>
 
@@ -192,8 +201,7 @@
           <textarea
             v-model="form.benefits"
             rows="4"
-            placeholder="e.g. Health insurance, annual bonus, remote work flexibility..."
-            class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-300 resize-none leading-relaxed"
+            class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all resize-none leading-relaxed"
           ></textarea>
         </div>
 
@@ -208,11 +216,11 @@
           </button>
           <button
             type="submit"
-            :disabled="employerStore.loading"
+            :disabled="saving"
             class="px-12 py-4 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl shadow-indigo-100 dark:shadow-none hover:bg-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all flex items-center gap-3 disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            <i class="pi pi-check-circle"></i>
-            {{ employerStore.loading ? 'Posting...' : 'Post Job' }}
+            <i class="pi pi-save"></i>
+            {{ saving ? 'Saving...' : 'Save Changes' }}
           </button>
         </div>
       </form>
@@ -222,12 +230,19 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useEmployerStore } from '@/stores/employer.store'
+import { jobsApi } from '@/api/services/api'
 import Swal from 'sweetalert2'
 
+const route = useRoute()
 const router = useRouter()
 const employerStore = useEmployerStore()
+
+const loading = ref(true)
+const saving = ref(false)
+const form = ref(null)
+const techInput = ref('')
 
 const workTypes = [
   { label: 'Remote', value: 'remote' },
@@ -235,25 +250,36 @@ const workTypes = [
   { label: 'Hybrid', value: 'hybrid' },
 ]
 
-const techInput = ref('')
-const form = ref({
-  title: '',
-  category_id: '',
-  location: '',
-  work_type: 'onsite',
-  experience_level: '',
-  salary_min: '',
-  salary_max: '',
-  technologies: [],
-  description: '',
-  requirements: '',
-  benefits: '',
-})
-
 onMounted(async () => {
   if (!employerStore.categories.length) {
     await employerStore.fetchCategories()
   }
+
+  // Try local store first
+  let job = employerStore.getJobById(route.params.id)
+
+  // If not in store, fetch from API
+  if (!job) {
+    try {
+      const res = await jobsApi.getById(route.params.id)
+      job = res.data
+    } catch {
+      job = null
+    }
+  }
+
+  if (job) {
+    form.value = {
+      ...job,
+      technologies: Array.isArray(job.technologies) ? [...job.technologies] : [],
+      salary_min: job.salary_min || '',
+      salary_max: job.salary_max || '',
+      experience_level: job.experience_level || '',
+      benefits: job.benefits || '',
+    }
+  }
+
+  loading.value = false
 })
 
 const addTech = () => {
@@ -269,28 +295,29 @@ const removeTech = (i) => {
 }
 
 const handleSubmit = async () => {
+  saving.value = true
   try {
-    await employerStore.postJob({ ...form.value })
+    await employerStore.updateJob(route.params.id, form.value)
 
     await Swal.fire({
-      title: 'Job Posted!',
-      text: 'Your job listing is now live.',
+      title: 'Changes Saved!',
+      text: 'Your job listing has been updated.',
       icon: 'success',
       timer: 2000,
       showConfirmButton: false,
-      customClass: {
-        popup: 'rounded-[2rem] p-10',
-      },
+      customClass: { popup: 'rounded-[2rem] p-10' },
     })
 
     router.push({ name: 'employer.manage-jobs' })
   } catch {
     Swal.fire({
       title: 'Error',
-      text: 'Failed to post job. Please try again.',
+      text: 'Failed to save changes. Please try again.',
       icon: 'error',
       customClass: { popup: 'rounded-[2rem] p-10' },
     })
+  } finally {
+    saving.value = false
   }
 }
 </script>

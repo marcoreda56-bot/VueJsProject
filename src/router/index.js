@@ -11,6 +11,11 @@ const router = createRouter({
       name: 'public.jobs',
       component: () => import('@/features/jobs/views/JobListView.vue'),
     },
+    {
+      path: '/jobs/:id',
+      name: 'job.detail',
+      component: () => import('@/features/jobs/views/JobDetailsView.vue'),
+    },
 
     // 2. Auth Routes (Guest Only)
     {
@@ -90,6 +95,21 @@ const router = createRouter({
           path: 'manage-jobs',
           name: 'employer.manage-jobs',
           component: () => import('@/features/employer/views/ManageJobsView.vue'),
+        },
+        {
+          path: 'applications',
+          name: 'employer.applications',
+          component: () => import('@/features/employer/views/EmployerApplicationsView.vue'),
+        },
+        {
+          path: 'jobs/:id',
+          name: 'employer.job-details',
+          component: () => import('@/features/jobs/views/JobDetailsView.vue'),
+        },
+        {
+          path: 'edit-job/:id',
+          name: 'employer.edit-job',
+          component: () => import('@/features/employer/views/EditJobView.vue'),
         },
       ],
     },

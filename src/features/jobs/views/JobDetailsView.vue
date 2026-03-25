@@ -10,7 +10,9 @@
       >
         <div
           class="w-8 h-8 rounded-full border border-slate-200 dark:border-slate-800 flex items-center justify-center group-hover:border-indigo-600 transition-colors"
-        ></div>
+        >
+          <i class="pi pi-arrow-left text-xs transition-transform group-hover:-translate-x-0.5"></i>
+        </div>
         Back
       </button>
 
@@ -102,26 +104,34 @@
                 >
               </h4>
 
-              <button
-                @click="showApplyModal = true"
-                :disabled="hasApplied"
-                class="w-full py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 shadow-xl"
-                :class="
-                  hasApplied
-                    ? 'bg-slate-700 text-slate-500 cursor-not-allowed shadow-none'
-                    : 'bg-indigo-600 hover:bg-white hover:text-slate-900 shadow-indigo-500/20 active:scale-95'
-                "
-              >
-                <i :class="hasApplied ? 'pi pi-check-circle' : 'pi pi-bolt'"></i>
-                {{ hasApplied ? 'Already Tracked' : 'Easy Apply Now' }}
-              </button>
+              <template v-if="!isEmployer">
+                <button
+                  @click="showApplyModal = true"
+                  :disabled="hasApplied"
+                  class="w-full py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 shadow-xl"
+                  :class="
+                    hasApplied
+                      ? 'bg-slate-700 text-slate-500 cursor-not-allowed shadow-none'
+                      : 'bg-indigo-600 hover:bg-white hover:text-slate-900 shadow-indigo-500/20 active:scale-95'
+                  "
+                >
+                  <i class="pi" :class="hasApplied ? 'pi-check-circle' : 'pi-bolt'"></i>
+                  {{ hasApplied ? 'Already Tracked' : 'Easy Apply Now' }}
+                </button>
 
-              <p
-                v-if="hasApplied"
-                class="text-center text-[10px] font-bold text-emerald-400 mt-4 uppercase tracking-widest"
-              >
-                Application is being reviewed
-              </p>
+                <p
+                  v-if="hasApplied"
+                  class="text-center text-[10px] font-bold text-emerald-400 mt-4 uppercase tracking-widest"
+                >
+                  Application is being reviewed
+                </p>
+              </template>
+              <template v-else>
+                <div class="mt-4 p-4 rounded-2xl bg-slate-800/50 border border-slate-700 text-center">
+                  <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">Employer View</p>
+                  <p class="text-xs font-bold text-indigo-400 mt-1">Editing disabled here</p>
+                </div>
+              </template>
             </div>
           </div>
         </div>
@@ -185,15 +195,18 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useJobsStore } from '@/stores/jobs'
 import { useCandidateStore } from '@/stores/candidate.store'
+import { useAuthStore } from '@/stores/auth.store'
 import Swal from 'sweetalert2'
 
 const route = useRoute()
-const router = useRouter()
 const jobsStore = useJobsStore()
 const candidateStore = useCandidateStore()
+const authStore = useAuthStore()
+
+const isEmployer = computed(() => authStore.user?.role === 'employer')
 
 const showApplyModal = ref(false)
 const coverLetter = ref('')
@@ -235,7 +248,7 @@ const submitApplication = async () => {
       confirmButtonColor: '#6366f1',
       timer: 3000,
     })
-  } catch (error) {
+  } catch {
     Swal.fire('Error', 'Something went wrong. Check your connection.', 'error')
   }
 }
