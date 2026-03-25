@@ -191,7 +191,6 @@
       "password": "mo@@@###$$$&&&",
       "company_name": "",
       "role": "candidate",
-<<<<<<< HEAD
       "id": "Vbfyp7DU1co"
     },
     {
@@ -209,9 +208,6 @@
       "company_name": "",
       "role": "candidate",
       "id": "2-91LFz9B0Q"
-=======
-      "id": "s97csuwlRT8"
->>>>>>> 0810f287b08b5ac6c08388f6d518193f30ebd009
     }
   ],
   "candidates": [
@@ -1599,7 +1595,6 @@
       "candidate_id": 1,
       "cover_letter": "Auto-generated application via Jobs Store",
       "status": "pending",
-<<<<<<< HEAD
       "applied_at": "2026-03-24T18:42:12.895Z",
       "id": "2E--69tDtT8"
     },
@@ -1774,9 +1769,6 @@
       "status": "pending",
       "applied_at": "2026-03-25T10:37:17.484Z",
       "id": "EDifOX1pu-0"
-=======
-      "id": "uMGGSC99psw"
->>>>>>> 0810f287b08b5ac6c08388f6d518193f30ebd009
     }
   ],
   "application_stages": [
