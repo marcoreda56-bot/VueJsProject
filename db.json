@@ -175,7 +175,7 @@
       "password": "123456",
       "company_name": "",
       "role": "candidate",
-      "id": "14"
+      "id": "AilQdwHkr-8"
     },
     {
       "name": "Marco",
@@ -183,7 +183,7 @@
       "password": "#2452001",
       "company_name": "",
       "role": "candidate",
-      "id": "15"
+      "id": "Ksnf5VD9EEg"
     },
     {
       "name": "marco",
@@ -191,7 +191,7 @@
       "password": "123456",
       "company_name": "",
       "role": "candidate",
-      "id": "16"
+      "id": "Vbfyp7DU1co"
     },
     {
       "name": "mahmoud",
@@ -199,24 +199,15 @@
       "password": "123456",
       "company_name": "",
       "role": "candidate",
-      "id": "17"
+      "id": "KupEhge2G8g"
     },
     {
-      "name": "mar.ma",
-      "email": "ma@gmail.com",
+      "name": "mahmoud",
+      "email": "marco1@gmail.com",
       "password": "123456",
       "company_name": "",
       "role": "candidate",
-      "id": "18"
-    },
-    {
-      "name": "mona",
-      "email": "mona@gmail.com",
-      "password": "123456",
-      "role": "candidate",
-      "company_name": "",
-      "created_at": "2026-03-24T22:14:06.956Z",
-      "id": "USykNG9iZ9g"
+      "id": "2-91LFz9B0Q"
     }
   ],
   "candidates": [
@@ -371,8 +362,8 @@
       "currency": "EGP",
       "profile_completion": 40,
       "created_at": "2024-06-01T12:00:00Z",
-      "updated_at": "2026-03-24T22:08:58.579Z",
-      "title": "",
+      "updated_at": "2026-03-24T22:37:06.786Z",
+      "title": "senior backend",
       "skills": [
         "node js"
       ]
@@ -426,12 +417,12 @@
       "updated_at": "2026-03-24T21:30:20.817Z"
     },
     {
-      "id": "1wvDbszNeQ8",
-      "title": "s",
+      "id": "ixDyUXe3lZE",
+      "title": "senior",
       "location": "Egypt",
       "bio": "",
       "skills": [],
-      "updated_at": "2026-03-24T22:02:04.203Z"
+      "updated_at": "2026-03-24T22:44:47.939Z"
     }
   ],
   "candidate_education": [
@@ -1775,18 +1766,18 @@
     },
     {
       "candidate_id": "6",
-      "job_id": "3",
-      "cover_letter": "hello",
+      "job_id": "1",
+      "cover_letter": "hello\n",
       "candidate_snapshot": {
         "name": "Laila Farouk",
         "email": "laila.farouk@email.com",
-        "title": "Professional Candidate",
+        "title": "senior backend",
         "location": "Mansoura, Egypt",
         "bio": "Fresh graduate with strong portfolio in branding and visual identity design."
       },
       "status": "pending",
-      "applied_at": "2026-03-24T22:09:21.102Z",
-      "id": "_IxEtjmH8Wg"
+      "applied_at": "2026-03-24T22:42:36.547Z",
+      "id": "569kArgrWts"
     }
   ],
   "application_stages": [
