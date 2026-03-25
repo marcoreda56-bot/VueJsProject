@@ -49,6 +49,29 @@
             </div>
           </div>
 
+          <div class="space-y-4 mb-8">
+            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2"
+              >Category</label
+            >
+            <div
+              v-for="category in jobStore.categories"
+              :key="category.id"
+              @click="toggleCategory(category.id)"
+              :class="
+                selectedCategory === category.id
+                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-none'
+                  : 'bg-slate-50 dark:bg-slate-800 text-slate-500'
+              "
+              class="px-6 py-4 rounded-2xl cursor-pointer transition-all flex items-center justify-between font-black text-[10px] uppercase tracking-widest hover:scale-[1.02]"
+            >
+              {{ category.name }}
+              <span v-if="selectedCategory !== category.id" class="text-[9px] opacity-60"
+                >({{ category.jobs_count || 0 }})</span
+              >
+              <i v-if="selectedCategory === category.id" class="pi pi-check"></i>
+            </div>
+          </div>
+
           <button
             @click="resetFilters"
             class="w-full text-[10px] font-black uppercase text-slate-400 hover:text-rose-500 transition-colors py-2"
@@ -131,11 +154,12 @@ import { useJobsStore } from '@/stores/jobs'
 const jobStore = useJobsStore()
 const searchQuery = ref('')
 const selectedType = ref(null)
+const selectedCategory = ref(null) // Added for category filter
 
 const jobTypes = [
-  { id: 'full-time', label: 'Full Time' },
+  { id: 'full_time', label: 'Full Time' },
   { id: 'remote', label: 'Remote' },
-  { id: 'part-time', label: 'Part Time' },
+  { id: 'part_time', label: 'Part Time' },
 ]
 
 onMounted(() => jobStore.initialize())
@@ -156,8 +180,11 @@ const filteredJobs = computed(() => {
       job.location?.toLowerCase().includes(query)
 
     const matchesType = selectedType.value ? job.type === selectedType.value : true
+    const matchesCategory = selectedCategory.value
+      ? String(job.category_id) === String(selectedCategory.value)
+      : true
 
-    return matchesSearch && matchesType
+    return matchesSearch && matchesType && matchesCategory
   })
 })
 
@@ -165,8 +192,13 @@ const toggleType = (id) => {
   selectedType.value = selectedType.value === id ? null : id
 }
 
+const toggleCategory = (id) => {
+  selectedCategory.value = selectedCategory.value === id ? null : id
+}
+
 const resetFilters = () => {
   searchQuery.value = ''
   selectedType.value = null
+  selectedCategory.value = null
 }
 </script>

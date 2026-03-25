@@ -225,10 +225,7 @@
       "portfolio_url": "https://ahmedkhaled.dev",
       "is_open_to_work": true,
       "preferred_job_type": "full_time",
-      "preferred_locations": [
-        "Cairo",
-        "Remote"
-      ],
+      "preferred_locations": ["Cairo", "Remote"],
       "expected_salary_min": 25000,
       "expected_salary_max": 40000,
       "currency": "EGP",
@@ -250,11 +247,7 @@
       "portfolio_url": "https://saramohamed.design",
       "is_open_to_work": true,
       "preferred_job_type": "full_time",
-      "preferred_locations": [
-        "Giza",
-        "Cairo",
-        "Remote"
-      ],
+      "preferred_locations": ["Giza", "Cairo", "Remote"],
       "expected_salary_min": 18000,
       "expected_salary_max": 28000,
       "currency": "EGP",
@@ -278,10 +271,7 @@
       "portfolio_url": null,
       "is_open_to_work": false,
       "preferred_job_type": "full_time",
-      "preferred_locations": [
-        "Alexandria",
-        "Remote"
-      ],
+      "preferred_locations": ["Alexandria", "Remote"],
       "expected_salary_min": 22000,
       "expected_salary_max": 35000,
       "currency": "EGP",
@@ -304,9 +294,7 @@
       "portfolio_url": null,
       "is_open_to_work": true,
       "preferred_job_type": "full_time",
-      "preferred_locations": [
-        "Cairo"
-      ],
+      "preferred_locations": ["Cairo"],
       "expected_salary_min": 12000,
       "expected_salary_max": 20000,
       "currency": "EGP",
@@ -328,16 +316,15 @@
       "portfolio_url": null,
       "is_open_to_work": true,
       "preferred_job_type": "full_time",
-      "preferred_locations": [
-        "Cairo",
-        "Remote"
-      ],
+      "preferred_locations": ["Cairo", "Remote"],
       "expected_salary_min": 40000,
       "expected_salary_max": 65000,
       "currency": "EGP",
       "profile_completion": 95,
       "created_at": "2024-05-22T11:00:00Z",
-      "updated_at": "2024-10-30T16:00:00Z"
+      "updated_at": "2026-03-25T10:36:26.104Z",
+      "title": "fullstack developer",
+      "skills": []
     },
     {
       "id": "6",
@@ -353,10 +340,7 @@
       "portfolio_url": null,
       "is_open_to_work": true,
       "preferred_job_type": "internship",
-      "preferred_locations": [
-        "Mansoura",
-        "Cairo"
-      ],
+      "preferred_locations": ["Mansoura", "Cairo"],
       "expected_salary_min": 6000,
       "expected_salary_max": 10000,
       "currency": "EGP",
@@ -364,9 +348,7 @@
       "created_at": "2024-06-01T12:00:00Z",
       "updated_at": "2026-03-24T22:37:06.786Z",
       "title": "senior backend",
-      "skills": [
-        "node js"
-      ]
+      "skills": ["node js"]
     },
     {
       "id": "9d88E6oi_sg",
@@ -639,11 +621,7 @@
     {
       "id": "2",
       "user_id": 13,
-      "permissions": [
-        "manage_jobs",
-        "manage_users",
-        "view_reports"
-      ],
+      "permissions": ["manage_jobs", "manage_users", "view_reports"],
       "created_at": "2023-01-01T00:00:00Z"
     }
   ],
@@ -1778,6 +1756,21 @@
       "status": "pending",
       "applied_at": "2026-03-24T22:42:36.547Z",
       "id": "569kArgrWts"
+    },
+    {
+      "candidate_id": "5",
+      "job_id": "3",
+      "cover_letter": "any thing",
+      "candidate_snapshot": {
+        "name": "Karim Mahmoud",
+        "email": "karim.mahmoud@email.com",
+        "title": "fullstack developer",
+        "location": "Cairo, Egypt",
+        "bio": "Strategic product manager with 6+ years leading cross-functional teams. Experienced in Agile methodologies and data-driven decision making."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-25T10:37:17.484Z",
+      "id": "EDifOX1pu-0"
     }
   ],
   "application_stages": [
