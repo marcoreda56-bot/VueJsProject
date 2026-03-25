@@ -200,6 +200,22 @@
       "company_name": "abdocomp",
       "role": "employer",
       "id": "Ig9klbp1P-I"
+    },
+    {
+      "name": "mahmoud",
+      "email": "mahmoud@gmail.com",
+      "password": "123456",
+      "company_name": "",
+      "role": "candidate",
+      "id": "KupEhge2G8g"
+    },
+    {
+      "name": "mahmoud",
+      "email": "marco1@gmail.com",
+      "password": "123456",
+      "company_name": "",
+      "role": "candidate",
+      "id": "2-91LFz9B0Q"
     }
   ],
   "candidates": [
@@ -329,7 +345,9 @@
       "currency": "EGP",
       "profile_completion": 95,
       "created_at": "2024-05-22T11:00:00Z",
-      "updated_at": "2024-10-30T16:00:00Z"
+      "updated_at": "2026-03-25T10:36:26.104Z",
+      "title": "fullstack developer",
+      "skills": []
     },
     {
       "id": "6",
@@ -354,7 +372,11 @@
       "currency": "EGP",
       "profile_completion": 40,
       "created_at": "2024-06-01T12:00:00Z",
-      "updated_at": "2024-06-01T12:00:00Z"
+      "updated_at": "2026-03-24T22:37:06.786Z",
+      "title": "senior backend",
+      "skills": [
+        "node js"
+      ]
     },
     {
       "id": "9d88E6oi_sg",
@@ -403,6 +425,14 @@
       "bio": "Welcome to HireMasr! Complete your profile to stand out.",
       "skills": [],
       "updated_at": "2026-03-24T21:30:20.817Z"
+    },
+    {
+      "id": "ixDyUXe3lZE",
+      "title": "senior",
+      "location": "Egypt",
+      "bio": "",
+      "skills": [],
+      "updated_at": "2026-03-24T22:44:47.939Z"
     }
   ],
   "candidate_education": [
@@ -1309,6 +1339,24 @@
       "created_at": "2026-03-25T06:36:45.718Z",
       "updated_at": "2026-03-25T06:40:41.139Z",
       "id": "ohgT_CR_ybY"
+    },
+    {
+      "title": "Ceo Ui/Ux design",
+      "category_id": "2",
+      "location": "Minya",
+      "work_type": "remote",
+      "experience_level": "lead",
+      "salary_min": 20000,
+      "salary_max": 30000,
+      "technologies": [],
+      "description": "any thing",
+      "requirements": "any thing",
+      "benefits": "",
+      "employer_id": "7",
+      "status": "active",
+      "created_at": "2026-03-25T14:33:41.387Z",
+      "updated_at": "2026-03-25T14:33:41.388Z",
+      "id": "CqAfGePSMhY"
     }
   ],
   "job_skills": [
@@ -1635,6 +1683,193 @@
       "status": "rejected",
       "applied_at": "2026-03-25T06:53:51.187Z",
       "id": "fR1PiqmFnRg"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "hello",
+      "status": "pending",
+      "applied_at": "2026-03-24T18:48:34.791Z",
+      "id": "0TmHW3mWtuY"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "ddd",
+      "status": "pending",
+      "applied_at": "2026-03-24T18:48:47.099Z",
+      "id": "wOZNpbCU8tI"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "5",
+      "cover_letter": "d",
+      "status": "pending",
+      "applied_at": "2026-03-24T18:50:38.065Z",
+      "id": "t_iqsXpq1uk"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "hello",
+      "candidate_snapshot": {
+        "name": "Omar Hassan",
+        "email": "omar.hassan@email.com",
+        "title": "senior backend",
+        "location": "Alexandria, Egypt",
+        "bio": "Backend developer specializing in Laravel and RESTful APIs. Experienced in building high-performance systems and integrating third-party services."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T18:54:40.676Z",
+      "id": "IpAnB39PTtI"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "d",
+      "candidate_snapshot": {
+        "name": "Omar Hassan",
+        "email": "omar.hassan@email.com",
+        "title": "senior backend",
+        "location": "Alexandria, Egypt",
+        "bio": "Backend developer specializing in Laravel and RESTful APIs. Experienced in building high-performance systems and integrating third-party services."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T18:55:04.958Z",
+      "id": "gx3i4KRP-UY"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "d",
+      "candidate_snapshot": {
+        "name": "Omar Hassan",
+        "email": "omar.hassan@email.com",
+        "title": "senior backend"
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T19:00:40.074Z",
+      "id": "TPvjKhbaJ7A"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "10",
+      "cover_letter": "hello dear",
+      "candidate_snapshot": {
+        "name": "Omar Hassan",
+        "email": "omar.hassan@email.com",
+        "title": "senior backend",
+        "location": "Alexandria, Egypt",
+        "bio": "Backend developer specializing in Laravel and RESTful APIs. Experienced in building high-performance systems and integrating third-party services."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T19:09:35.632Z",
+      "id": "ReJWJ_6Ht-I"
+    },
+    {
+      "candidate_id": "2",
+      "job_id": "6",
+      "cover_letter": "s",
+      "candidate_snapshot": {
+        "name": "Sara Mohamed",
+        "email": "sara.mohamed@email.com",
+        "title": "softwere engineer",
+        "location": "Giza, Egypt",
+        "bio": "Creative UI/UX designer with a passion for building intuitive and beautiful user experiences. 3 years of experience working with product teams."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T19:48:34.550Z",
+      "id": "yHQ9rTPIluw"
+    },
+    {
+      "candidate_id": "2",
+      "job_id": "4",
+      "cover_letter": "",
+      "candidate_snapshot": {
+        "name": "Sara Mohamed",
+        "email": "sara.mohamed@email.com",
+        "title": "softwere engineer",
+        "location": "Giza, Egypt",
+        "bio": "Creative UI/UX designer with a passion for building intuitive and beautiful user experiences. 3 years of experience working with product teams."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T19:50:49.004Z",
+      "id": "82-6mlL7QD0"
+    },
+    {
+      "candidate_id": "2",
+      "job_id": "5",
+      "cover_letter": "i hope to be aproved",
+      "candidate_snapshot": {
+        "name": "Sara Mohamed",
+        "email": "sara.mohamed@email.com",
+        "title": "softwere engineer",
+        "location": "Giza, Egypt",
+        "bio": "Creative UI/UX designer with a passion for building intuitive and beautiful user experiences. 3 years of experience working with product teams."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T19:55:42.982Z",
+      "id": "hqj7yNE73vw"
+    },
+    {
+      "candidate_id": "Vbfyp7DU1co",
+      "job_id": "1",
+      "cover_letter": "hello",
+      "candidate_snapshot": {
+        "name": "marco",
+        "email": "marcoreda560@gmail.com",
+        "title": "New Candidate",
+        "location": "Egypt",
+        "bio": "Welcome to HireMasr! Complete your profile to stand out."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T21:27:03.328Z",
+      "id": "C-7Dr0TjoAc"
+    },
+    {
+      "candidate_id": "6",
+      "job_id": "1",
+      "cover_letter": "hello\n",
+      "candidate_snapshot": {
+        "name": "Laila Farouk",
+        "email": "laila.farouk@email.com",
+        "title": "senior backend",
+        "location": "Mansoura, Egypt",
+        "bio": "Fresh graduate with strong portfolio in branding and visual identity design."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T22:42:36.547Z",
+      "id": "569kArgrWts"
+    },
+    {
+      "candidate_id": "5",
+      "job_id": "3",
+      "cover_letter": "any thing",
+      "candidate_snapshot": {
+        "name": "Karim Mahmoud",
+        "email": "karim.mahmoud@email.com",
+        "title": "fullstack developer",
+        "location": "Cairo, Egypt",
+        "bio": "Strategic product manager with 6+ years leading cross-functional teams. Experienced in Agile methodologies and data-driven decision making."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-25T10:37:17.484Z",
+      "id": "EDifOX1pu-0"
+    },
+    {
+      "candidate_id": "6",
+      "job_id": "CqAfGePSMhY",
+      "cover_letter": "hello",
+      "candidate_snapshot": {
+        "name": "Laila Farouk",
+        "email": "laila.farouk@email.com",
+        "title": "senior backend",
+        "location": "Mansoura, Egypt",
+        "bio": "Fresh graduate with strong portfolio in branding and visual identity design."
+      },
+      "status": "accepted",
+      "applied_at": "2026-03-25T14:35:54.388Z",
+      "id": "VI7x0NRThNE"
     }
   ],
   "application_stages": [
