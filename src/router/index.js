@@ -94,6 +94,40 @@ const router = createRouter({
       ],
     },
 
+    // 5. Admin Routes
+    {
+      path: '/admin',
+      component: () => import('@/components/layout/AdminLayout.vue'),
+      meta: { requiresAuth: true, role: 'admin', hideNavbar: true },
+      children: [
+        {
+          path: 'dashboard',
+          name: 'admin.dashboard',
+          component: () => import('@/features/admin/views/AdminDashboardView.vue'),
+        },
+        {
+          path: 'management/users',
+          name: 'admin.users',
+          component: () => import('@/features/admin/views/ManageUsersView.vue'),
+        },
+        {
+          path: 'management/users/:id',
+          name: 'admin.user-details',
+          component: () => import('@/features/admin/views/AdminUserDetailsView.vue'),
+        },
+        {
+          path: 'management/jobs',
+          name: 'admin.jobs',
+          component: () => import('@/features/admin/views/ManageJobsView.vue'),
+        },
+        {
+          path: 'management/jobs/:id',
+          name: 'admin.job-details',
+          component: () => import('@/features/admin/views/AdminJobDetailsView.vue'),
+        },
+      ],
+    },
+
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
