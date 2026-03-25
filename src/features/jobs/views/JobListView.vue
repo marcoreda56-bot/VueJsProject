@@ -104,7 +104,7 @@
               <div
                 class="w-16 h-16 bg-slate-900 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl group-hover:bg-indigo-600 transition-all shadow-inner"
               >
-                {{ job.title.charAt(0) }}
+                {{ job.title?.charAt(0) || '?' }}
               </div>
               <span
                 class="px-4 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 rounded-xl text-[10px] font-black uppercase tracking-widest"
