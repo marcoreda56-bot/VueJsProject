@@ -53,8 +53,17 @@
       "updated_at": "2024-11-05T09:00:00Z"
     },
     {
+      "id": "5",
+      "name": "Karim Mahmoud",
+      "email": "karim.mahmoud@email.com",
+      "password": "$2y$10$hashedpassword",
+      "role": "candidate",
+      "avatar": "https://i.pravatar.cc/150?img=15",
+      "phone": "+20 110 678 9012",
       "is_active": true,
-      "id": "5"
+      "email_verified_at": "2024-05-22T11:00:00Z",
+      "created_at": "2024-05-22T11:00:00Z",
+      "updated_at": "2024-11-01T10:00:00Z"
     },
     {
       "id": "6",
@@ -1251,6 +1260,30 @@
       "views": 0,
       "applications_count": 0,
       "id": "mdSrD8IYhSI"
+    },
+    {
+      "title": "backend",
+      "employer_id": "1",
+      "category_id": "1",
+      "type": "part_time",
+      "workplace_type": "remote",
+      "location": "dairmawas",
+      "description": "  بشمهدس رايق ومبيحبش النقاشه",
+      "requirements": "  فهمان \n ",
+      "benefits": "",
+      "salary_min": 5000,
+      "salary_max": 10000,
+      "currency": "EGP",
+      "experience_level": "senior",
+      "career_level": "Entry Level",
+      "vacancies": 1,
+      "status": "active",
+      "slug": "backend",
+      "created_at": "2026-03-25T16:54:02.463Z",
+      "updated_at": "2026-03-25T16:54:02.463Z",
+      "views": 0,
+      "applications_count": 0,
+      "id": "IgjXRJd6QQ8"
     }
   ],
   "job_skills": [

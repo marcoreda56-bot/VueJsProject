@@ -30,7 +30,7 @@ export const usersApi = {
   register: (data) => api.post('/users', data),
   getAll: () => api.get('/users'),
   getById: (id) => api.get(`/users/${id}`),
-  update: (id, data) => api.put(`/users/${id}`, data),
+  update: (id, data) => api.patch(`/users/${id}`, data),
   delete: (id) => api.delete(`/users/${id}`),
   getByRole: (role) => api.get(`/users?role=${role}`),
   getCandidates: () => api.get('/users?role=candidate'),
@@ -61,7 +61,7 @@ export const jobsApi = {
   getByEmployer: (employerId) => api.get(`/jobs?employer_id=${employerId}`),
   getByCategory: (categoryId) => api.get(`/jobs?category_id=${categoryId}`),
   create: (data) => api.post('/jobs', data),
-  update: (id, data) => api.put(`/jobs/${id}`, data),
+  update: (id, data) => api.patch(`/jobs/${id}`, data),
   delete: (id) => api.delete(`/jobs/${id}`),
 }
 

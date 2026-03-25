@@ -1,24 +1,28 @@
 <script setup>
-import { onMounted, computed, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAdminStore } from '@/stores/admin.store'
+import { useAuthStore } from '@/stores/auth.store'
+import Swal from 'sweetalert2'
 
 const route = useRoute()
 const router = useRouter()
 const adminStore = useAdminStore()
+const authStore = useAuthStore()
 const userId = route.params.id
-
-onMounted(async () => {
-  await adminStore.fetchAllData()
-})
+const actionLoading = ref(false)
 
 const user = computed(() => adminStore.users.find(u => u.id == userId) || {})
+
+const canToggleStatus = computed(() => {
+  return user.value.role !== 'admin' && String(user.value.id) !== String(authStore.user?.id)
+})
 
 const profileData = computed(() => {
   if (user.value.role === 'employer') {
     return adminStore.employers.find(e => e.user_id == userId) || {}
   } else if (user.value.role === 'candidate') {
-    return adminStore.candidates.find(c => c.user_id == userId) || {}
+    return adminStore.candidates?.find(c => c.user_id == userId) || {}
   }
   return {}
 })
@@ -43,10 +47,27 @@ const getJobTitle = (jobId) => {
 }
 
 const toggleStatus = async () => {
+  if (!canToggleStatus.value) return
+
+  const action = user.value.is_active ? 'suspend' : 'activate'
+  const result = await Swal.fire({
+    title: `${action.charAt(0).toUpperCase() + action.slice(1)} this account?`,
+    text: `Are you sure you want to ${action} ${user.value.name || 'this user'}?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: user.value.is_active ? '#dc2626' : '#059669',
+    confirmButtonText: `Yes, ${action}`,
+  })
+  if (!result.isConfirmed) return
+
+  actionLoading.value = true
   try {
     await adminStore.updateUserStatus(user.value.id, !user.value.is_active)
+    Swal.fire({ title: 'Updated!', text: `Account has been ${action}d.`, icon: 'success', timer: 1500, showConfirmButton: false })
   } catch (err) {
-    alert('Failed to update status')
+    Swal.fire('Error', 'Failed to update status.', 'error')
+  } finally {
+    actionLoading.value = false
   }
 }
 
@@ -84,14 +105,21 @@ const formatDate = (dateString) => {
           
           <div class="flex flex-col gap-3">
              <button 
+              v-if="canToggleStatus"
               @click="toggleStatus"
+              :disabled="actionLoading"
               :class="[
                 'w-full py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg',
+                actionLoading ? 'opacity-50 cursor-not-allowed' : '',
                 user.is_active ? 'bg-red-50 text-red-600 shadow-red-50' : 'bg-emerald-50 text-emerald-600 shadow-emerald-50'
               ]"
             >
+              <i v-if="actionLoading" class="pi pi-spin pi-spinner mr-1"></i>
               {{ user.is_active ? 'Suspend Account' : 'Activate Account' }}
             </button>
+            <span v-else class="w-full py-4 bg-gray-50 text-gray-400 rounded-2xl font-black text-xs uppercase tracking-widest text-center">
+              Protected Account
+            </span>
             <a :href="`mailto:${user.email}`" class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2">
               <i class="pi pi-envelope"></i>
               Send Email
@@ -183,7 +211,7 @@ const formatDate = (dateString) => {
                     <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-1">{{ job.location }}</p>
                   </td>
                   <td class="px-8 py-6">
-                    <span :class="[user.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100', 'text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full']">
+                    <span :class="[job.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-700', 'text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full']">
                       {{ job.status }}
                     </span>
                   </td>

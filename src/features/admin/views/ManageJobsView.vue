@@ -1,10 +1,13 @@
 <script setup>
-import { onMounted, ref, computed, reactive } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import { useAdminStore } from '@/stores/admin.store'
+import Swal from 'sweetalert2'
 
 const adminStore = useAdminStore()
 const statusFilter = ref('all')
 const showModal = ref(false)
+const actionLoading = ref(null)
+const submitLoading = ref(false)
 
 const newJob = reactive({
   title: '',
@@ -25,10 +28,6 @@ const newJob = reactive({
   status: 'active'
 })
 
-onMounted(async () => {
-  await adminStore.fetchAllData()
-})
-
 const filteredJobs = computed(() => {
   return adminStore.jobs.filter(job => {
     return statusFilter.value === 'all' || job.status === statusFilter.value
@@ -36,45 +35,114 @@ const filteredJobs = computed(() => {
 })
 
 const updateJobStatus = async (jobId, status) => {
+  const actionLabel = status === 'active' ? 'approve' : status === 'rejected' ? 'reject' : 'close'
+  const result = await Swal.fire({
+    title: `${actionLabel.charAt(0).toUpperCase() + actionLabel.slice(1)} this job?`,
+    text: `This will change the job status to "${status}".`,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: status === 'active' ? '#4f46e5' : status === 'rejected' ? '#dc2626' : '#6b7280',
+    confirmButtonText: `Yes, ${actionLabel} it`,
+  })
+  if (!result.isConfirmed) return
+
+  actionLoading.value = `${jobId}-${status}`
   try {
     await adminStore.updateJobStatus(jobId, status)
+    Swal.fire({ title: 'Updated!', icon: 'success', timer: 1500, showConfirmButton: false })
   } catch (err) {
-    alert('Failed to update job status')
+    Swal.fire('Error', 'Failed to update job status.', 'error')
+  } finally {
+    actionLoading.value = null
   }
 }
 
 const deleteJob = async (jobId) => {
-  if (confirm('Are you sure you want to delete this job posting? This action cannot be undone.')) {
-    try {
-      await adminStore.deleteJob(jobId)
-    } catch (err) {
-      alert('Failed to delete job')
-    }
+  const result = await Swal.fire({
+    title: 'Delete this job?',
+    text: 'This action cannot be undone.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#dc2626',
+    confirmButtonText: 'Yes, delete permanently',
+  })
+  if (!result.isConfirmed) return
+
+  actionLoading.value = `${jobId}-delete`
+  try {
+    await adminStore.deleteJob(jobId)
+    Swal.fire({ title: 'Deleted!', text: 'Job posting has been removed.', icon: 'success', timer: 1500, showConfirmButton: false })
+  } catch (err) {
+    Swal.fire('Error', 'Failed to delete job.', 'error')
+  } finally {
+    actionLoading.value = null
   }
 }
 
+const formErrors = ref([])
+
+const validateForm = () => {
+  const errors = []
+  if (!newJob.title || newJob.title.trim().length < 3) {
+    errors.push('Job title must be at least 3 characters.')
+  }
+  if (!newJob.employer_id) {
+    errors.push('Please select an employer.')
+  }
+  if (!newJob.category_id) {
+    errors.push('Please select a category.')
+  }
+  if (!newJob.description || newJob.description.trim().length < 10) {
+    errors.push('Description must be at least 10 characters.')
+  }
+  if (newJob.salary_min < 0 || newJob.salary_max < 0) {
+    errors.push('Salary values cannot be negative.')
+  }
+  if (newJob.salary_min > newJob.salary_max && newJob.salary_max > 0) {
+    errors.push('Minimum salary cannot exceed maximum salary.')
+  }
+  if (newJob.vacancies < 1) {
+    errors.push('Vacancies must be at least 1.')
+  }
+  formErrors.value = errors
+  return errors.length === 0
+}
+
+const resetForm = () => {
+  Object.assign(newJob, {
+    title: '',
+    employer_id: '',
+    category_id: '',
+    type: 'full_time',
+    workplace_type: 'on_site',
+    location: '',
+    description: '',
+    requirements: '',
+    benefits: '',
+    salary_min: 0,
+    salary_max: 0,
+    currency: 'EGP',
+    experience_level: 'junior',
+    career_level: 'Entry Level',
+    vacancies: 1,
+    status: 'active'
+  })
+  formErrors.value = []
+}
+
 const submitJob = async () => {
+  if (!validateForm()) return
+
+  submitLoading.value = true
   try {
     await adminStore.createJob({ ...newJob })
     showModal.value = false
-    // Reset form
-    Object.assign(newJob, {
-      title: '',
-      employer_id: '',
-      category_id: '',
-      type: 'full_time',
-      workplace_type: 'on_site',
-      location: '',
-      description: '',
-      requirements: '',
-      benefits: '',
-      salary_min: 0,
-      salary_max: 0,
-      experience_level: 'junior',
-      vacancies: 1
-    })
+    resetForm()
+    Swal.fire({ title: 'Published!', text: 'Job listing has been created successfully.', icon: 'success', timer: 2000, showConfirmButton: false })
   } catch (err) {
-    alert('Failed to create job')
+    Swal.fire('Error', 'Failed to create job listing.', 'error')
+  } finally {
+    submitLoading.value = false
   }
 }
 
@@ -93,6 +161,8 @@ const getEmployerName = (employerId) => {
   const employer = adminStore.employers.find(e => e.id == employerId)
   return employer ? employer.company_name : 'Unknown Employer'
 }
+
+const isActionLoading = (jobId, action) => actionLoading.value === `${jobId}-${action}`
 </script>
 
 <template>
@@ -157,16 +227,18 @@ const getEmployerName = (employerId) => {
             <template v-if="job.status === 'pending'">
               <button 
                 @click="updateJobStatus(job.id, 'active')"
-                class="w-full px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold text-sm hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2"
+                :disabled="isActionLoading(job.id, 'active')"
+                class="w-full px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold text-sm hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <i class="pi pi-check"></i>
+                <i :class="isActionLoading(job.id, 'active') ? 'pi pi-spin pi-spinner' : 'pi pi-check'"></i>
                 Approve
               </button>
               <button 
                 @click="updateJobStatus(job.id, 'rejected')"
-                class="w-full px-6 py-3 bg-red-50 text-red-600 rounded-2xl font-bold text-sm hover:bg-red-100 transition-all flex items-center justify-center gap-2"
+                :disabled="isActionLoading(job.id, 'rejected')"
+                class="w-full px-6 py-3 bg-red-50 text-red-600 rounded-2xl font-bold text-sm hover:bg-red-100 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <i class="pi pi-times"></i>
+                <i :class="isActionLoading(job.id, 'rejected') ? 'pi pi-spin pi-spinner' : 'pi pi-times'"></i>
                 Reject
               </button>
             </template>
@@ -174,25 +246,28 @@ const getEmployerName = (employerId) => {
                <button 
                 v-if="job.status === 'active'"
                 @click="updateJobStatus(job.id, 'closed')"
-                class="w-full px-6 py-3 bg-gray-50 text-gray-600 rounded-2xl font-bold text-sm hover:bg-gray-100 transition-all flex items-center justify-center gap-2"
+                :disabled="isActionLoading(job.id, 'closed')"
+                class="w-full px-6 py-3 bg-gray-50 text-gray-600 rounded-2xl font-bold text-sm hover:bg-gray-100 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <i class="pi pi-lock"></i>
+                <i :class="isActionLoading(job.id, 'closed') ? 'pi pi-spin pi-spinner' : 'pi pi-lock'"></i>
                 Close Job
               </button>
               <button 
                 v-if="job.status === 'rejected' || job.status === 'closed'"
                 @click="updateJobStatus(job.id, 'active')"
-                class="w-full px-6 py-3 bg-emerald-50 text-emerald-600 rounded-2xl font-bold text-sm hover:bg-emerald-100 transition-all flex items-center justify-center gap-2"
+                :disabled="isActionLoading(job.id, 'active')"
+                class="w-full px-6 py-3 bg-emerald-50 text-emerald-600 rounded-2xl font-bold text-sm hover:bg-emerald-100 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <i class="pi pi-refresh"></i>
+                <i :class="isActionLoading(job.id, 'active') ? 'pi pi-spin pi-spinner' : 'pi pi-refresh'"></i>
                 Re-activate
               </button>
             </template>
             <button 
               @click="deleteJob(job.id)"
-              class="w-full px-6 py-3 bg-white border border-red-100 text-red-400 rounded-2xl font-bold text-sm hover:bg-red-50 hover:text-red-600 transition-all flex items-center justify-center gap-2 mt-auto"
+              :disabled="isActionLoading(job.id, 'delete')"
+              class="w-full px-6 py-3 bg-white border border-red-100 text-red-400 rounded-2xl font-bold text-sm hover:bg-red-50 hover:text-red-600 transition-all flex items-center justify-center gap-2 mt-auto disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <i class="pi pi-trash"></i>
+              <i :class="isActionLoading(job.id, 'delete') ? 'pi pi-spin pi-spinner' : 'pi pi-trash'"></i>
               Delete
             </button>
           </div>
@@ -209,19 +284,27 @@ const getEmployerName = (employerId) => {
 
     <!-- Add Job Modal -->
     <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="showModal = false"></div>
+      <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" @click="showModal = false; formErrors = []"></div>
       <div class="bg-white rounded-[3rem] w-full max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl relative z-10 flex flex-col">
         <div class="p-8 border-b border-gray-50 flex items-center justify-between bg-white sticky top-0 z-20">
           <div>
             <h2 class="text-2xl font-black text-slate-900 italic">Post New Job<span class="text-indigo-600">.</span></h2>
             <p class="text-sm font-bold text-gray-400">Fill in the details to create a new job listing.</p>
           </div>
-          <button @click="showModal = false" class="w-12 h-12 rounded-2xl bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-600 transition-all">
+          <button @click="showModal = false; formErrors = []" class="w-12 h-12 rounded-2xl bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-600 transition-all">
             <i class="pi pi-times"></i>
           </button>
         </div>
 
         <div class="p-10 overflow-y-auto">
+          <!-- Validation errors -->
+          <div v-if="formErrors.length > 0" class="mb-6 p-4 bg-red-50 rounded-2xl border border-red-100">
+            <p class="text-sm font-black text-red-600 mb-2">Please fix the following errors:</p>
+            <ul class="list-disc list-inside space-y-1">
+              <li v-for="err in formErrors" :key="err" class="text-sm text-red-500 font-medium">{{ err }}</li>
+            </ul>
+          </div>
+
           <form @submit.prevent="submitJob" class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <!-- Basic Info -->
             <div class="space-y-6 md:col-span-2">
@@ -233,12 +316,12 @@ const getEmployerName = (employerId) => {
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="space-y-2">
                   <label class="text-xs font-black text-slate-400 uppercase tracking-wider ml-1">Job Title</label>
-                  <input v-model="newJob.title" type="text" required placeholder="e.g. Senior Frontend Engineer" 
+                  <input v-model="newJob.title" type="text" placeholder="e.g. Senior Frontend Engineer" 
                     class="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all font-bold text-slate-900 placeholder:text-gray-300" />
                 </div>
                 <div class="space-y-2">
                   <label class="text-xs font-black text-slate-400 uppercase tracking-wider ml-1">Employer</label>
-                  <select v-model="newJob.employer_id" required 
+                  <select v-model="newJob.employer_id" 
                     class="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all font-bold text-slate-900">
                     <option value="" disabled>Select Employer</option>
                     <option v-for="emp in adminStore.employers" :key="emp.id" :value="emp.id">{{ emp.company_name }}</option>
@@ -251,7 +334,7 @@ const getEmployerName = (employerId) => {
             <div class="space-y-6">
               <div class="space-y-2">
                 <label class="text-xs font-black text-slate-400 uppercase tracking-wider ml-1">Category</label>
-                <select v-model="newJob.category_id" required 
+                <select v-model="newJob.category_id" 
                   class="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all font-bold text-slate-900">
                   <option value="" disabled>Select Category</option>
                   <option v-for="cat in adminStore.categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
@@ -288,12 +371,12 @@ const getEmployerName = (employerId) => {
                <div class="grid grid-cols-2 gap-4">
                 <div class="space-y-2">
                   <label class="text-xs font-black text-slate-400 uppercase tracking-wider ml-1">Min Salary</label>
-                  <input v-model.number="newJob.salary_min" type="number" 
+                  <input v-model.number="newJob.salary_min" type="number" min="0"
                     class="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all font-bold text-slate-900" />
                 </div>
                 <div class="space-y-2">
                   <label class="text-xs font-black text-slate-400 uppercase tracking-wider ml-1">Max Salary</label>
-                  <input v-model.number="newJob.salary_max" type="number" 
+                  <input v-model.number="newJob.salary_max" type="number" min="0"
                     class="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all font-bold text-slate-900" />
                 </div>
               </div>
@@ -307,7 +390,7 @@ const getEmployerName = (employerId) => {
               </div>
               <div class="space-y-2">
                 <label class="text-xs font-black text-slate-400 uppercase tracking-wider ml-1">Vacancies</label>
-                <input v-model.number="newJob.vacancies" type="number" 
+                <input v-model.number="newJob.vacancies" type="number" min="1"
                   class="w-full px-6 py-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all font-bold text-slate-900" />
               </div>
             </div>
@@ -320,7 +403,7 @@ const getEmployerName = (employerId) => {
               </div>
               <div class="space-y-2">
                 <label class="text-xs font-black text-slate-400 uppercase tracking-wider ml-1">Description</label>
-                <textarea v-model="newJob.description" rows="4" required placeholder="Describe the role..." 
+                <textarea v-model="newJob.description" rows="4" placeholder="Describe the role..." 
                   class="w-full px-6 py-4 bg-gray-50 border-none rounded-[2rem] focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all font-bold text-slate-900 placeholder:text-gray-300 resize-none"></textarea>
               </div>
               <div class="space-y-2">
@@ -332,8 +415,13 @@ const getEmployerName = (employerId) => {
 
             <!-- Submit -->
             <div class="md:col-span-2 pt-6">
-              <button type="submit" class="w-full py-5 bg-indigo-600 text-white rounded-[2rem] font-black text-lg uppercase tracking-widest hover:bg-indigo-700 shadow-2xl shadow-indigo-200 transition-all">
-                Publish Job Listing
+              <button 
+                type="submit" 
+                :disabled="submitLoading"
+                class="w-full py-5 bg-indigo-600 text-white rounded-[2rem] font-black text-lg uppercase tracking-widest hover:bg-indigo-700 shadow-2xl shadow-indigo-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+              >
+                <i v-if="submitLoading" class="pi pi-spin pi-spinner text-lg"></i>
+                {{ submitLoading ? 'Publishing...' : 'Publish Job Listing' }}
               </button>
             </div>
           </form>

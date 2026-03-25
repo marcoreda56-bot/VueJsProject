@@ -1,12 +1,7 @@
 <script setup>
-import { onMounted } from 'vue'
 import { useAdminStore } from '@/stores/admin.store'
 
 const adminStore = useAdminStore()
-
-onMounted(async () => {
-  await adminStore.fetchAllData()
-})
 
 const statCards = [
   { label: 'Total Users', key: 'totalUsers', icon: 'pi pi-users', color: 'bg-indigo-50 text-indigo-600' },
@@ -43,10 +38,6 @@ const statCards = [
           <div :class="[stat.color, 'w-14 h-14 rounded-2xl flex items-center justify-center text-2xl transition-transform group-hover:scale-110 duration-500']">
             <i :class="stat.icon"></i>
           </div>
-          <div class="flex items-center gap-1 text-[10px] font-black text-emerald-500 bg-emerald-50 px-3 py-1 rounded-full">
-            <i class="pi pi-arrow-up text-[8px]"></i>
-            <span>12%</span>
-          </div>
         </div>
         
         <p class="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">
@@ -60,7 +51,7 @@ const statCards = [
       </div>
     </div>
 
-    <!-- Recent Activity Placeholder -->
+    <!-- Recent Activity -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <div class="bg-white border border-gray-100 rounded-[2.5rem] p-8 shadow-sm">
         <h3 class="text-xl font-black text-slate-900 mb-6 tracking-tight">Recent Job Postings</h3>

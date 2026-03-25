@@ -1,31 +1,64 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
 import { useAdminStore } from '@/stores/admin.store'
+import { useAuthStore } from '@/stores/auth.store'
+import Swal from 'sweetalert2'
 
 const adminStore = useAdminStore()
-const searchQuerry = ref('')
+const authStore = useAuthStore()
+const searchQuery = ref('')
 const roleFilter = ref('all')
 
-onMounted(async () => {
-  await adminStore.fetchAllData()
-})
+const currentUserId = computed(() => authStore.user?.id)
 
 const filteredUsers = computed(() => {
   return adminStore.users.filter(user => {
     const name = user.name || ''
     const email = user.email || ''
-    const matchesSearch = name.toLowerCase().includes(searchQuerry.value.toLowerCase()) || 
-                         email.toLowerCase().includes(searchQuerry.value.toLowerCase())
+    const matchesSearch = name.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
+                         email.toLowerCase().includes(searchQuery.value.toLowerCase())
     const matchesRole = roleFilter.value === 'all' || user.role === roleFilter.value
     return matchesSearch && matchesRole
   })
 })
 
+const canToggleStatus = (user) => {
+  // Prevent deactivating admin accounts or self
+  return user.role !== 'admin' && String(user.id) !== String(currentUserId.value)
+}
+
+const actionLoading = ref(null)
+
 const toggleUserStatus = async (user) => {
+  if (!canToggleStatus(user)) return
+
+  const action = user.is_active ? 'deactivate' : 'activate'
+  const result = await Swal.fire({
+    title: `${action.charAt(0).toUpperCase() + action.slice(1)} User?`,
+    text: `Are you sure you want to ${action} ${user.name || 'this user'}?`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: user.is_active ? '#dc2626' : '#059669',
+    cancelButtonColor: '#6b7280',
+    confirmButtonText: `Yes, ${action}`,
+  })
+
+  if (!result.isConfirmed) return
+
+  actionLoading.value = user.id
   try {
     await adminStore.updateUserStatus(user.id, !user.is_active)
+    Swal.fire({
+      title: 'Updated!',
+      text: `User has been ${action}d successfully.`,
+      icon: 'success',
+      timer: 1500,
+      showConfirmButton: false
+    })
   } catch (err) {
-    alert('Failed to update user status')
+    Swal.fire('Error', 'Failed to update user status.', 'error')
+  } finally {
+    actionLoading.value = null
   }
 }
 
@@ -57,7 +90,7 @@ const getRoleBadgeClass = (role) => {
         <div class="relative">
           <i class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
           <input 
-            v-model="searchQuerry"
+            v-model="searchQuery"
             type="text" 
             placeholder="Search users..." 
             class="pl-12 pr-6 py-3 bg-white border border-gray-100 rounded-2xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all font-bold text-sm w-64"
@@ -115,14 +148,21 @@ const getRoleBadgeClass = (role) => {
               </td>
               <td class="px-8 py-6 text-right">
                 <button 
+                  v-if="canToggleStatus(user)"
                   @click="toggleUserStatus(user)"
+                  :disabled="actionLoading === user.id"
                   :class="[
                     'px-4 py-2 rounded-xl font-bold text-xs transition-all',
+                    actionLoading === user.id ? 'opacity-50 cursor-not-allowed' : '',
                     user.is_active ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'
                   ]"
                 >
+                  <i v-if="actionLoading === user.id" class="pi pi-spin pi-spinner mr-1"></i>
                   {{ user.is_active ? 'Deactivate' : 'Activate' }}
                 </button>
+                <span v-else class="text-[10px] font-black text-gray-300 uppercase tracking-wider">
+                  Protected
+                </span>
               </td>
             </tr>
           </tbody>

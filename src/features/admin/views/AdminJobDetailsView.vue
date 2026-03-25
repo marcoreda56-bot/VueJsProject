@@ -1,16 +1,14 @@
 <script setup>
-import { onMounted, computed, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAdminStore } from '@/stores/admin.store'
+import Swal from 'sweetalert2'
 
 const route = useRoute()
 const router = useRouter()
 const adminStore = useAdminStore()
 const jobId = route.params.id
-
-onMounted(async () => {
-  await adminStore.fetchAllData()
-})
+const actionLoading = ref(null)
 
 const job = computed(() => adminStore.jobs.find(j => j.id == jobId) || {})
 const employer = computed(() => adminStore.employers.find(e => e.id == job.value.employer_id) || {})
@@ -40,6 +38,51 @@ const formatDate = (dateString) => {
     day: 'numeric',
     year: 'numeric'
   })
+}
+
+const handleStatusChange = async (status) => {
+  const label = status === 'active' ? 'approve' : status === 'rejected' ? 'reject' : 'close'
+  const result = await Swal.fire({
+    title: `${label.charAt(0).toUpperCase() + label.slice(1)} this job?`,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: status === 'active' ? '#4f46e5' : status === 'rejected' ? '#dc2626' : '#6b7280',
+    confirmButtonText: `Yes, ${label} it`,
+  })
+  if (!result.isConfirmed) return
+
+  actionLoading.value = status
+  try {
+    await adminStore.updateJobStatus(job.value.id, status)
+    Swal.fire({ title: 'Updated!', icon: 'success', timer: 1500, showConfirmButton: false })
+  } catch {
+    Swal.fire('Error', 'Failed to update job status.', 'error')
+  } finally {
+    actionLoading.value = null
+  }
+}
+
+const handleDelete = async () => {
+  const result = await Swal.fire({
+    title: 'Delete this job permanently?',
+    text: 'This action cannot be undone.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#dc2626',
+    confirmButtonText: 'Yes, delete it',
+  })
+  if (!result.isConfirmed) return
+
+  actionLoading.value = 'delete'
+  try {
+    await adminStore.deleteJob(job.value.id)
+    Swal.fire({ title: 'Deleted!', icon: 'success', timer: 1500, showConfirmButton: false })
+    router.push('/admin/management/jobs')
+  } catch {
+    Swal.fire('Error', 'Failed to delete job.', 'error')
+  } finally {
+    actionLoading.value = null
+  }
 }
 </script>
 
@@ -72,43 +115,48 @@ const formatDate = (dateString) => {
           <div class="flex flex-col sm:flex-row gap-4 mb-8">
             <template v-if="job.status === 'pending'">
               <button 
-                @click="adminStore.updateJobStatus(job.id, 'active')"
-                class="px-8 py-3 bg-indigo-600 text-white rounded-2xl font-bold text-sm hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2"
+                @click="handleStatusChange('active')"
+                :disabled="actionLoading === 'active'"
+                class="px-8 py-3 bg-indigo-600 text-white rounded-2xl font-bold text-sm hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <i class="pi pi-check text-xs"></i>
+                <i :class="actionLoading === 'active' ? 'pi pi-spin pi-spinner text-xs' : 'pi pi-check text-xs'"></i>
                 Approve Listing
               </button>
               <button 
-                @click="adminStore.updateJobStatus(job.id, 'rejected')"
-                class="px-8 py-3 bg-red-50 text-red-600 rounded-2xl font-bold text-sm hover:bg-red-100 transition-all flex items-center justify-center gap-2"
+                @click="handleStatusChange('rejected')"
+                :disabled="actionLoading === 'rejected'"
+                class="px-8 py-3 bg-red-50 text-red-600 rounded-2xl font-bold text-sm hover:bg-red-100 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <i class="pi pi-times text-xs"></i>
+                <i :class="actionLoading === 'rejected' ? 'pi pi-spin pi-spinner text-xs' : 'pi pi-times text-xs'"></i>
                 Reject Job
               </button>
             </template>
             <template v-else-if="job.status === 'active'">
               <button 
-                @click="adminStore.updateJobStatus(job.id, 'closed')"
-                class="px-8 py-3 bg-gray-100 text-gray-600 rounded-2xl font-bold text-sm hover:bg-gray-200 transition-all flex items-center justify-center gap-2"
+                @click="handleStatusChange('closed')"
+                :disabled="actionLoading === 'closed'"
+                class="px-8 py-3 bg-gray-100 text-gray-600 rounded-2xl font-bold text-sm hover:bg-gray-200 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <i class="pi pi-lock text-xs"></i>
+                <i :class="actionLoading === 'closed' ? 'pi pi-spin pi-spinner text-xs' : 'pi pi-lock text-xs'"></i>
                 Close Posting
               </button>
             </template>
             <template v-else-if="job.status === 'rejected' || job.status === 'closed'">
                <button 
-                @click="adminStore.updateJobStatus(job.id, 'active')"
-                class="px-8 py-3 bg-emerald-50 text-emerald-600 rounded-2xl font-bold text-sm hover:bg-emerald-100 transition-all flex items-center justify-center gap-2"
+                @click="handleStatusChange('active')"
+                :disabled="actionLoading === 'active'"
+                class="px-8 py-3 bg-emerald-50 text-emerald-600 rounded-2xl font-bold text-sm hover:bg-emerald-100 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <i class="pi pi-refresh text-xs"></i>
+                <i :class="actionLoading === 'active' ? 'pi pi-spin pi-spinner text-xs' : 'pi pi-refresh text-xs'"></i>
                 Re-activate
               </button>
             </template>
             <button 
-              @click="adminStore.deleteJob(job.id).then(() => router.push('/admin/management/jobs'))"
-              class="px-8 py-3 bg-white border border-red-100 text-red-400 rounded-2xl font-bold text-sm hover:bg-red-50 hover:text-red-600 transition-all flex items-center justify-center gap-2 sm:ml-auto"
+              @click="handleDelete"
+              :disabled="actionLoading === 'delete'"
+              class="px-8 py-3 bg-white border border-red-100 text-red-400 rounded-2xl font-bold text-sm hover:bg-red-50 hover:text-red-600 transition-all flex items-center justify-center gap-2 sm:ml-auto disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <i class="pi pi-trash text-xs"></i>
+              <i :class="actionLoading === 'delete' ? 'pi pi-spin pi-spinner text-xs' : 'pi pi-trash text-xs'"></i>
               Delete Permanently
             </button>
           </div>

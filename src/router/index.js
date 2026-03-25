@@ -139,13 +139,20 @@ const router = createRouter({
 // Navigation Guard
 router.beforeEach((to) => {
   const token = localStorage.getItem('token')
-  const user = JSON.parse(localStorage.getItem('user'))
+  let user = null
+  try {
+    user = JSON.parse(localStorage.getItem('user'))
+  } catch {
+    // Corrupted localStorage — clear and redirect to login
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+  }
 
-  if (token && (to.name === 'home' || to.meta.guestOnly)) {
+  if (token && user && (to.name === 'home' || to.meta.guestOnly)) {
     return { name: `${user.role}.dashboard` }
   }
 
-  if (to.meta.requiresAuth && !token) {
+  if (to.meta.requiresAuth && (!token || !user)) {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
 
