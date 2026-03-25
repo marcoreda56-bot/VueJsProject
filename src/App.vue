@@ -2,7 +2,7 @@
   <div class="app-container min-h-screen bg-gray-50">
     <AppNavbar v-if="!$route.meta.hideNavbar" />
 
-    <main class="container mx-auto py-6">
+    <main class="container mx-auto pt-12 pb-8 px-4 md:px-6">
       <router-view v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />

@@ -154,7 +154,7 @@ import { useJobsStore } from '@/stores/jobs'
 const jobStore = useJobsStore()
 const searchQuery = ref('')
 const selectedType = ref(null)
-const selectedCategory = ref(null) // Added for category filter
+const selectedCategory = ref(null)
 
 const jobTypes = [
   { id: 'full_time', label: 'Full Time' },

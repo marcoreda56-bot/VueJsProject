@@ -111,6 +111,11 @@ const router = createRouter({
           name: 'employer.edit-job',
           component: () => import('@/features/employer/views/EditJobView.vue'),
         },
+        {
+          path: 'find-jobs',
+          name: 'employeer.find-jobs',
+          component: () => import('@/features/jobs/views/JobListView.vue'),
+        },
       ],
     },
 

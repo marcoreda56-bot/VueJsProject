@@ -9,35 +9,12 @@
         <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tighter italic">
           Hire<span class="text-indigo-600">Masr.</span>
         </h2>
-        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-1">
-          Employer Portal
-        </p>
       </div>
 
       <nav class="flex-1 space-y-2">
-        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 ml-4 mt-6 border-t border-slate-100 dark:border-slate-800 pt-6">
-          System Menu
-        </p>
-
-        <router-link
-          to="/"
-          class="flex items-center gap-4 px-5 py-3.5 rounded-2xl font-bold text-sm transition-all duration-200 no-underline group relative overflow-hidden text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-indigo-600"
-          active-class="bg-indigo-600 !text-white shadow-xl shadow-indigo-100 dark:shadow-none"
+        <p
+          class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 ml-4 mt-6 border-t border-slate-100 dark:border-slate-800 pt-6"
         >
-          <i class="pi pi-home text-lg transition-colors text-slate-400 group-hover:text-indigo-600"></i>
-          <span class="relative z-10">Home</span>
-        </router-link>
-
-        <router-link
-          to="/jobs"
-          class="flex items-center gap-4 px-5 py-3.5 rounded-2xl font-bold text-sm transition-all duration-200 no-underline group relative overflow-hidden text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-indigo-600"
-          active-class="bg-indigo-600 !text-white shadow-xl shadow-indigo-100 dark:shadow-none"
-        >
-          <i class="pi pi-search text-lg transition-colors text-slate-400 group-hover:text-indigo-600"></i>
-          <span class="relative z-10">Browse Jobs</span>
-        </router-link>
-
-        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 ml-4 mt-6 border-t border-slate-100 dark:border-slate-800 pt-6">
           Employer Menu
         </p>
 
@@ -64,8 +41,11 @@
           <span
             v-if="item.badge"
             class="ml-auto text-[10px] font-black px-2 py-0.5 rounded-full"
-            :class="isActive(item.path) ? 'bg-white/20 text-white' : 'bg-indigo-100 text-indigo-600'"
-          >{{ item.badge }}</span>
+            :class="
+              isActive(item.path) ? 'bg-white/20 text-white' : 'bg-indigo-100 text-indigo-600'
+            "
+            >{{ item.badge }}</span
+          >
         </router-link>
       </nav>
 
@@ -86,7 +66,9 @@
             class="w-10 h-10 rounded-xl shadow-sm border-2 border-transparent group-hover:border-indigo-500 transition-all"
           />
           <div class="flex-1 overflow-hidden">
-            <p class="text-sm font-black text-slate-900 dark:text-white truncate">{{ auth.user?.name || 'Employer' }}</p>
+            <p class="text-sm font-black text-slate-900 dark:text-white truncate">
+              {{ auth.user?.name || 'Employer' }}
+            </p>
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest truncate">
               Employer
             </p>
@@ -103,8 +85,11 @@
           HIRE<span class="text-indigo-600">.</span>
         </div>
         <div class="hidden md:block text-sm font-bold text-slate-400">
-          Hello, <span class="text-slate-900 dark:text-white font-black uppercase">{{ auth.user?.name?.split(' ')[0] || 'Employer' }}</span> —
-          Welcome back!
+          Hello,
+          <span class="text-slate-900 dark:text-white font-black uppercase">{{
+            auth.user?.name?.split(' ')[0] || 'Employer'
+          }}</span>
+          — Welcome back!
         </div>
 
         <div class="flex items-center gap-4">
