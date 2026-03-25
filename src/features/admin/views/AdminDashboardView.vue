@@ -1,64 +1,104 @@
-<template>
-  <div
-    class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 p-10 font-['Plus_Jakarta_Sans',sans-serif]"
-  >
-    <div class="max-w-7xl mx-auto mb-10">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-          <div class="flex items-center gap-2 mb-2">
-            <span class="w-2 h-2 bg-indigo-600 rounded-full animate-pulse"></span>
-            <span
-              class="text-[10px] font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-[0.3em]"
-              >System Live</span
-            >
-          </div>
-          <h1 class="text-5xl font-black text-slate-900 dark:text-white tracking-tighter italic">
-            Admin<span class="text-indigo-600">.</span>Control
-          </h1>
-        </div>
+<script setup>
+import { useAdminStore } from '@/stores/admin.store'
 
-        <div
-          class="inline-flex items-center gap-4 bg-white dark:bg-slate-900 border border-red-100 dark:border-red-900/30 px-6 py-4 rounded-[2rem] shadow-[0_10px_30px_rgba(239,68,68,0.05)]"
-        >
-          <div
-            class="w-10 h-10 bg-red-50 dark:bg-red-500/10 rounded-xl flex items-center justify-center"
-          >
-            <i class="pi pi-shield text-red-500 text-lg"></i>
+const adminStore = useAdminStore()
+
+const statCards = [
+  { label: 'Total Users', key: 'totalUsers', icon: 'pi pi-users', color: 'bg-indigo-50 text-indigo-600' },
+  { label: 'Total Jobs', key: 'totalJobs', icon: 'pi pi-briefcase', color: 'bg-emerald-50 text-emerald-600' },
+  { label: 'Pending Approval', key: 'pendingJobs', icon: 'pi pi-clock', color: 'bg-amber-50 text-amber-600' },
+  { label: 'Active Jobs', key: 'activeJobs', icon: 'pi pi-check-circle', color: 'bg-sky-50 text-sky-600' },
+  { label: 'Applications', key: 'totalApplications', icon: 'pi pi-file-edit', color: 'bg-rose-50 text-rose-600' },
+  { label: 'Employers', key: 'totalEmployers', icon: 'pi pi-building', color: 'bg-purple-50 text-purple-600' }
+]
+</script>
+
+<template>
+  <div class="p-10 max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-12">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="w-2 h-2 bg-indigo-600 rounded-full animate-pulse"></span>
+        <span class="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em]">System Overview</span>
+      </div>
+      <h1 class="text-4xl font-black text-slate-900 tracking-tighter italic">
+        Dashboard<span class="text-indigo-600">.</span>
+      </h1>
+      <p class="text-gray-400 font-medium">Monitor platform activity and key performance indicators.</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+      <div
+        v-for="stat in statCards"
+        :key="stat.label"
+        class="bg-white border border-gray-100 p-8 rounded-[2.5rem] shadow-sm hover:shadow-xl hover:shadow-indigo-500/5 transition-all group"
+      >
+        <div class="flex items-start justify-between mb-6">
+          <div :class="[stat.color, 'w-14 h-14 rounded-2xl flex items-center justify-center text-2xl transition-transform group-hover:scale-110 duration-500']">
+            <i :class="stat.icon"></i>
           </div>
-          <div>
-            <p
-              class="text-[10px] font-black text-red-400 uppercase tracking-widest leading-none mb-1"
-            >
-              Security Status
-            </p>
-            <p class="text-sm font-bold text-red-600 dark:text-red-400">
-              Restricted Access Enabled
-            </p>
-          </div>
+        </div>
+        
+        <p class="text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">
+          {{ stat.label }}
+        </p>
+        <div class="flex items-end gap-2">
+          <span class="text-4xl font-black text-slate-900 tracking-tighter tabular-nums">
+            {{ adminStore.loading ? '...' : adminStore.stats[stat.key] }}
+          </span>
         </div>
       </div>
     </div>
 
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-      <div
-        v-for="stat in ['System Load', 'Active Users', 'Database Status']"
-        :key="stat"
-        class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-8 rounded-[2rem] shadow-[0_4px_20px_rgba(0,0,0,0.01)] hover:shadow-xl hover:shadow-indigo-500/5 transition-all group cursor-default"
-      >
-        <p
-          class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 group-hover:text-indigo-600 transition-colors"
-        >
-          {{ stat }}
-        </p>
-        <div class="flex items-end gap-2">
-          <span
-            class="text-3xl font-black text-slate-900 dark:text-white tracking-tighter leading-none"
-          >
-            {{ stat === 'System Load' ? '2.4%' : stat === 'Active Users' ? '1,284' : 'Optimal' }}
-          </span>
-          <i
-            class="pi pi-chart-line text-slate-200 dark:text-slate-800 text-xl group-hover:text-indigo-500/20 transition-colors"
-          ></i>
+    <!-- Recent Activity -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="bg-white border border-gray-100 rounded-[2.5rem] p-8 shadow-sm">
+        <h3 class="text-xl font-black text-slate-900 mb-6 tracking-tight">Recent Job Postings</h3>
+        <div v-if="adminStore.loading" class="space-y-4">
+          <div v-for="i in 3" :key="i" class="h-16 bg-gray-50 rounded-2xl animate-pulse"></div>
+        </div>
+        <div v-else class="space-y-4">
+          <div v-for="job in adminStore.jobs.slice(0, 4)" :key="job.id" class="flex items-center gap-4 p-4 rounded-2xl hover:bg-gray-50 transition-colors">
+            <div class="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
+              <i class="pi pi-briefcase"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="font-bold text-slate-900 truncate">{{ job.title }}</p>
+              <p class="text-xs text-gray-400 font-medium">{{ job.location }} • {{ job.type }}</p>
+            </div>
+            <span :class="[
+              'text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full',
+              job.status === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'
+            ]">
+              {{ job.status }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent User Signups -->
+      <div class="bg-white border border-gray-100 rounded-[2.5rem] p-8 shadow-sm">
+        <h3 class="text-xl font-black text-slate-900 mb-6 tracking-tight">Recent User Signups</h3>
+        <div v-if="adminStore.loading" class="space-y-4">
+          <div v-for="i in 3" :key="i" class="h-16 bg-gray-50 rounded-2xl animate-pulse"></div>
+        </div>
+        <div v-else class="space-y-4">
+          <div v-for="user in adminStore.users.slice(0, 4)" :key="user.id" class="flex items-center gap-4 p-4 rounded-2xl hover:bg-gray-50 transition-colors">
+            <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600 font-black text-sm">
+              {{ user.name?.charAt(0) || 'U' }}
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="font-bold text-slate-900 truncate">{{ user.name || 'Unnamed User' }}</p>
+              <p class="text-xs text-gray-400 font-medium">{{ user.email }}</p>
+            </div>
+            <span class="text-[10px] font-black text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full uppercase tracking-wider">
+              {{ user.role }}
+            </span>
+          </div>
+          <div v-if="adminStore.users.length === 0" class="py-8 text-center text-gray-300 font-bold italic">
+            No users registered yet.
+          </div>
         </div>
       </div>
     </div>
