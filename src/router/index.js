@@ -21,7 +21,7 @@ const router = createRouter({
     {
       path: '/auth',
       component: () => import('@/components/layout/AuthLayout.vue'),
-      meta: { guestOnly: true },
+      meta: { guestOnly: true, hideNavbar: true },
       children: [
         {
           path: 'login',

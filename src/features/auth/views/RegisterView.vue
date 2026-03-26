@@ -1,12 +1,12 @@
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import AuthLayout from '../components/AuthLayout.vue'
 import { useAuth } from '../composables/useAuth'
 
 const router = useRouter()
 const { register, isLoading, error } = useAuth()
 
-const step = ref(0)
 const selectedRole = ref('candidate')
 const form = reactive({ name: '', email: '', password: '', company_name: '' })
 
@@ -14,167 +14,159 @@ const handleRegister = async () => {
   const success = await register(form, selectedRole.value)
   if (success) router.push({ name: `${selectedRole.value}.dashboard` })
 }
-
-const passwordStrength = computed(() => {
-  if (!form.password) return 0
-  if (form.password.length < 6) return 1
-  if (form.password.length < 10) return 2
-  return 3
-})
 </script>
 
 <template>
-  <div
-    class="w-full max-w-[460px] bg-white dark:bg-slate-900 p-8 md:p-12 rounded-[2.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-slate-100 dark:border-slate-800 animate-[fadeIn_0.5s_ease-out]"
-  >
-    <div class="text-center mb-10">
-      <div
-        class="inline-flex items-center justify-center w-16 h-16 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl mb-6 border border-indigo-100 dark:border-indigo-500/20 shadow-inner"
-      >
-        <span class="text-2xl animate-pulse">✨</span>
+  <AuthLayout>
+    <template #form>
+      <div class="space-y-2 mb-8">
+        <h1 class="text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+          Create account
+        </h1>
+        <p class="text-slate-500 dark:text-slate-400 font-medium">
+          Join our community of professionals today.
+        </p>
       </div>
-      <h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-none">
-        Get Started
-      </h2>
-      <p class="text-slate-400 dark:text-slate-500 mt-3 font-semibold text-sm">
-        Create your professional account
-      </p>
-    </div>
 
-    <div v-if="step === 0" class="space-y-4 animate-[slideIn_0.4s_ease-out]">
-      <div
-        v-for="role in [
-          { id: 'candidate', title: 'Candidate', desc: 'I want to find work', icon: '👤' },
-          { id: 'employer', title: 'Employer', desc: 'I want to hire talent', icon: '💼' },
-        ]"
-        :key="role.id"
-        @click="selectedRole = role.id"
-        :class="
-          selectedRole === role.id
-            ? 'border-indigo-600 bg-indigo-50/50 dark:bg-indigo-500/5 ring-1 ring-indigo-600 shadow-lg shadow-indigo-600/5'
-            : 'border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-indigo-200'
-        "
-        class="flex items-center p-5 border-2 rounded-[2rem] cursor-pointer transition-all duration-300 group"
-      >
-        <div
-          :class="
+      <!-- Role Selector Toggle -->
+      <div class="p-1.5 bg-slate-100 dark:bg-slate-900 rounded-2xl flex mb-8">
+        <button
+          v-for="role in [
+            { id: 'candidate', label: 'Candidate', icon: 'pi-user' },
+            { id: 'employer', label: 'Employer', icon: 'pi-briefcase' }
+          ]"
+          :key="role.id"
+          @click="selectedRole = role.id"
+          type="button"
+          :class="[
             selectedRole === role.id
-              ? 'bg-indigo-600 text-white scale-110'
-              : 'bg-slate-100 dark:bg-slate-800 text-slate-400 group-hover:bg-indigo-100 group-hover:text-indigo-600'
-          "
-          class="w-14 h-14 rounded-2xl flex items-center justify-center transition-all text-2xl shadow-sm"
+              ? 'bg-white dark:bg-slate-800 text-indigo-600 shadow-sm'
+              : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+          ]"
+          class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-all duration-300 font-black text-xs uppercase tracking-widest"
         >
-          {{ role.icon }}
-        </div>
-        <div class="ml-5">
-          <p class="font-black text-slate-900 dark:text-white text-lg tracking-tight">
-            {{ role.title }}
-          </p>
-          <p
-            class="text-slate-400 dark:text-slate-500 text-xs font-bold uppercase tracking-wider mt-0.5"
-          >
-            {{ role.desc }}
-          </p>
-        </div>
+          <i :class="['pi', role.icon]"></i>
+          {{ role.label }}
+        </button>
       </div>
 
-      <button
-        @click="step = 1"
-        class="w-full mt-8 py-4 bg-slate-900 dark:bg-indigo-600 text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-black dark:hover:bg-indigo-700 active:scale-[0.98] transition-all shadow-xl shadow-indigo-200 dark:shadow-none"
-      >
-        Continue
-      </button>
-    </div>
+      <!-- Form -->
+      <form @submit.prevent="handleRegister" class="space-y-5">
+        <!-- Dynamic Fields Container with transition -->
+        <div class="space-y-5 transition-all duration-500">
+          <!-- Full Name -->
+          <div class="space-y-2">
+            <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">
+              Full Name
+            </label>
+            <input
+              v-model="form.name"
+              type="text"
+              placeholder="John Doe"
+              required
+              class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900 border-2 border-transparent rounded-2xl focus:bg-white dark:focus:bg-slate-950 focus:border-indigo-600/20 focus:ring-4 focus:ring-indigo-600/5 outline-none transition-all font-bold text-slate-700 dark:text-slate-200"
+            />
+          </div>
 
-    <form v-else @submit.prevent="handleRegister" class="space-y-6 animate-[slideIn_0.4s_ease-out]">
-      <button
-        @click="step = 0"
-        type="button"
-        class="group text-[10px] font-black text-slate-400 hover:text-indigo-600 uppercase tracking-widest mb-2 flex items-center gap-2 transition-colors"
-      >
-        <i class="pi pi-arrow-left group-hover:-translate-x-1 transition-transform"></i>
-        Change Role
-      </button>
+          <!-- Company Name (Employer only) -->
+          <div v-if="selectedRole === 'employer'" class="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+            <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">
+              Company Name
+            </label>
+            <input
+              v-model="form.company_name"
+              type="text"
+              placeholder="Your Company LLC"
+              required
+              class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900 border-2 border-transparent rounded-2xl focus:bg-white dark:focus:bg-slate-950 focus:border-indigo-600/20 focus:ring-4 focus:ring-indigo-600/5 outline-none transition-all font-bold text-slate-700 dark:text-slate-200"
+            />
+          </div>
 
-      <div class="space-y-5">
-        <div
-          v-for="field in selectedRole === 'employer'
-            ? ['name', 'company_name', 'email', 'password']
-            : ['name', 'email', 'password']"
-          :key="field"
-          class="space-y-2"
-        >
-          <label
-            class="text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-2"
-          >
-            {{ field.replace('_', ' ') }}
-          </label>
-          <input
-            v-model="form[field]"
-            :type="field === 'password' ? 'password' : 'text'"
-            :placeholder="
-              field === 'password' ? '••••••••' : 'Enter your ' + field.replace('_', ' ')
-            "
-            class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-800/50 border-2 border-transparent rounded-2xl focus:bg-white dark:focus:bg-slate-900 focus:border-indigo-600/20 focus:ring-4 focus:ring-indigo-600/5 outline-none transition-all font-bold text-slate-700 dark:text-slate-200 placeholder:text-slate-300"
-            required
-          />
-          <div v-if="field === 'password'" class="flex gap-1.5 mt-3 px-1">
-            <div
-              v-for="i in 3"
-              :key="i"
-              :class="[
-                i <= passwordStrength
-                  ? passwordStrength === 1
-                    ? 'bg-red-400'
-                    : passwordStrength === 2
-                      ? 'bg-amber-400'
-                      : 'bg-green-500'
-                  : 'bg-slate-100 dark:bg-slate-800',
-              ]"
-              class="h-1.5 flex-1 rounded-full transition-all duration-500"
-            ></div>
+          <!-- Email -->
+          <div class="space-y-2">
+            <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">
+              Email Address
+            </label>
+            <input
+              v-model="form.email"
+              type="email"
+              placeholder="name@example.com"
+              required
+              class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900 border-2 border-transparent rounded-2xl focus:bg-white dark:focus:bg-slate-950 focus:border-indigo-600/20 focus:ring-4 focus:ring-indigo-600/5 outline-none transition-all font-bold text-slate-700 dark:text-slate-200"
+            />
+          </div>
+
+          <!-- Password -->
+          <div class="space-y-2">
+            <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">
+              Password
+            </label>
+            <input
+              v-model="form.password"
+              type="password"
+              placeholder="••••••••"
+              required
+              class="w-full px-6 py-4 bg-slate-50 dark:bg-slate-900 border-2 border-transparent rounded-2xl focus:bg-white dark:focus:bg-slate-950 focus:border-indigo-600/20 focus:ring-4 focus:ring-indigo-600/5 outline-none transition-all font-bold text-slate-700 dark:text-slate-200"
+            />
           </div>
         </div>
+
+        <!-- Error message -->
+        <div
+          v-if="error"
+          class="flex items-center gap-3 text-red-600 dark:text-red-400 text-sm bg-red-50 dark:bg-red-500/10 p-4 rounded-2xl border border-red-100 dark:border-red-500/20"
+        >
+          <i class="pi pi-exclamation-circle text-lg"></i>
+          <span class="font-bold">{{ error }}</span>
+        </div>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          :disabled="isLoading"
+          class="w-full py-4 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-50 flex justify-center items-center gap-3 transition-all shadow-xl shadow-indigo-200 dark:shadow-none uppercase tracking-[0.2em] text-xs mt-4"
+        >
+          <i v-if="isLoading" class="pi pi-spin pi-spinner text-lg"></i>
+          <span>{{ isLoading ? 'Creating Account...' : 'Get Started' }}</span>
+        </button>
+      </form>
+
+      <!-- Footer -->
+      <p class="text-center text-sm text-slate-500 dark:text-slate-400 mt-10 font-medium tracking-tight">
+        Already have an account?
+        <router-link to="/auth/login" class="text-indigo-600 font-black hover:underline underline-offset-4 ml-1"
+          >Log in</router-link
+        >
+      </p>
+    </template>
+
+    <template #illustration-icon>
+      <div class="relative">
+        <div class="absolute -inset-4 bg-purple-500/20 blur-2xl rounded-full"></div>
+        <i class="pi pi-sparkles text-6xl text-purple-400 relative z-10"></i>
       </div>
-
-      <button
-        type="submit"
-        :disabled="isLoading"
-        class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] hover:bg-indigo-700 disabled:opacity-50 transition-all mt-4 shadow-xl shadow-indigo-200 dark:shadow-none flex justify-center items-center gap-3"
-      >
-        <i v-if="isLoading" class="pi pi-spin pi-spinner text-lg"></i>
-        {{ isLoading ? 'Processing...' : 'Create Account' }}
-      </button>
-    </form>
-
-    <p class="text-center text-xs text-slate-400 font-black uppercase tracking-widest mt-10">
-      Joined before?
-      <router-link to="/auth/login" class="text-indigo-600 hover:underline underline-offset-4 ml-1"
-        >Log in</router-link
-      >
-    </p>
-  </div>
+    </template>
+    
+    <template #illustration-title>Join our community</template>
+    <template #illustration-description>
+      Whether you're hiring or looking for work, our platform provides the tools you need to succeed in the modern market.
+    </template>
+  </AuthLayout>
 </template>
 
-<style>
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+<style scoped>
+.animate-in {
+  animation: fadeInDown 0.4s ease-out forwards;
 }
-@keyframes slideIn {
+
+@keyframes fadeInDown {
   from {
     opacity: 0;
-    transform: translateX(10px);
+    transform: translateY(-10px);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
   }
 }
 </style>
