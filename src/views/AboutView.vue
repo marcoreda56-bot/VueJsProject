@@ -2,7 +2,7 @@
   <div
     class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 py-20 px-6 lg:px-12 font-['Plus_Jakarta_Sans',sans-serif]"
   >
-    <div class="max-w-5xl mx-auto text-center mb-24 animate-[fadeIn_0.8s_ease-out]">
+    <div class="max-w-6xl mx-auto text-center mb-24 animate-[fadeIn_0.8s_ease-out]">
       <div
         class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-500/10 rounded-full mb-6 border border-indigo-100 dark:border-indigo-500/20"
       >

@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Plus_Jakarta_Sans',sans-serif]">
-    <div class="max-w-[1400px] mx-auto p-6">
+    <div class="max-w-[1800px] mx-auto p-6">
       <section
         class="relative overflow-hidden bg-slate-900 rounded-[3rem] py-20 px-12 shadow-2xl animate-[fadeIn_0.8s_ease-out]"
       >
@@ -38,7 +38,7 @@
       </section>
     </div>
 
-    <section class="max-w-[1200px] mx-auto px-6 py-12">
+    <section class="max-w-[1800px] mx-auto px-6 py-12">
       <div v-if="candidateStore.applications.length === 0" class="text-center py-32">
         <div
           class="w-24 h-24 bg-slate-100 dark:bg-slate-900 rounded-[2.5rem] flex items-center justify-center mx-auto mb-8 text-slate-300 text-4xl italic font-black"

@@ -82,7 +82,7 @@ const formatDate = (dateString) => {
 </script>
 
 <template>
-  <div class="p-10 max-w-7xl mx-auto">
+  <div class="p-10 max-w-[1800px] mx-auto">
     <!-- Breadcrumbs / Back -->
     <button @click="router.back()" class="flex items-center gap-2 text-gray-400 hover:text-indigo-600 font-bold text-sm mb-8 transition-colors group">
       <i class="pi pi-arrow-left group-hover:-translate-x-1 transition-transform"></i>

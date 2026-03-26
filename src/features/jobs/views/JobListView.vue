@@ -5,21 +5,23 @@
         Find Your <span class="text-indigo-600">Next.</span>
       </h1>
 
-      <div class="w-full lg:w-[500px] relative group">
-        <i
-          class="pi pi-search absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-indigo-600 transition-colors z-10"
-        ></i>
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Search roles, companies, or locations (e.g. Cairo)..."
-          class="w-full pl-16 pr-8 py-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2rem] outline-none shadow-sm font-bold text-slate-900 dark:text-white transition-all focus:border-indigo-500/30 focus:ring-4 focus:ring-indigo-500/5"
-        />
+      <div class="flex items-center gap-4 lg:ml-auto">
+        <!-- Mobile Filter Toggle -->
+        <button 
+          @click="showFilters = !showFilters"
+          class="lg:hidden w-16 h-16 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl flex items-center justify-center text-indigo-600 shadow-sm transition-all active:scale-95"
+          :class="{ 'bg-indigo-600 !text-white border-indigo-600 shadow-lg shadow-indigo-200': showFilters }"
+        >
+          <i :class="showFilters ? 'pi pi-times' : 'pi pi-sliders-h'" class="text-xl"></i>
+        </button>
       </div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
-      <aside class="lg:col-span-3">
+      <aside 
+        class="lg:col-span-3 transition-all duration-500"
+        :class="[showFilters ? 'block' : 'hidden lg:block']"
+      >
         <div
           class="sticky top-6 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-8 rounded-[3rem] shadow-sm"
         >
@@ -30,7 +32,7 @@
           </h3>
 
           <div class="space-y-4 mb-8">
-            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2"
+            <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-2 italic"
               >Job Type</label
             >
             <div
@@ -42,7 +44,7 @@
                   ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-none'
                   : 'bg-slate-50 dark:bg-slate-800 text-slate-500'
               "
-              class="px-6 py-4 rounded-2xl cursor-pointer transition-all flex items-center justify-between font-black text-[10px] uppercase tracking-widest hover:scale-[1.02]"
+              class="px-6 py-4 rounded-2xl cursor-pointer transition-all flex items-center justify-between font-bold text-[13px] uppercase tracking-wider hover:scale-[1.02] font-sans"
             >
               {{ type.label }}
               <i v-if="selectedType === type.id" class="pi pi-check"></i>
@@ -50,7 +52,7 @@
           </div>
 
           <div class="space-y-4 mb-8">
-            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2"
+            <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest ml-2 italic"
               >Category</label
             >
             <div
@@ -59,12 +61,22 @@
               @click="toggleCategory(category.id)"
               :class="
                 selectedCategory === category.id
-                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-none'
-                  : 'bg-slate-50 dark:bg-slate-800 text-slate-500'
+                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200 dark:shadow-none translate-x-2'
+                  : 'bg-slate-50 dark:bg-slate-800 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800/80'
               "
-              class="px-6 py-4 rounded-2xl cursor-pointer transition-all flex items-center justify-between font-black text-[10px] uppercase tracking-widest hover:scale-[1.02]"
+              class="px-6 py-4 rounded-2xl cursor-pointer transition-all flex items-center justify-between font-bold text-[13px] uppercase tracking-wider hover:scale-[1.02] font-sans"
             >
-              {{ category.name }}
+              <div class="flex items-center gap-3">
+                <div 
+                  v-if="selectedCategory !== category.id"
+                  :class="[getCategoryStyle(category.icon).bg, getCategoryStyle(category.icon).text]"
+                  class="w-8 h-8 rounded-lg flex items-center justify-center transition-all"
+                >
+                   <i :class="getCategoryStyle(category.icon).icon" class="text-sm"></i>
+                </div>
+                <i v-else :class="getCategoryStyle(category.icon).icon" class="text-sm text-white"></i>
+                {{ category.name }}
+              </div>
               <span v-if="selectedCategory !== category.id" class="text-[9px] opacity-60"
                 >({{ category.jobs_count || 0 }})</span
               >
@@ -74,7 +86,7 @@
 
           <button
             @click="resetFilters"
-            class="w-full text-[10px] font-black uppercase text-slate-400 hover:text-rose-500 transition-colors py-2"
+            class="w-full text-[12px] font-black uppercase text-slate-400 hover:text-rose-500 transition-colors py-2"
           >
             Reset All Filters
           </button>
@@ -102,9 +114,13 @@
           >
             <div class="flex justify-between items-start mb-6">
               <div
-                class="w-16 h-16 bg-slate-900 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl group-hover:bg-indigo-600 transition-all shadow-inner"
+                class="w-16 h-16 bg-slate-900 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-white font-black text-2xl group-hover:bg-indigo-600 transition-all shadow-inner overflow-hidden"
               >
-                {{ job.title?.charAt(0) || '?' }}
+                <img 
+                  :src="`https://ui-avatars.com/api/?name=${getCompanyName(job.employer_id)}&background=1e293b&color=fff&bold=true&font-size=0.4`" 
+                  :alt="getCompanyName(job.employer_id)" 
+                  class="w-full h-full object-cover" 
+                />
               </div>
               <span
                 class="px-4 py-1.5 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 rounded-xl text-[10px] font-black uppercase tracking-widest"
@@ -148,13 +164,21 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { useJobsStore } from '@/stores/jobs'
 
+const route = useRoute()
 const jobStore = useJobsStore()
-const searchQuery = ref('')
+const searchQuery = ref(route.query.q || '')
+
+watch(() => route.query.q, (newQ) => {
+  searchQuery.value = newQ || ''
+})
+
 const selectedType = ref(null)
 const selectedCategory = ref(null)
+const showFilters = ref(false)
 
 const jobTypes = [
   { id: 'full_time', label: 'Full Time' },
@@ -162,7 +186,34 @@ const jobTypes = [
   { id: 'part_time', label: 'Part Time' },
 ]
 
-onMounted(() => jobStore.initialize())
+const lucideToPrime = {
+  'Code': { icon: 'pi pi-desktop', bg: 'bg-blue-50 dark:bg-blue-900/20', text: 'text-blue-600 dark:text-blue-400', border: 'border-blue-100 dark:border-blue-800' },
+  'Palette': { icon: 'pi pi-palette', bg: 'bg-pink-50 dark:bg-pink-900/20', text: 'text-pink-600 dark:text-pink-400', border: 'border-pink-100 dark:border-pink-800' },
+  'LayoutDashboard': { icon: 'pi pi-th-large', bg: 'bg-indigo-50 dark:bg-indigo-900/20', text: 'text-indigo-600 dark:text-indigo-400', border: 'border-indigo-100 dark:border-indigo-800' },
+  'Megaphone': { icon: 'pi pi-megaphone', bg: 'bg-orange-50 dark:bg-orange-900/20', text: 'text-orange-600 dark:text-orange-400', border: 'border-orange-100 dark:border-orange-800' },
+  'Database': { icon: 'pi pi-database', bg: 'bg-emerald-50 dark:bg-emerald-900/20', text: 'text-emerald-600 dark:text-emerald-400', border: 'border-emerald-100 dark:border-emerald-800' },
+  'Briefcase': { icon: 'pi pi-chart-line', bg: 'bg-purple-50 dark:bg-purple-900/20', text: 'text-purple-600 dark:text-purple-400', border: 'border-purple-100 dark:border-purple-800' },
+  'Users': { icon: 'pi pi-users', bg: 'bg-cyan-50 dark:bg-cyan-900/20', text: 'text-cyan-600 dark:text-cyan-400', border: 'border-cyan-100 dark:border-cyan-800' },
+  'Pencil': { icon: 'pi pi-pencil', bg: 'bg-amber-50 dark:bg-amber-900/20', text: 'text-amber-600 dark:text-amber-400', border: 'border-amber-100 dark:border-amber-800' }
+}
+
+const getCategoryStyle = (iconName) => {
+  return lucideToPrime[iconName] || { 
+    icon: 'pi pi-tag', 
+    bg: 'bg-slate-100 dark:bg-slate-800', 
+    text: 'text-slate-500 dark:text-slate-400',
+    border: 'border-slate-200 dark:border-slate-700'
+  }
+}
+
+onMounted(async () => {
+  await jobStore.initialize()
+  
+  // Activate category if present in query
+  if (route.query.category) {
+    selectedCategory.value = String(route.query.category)
+  }
+})
 
 const getCompanyName = (employerId) => {
   const employer = jobStore.employers.find((e) => String(e.id) === String(employerId))

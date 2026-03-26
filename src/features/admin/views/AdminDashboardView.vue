@@ -14,7 +14,7 @@ const statCards = [
 </script>
 
 <template>
-  <div class="p-10 max-w-7xl mx-auto">
+  <div class="p-10 max-w-[1800px] mx-auto">
     <!-- Header -->
     <div class="mb-12">
       <div class="flex items-center gap-2 mb-2">

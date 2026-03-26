@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Plus_Jakarta_Sans',sans-serif]">
     <!-- Hero -->
-    <div class="max-w-[1400px] mx-auto mb-8">
+    <div class="max-w-[1800px] mx-auto mb-8">
       <section class="relative overflow-hidden bg-slate-900 rounded-[3rem] py-14 px-12 shadow-2xl animate-[fadeIn_0.8s_ease-out]">
         <div class="absolute -top-16 -right-16 w-64 h-64 bg-indigo-600/20 blur-[80px] rounded-full animate-pulse"></div>
         <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
@@ -31,7 +31,7 @@
       </section>
     </div>
 
-    <div class="max-w-[1400px] mx-auto">
+    <div class="max-w-[1800px] mx-auto">
       <!-- Filter Bar -->
       <div class="flex flex-wrap gap-3 mb-8">
         <button
@@ -220,6 +220,7 @@ const handleStatusUpdate = async (appId, status) => {
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Plus_Jakarta_Sans',sans-serif]">
     <!-- Hero Banner -->
-    <div class="max-w-[1400px] mx-auto mb-8">
+    <div class="max-w-[1800px] mx-auto mb-8">
       <section
         class="relative overflow-hidden bg-slate-900 rounded-[3rem] py-16 px-12 shadow-2xl animate-[fadeIn_0.8s_ease-out]"
       >
