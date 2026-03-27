@@ -294,7 +294,6 @@ const getCategoryStyle = (iconName) => {
 onMounted(async () => {
   await jobStore.initialize()
 
-  // Activate category if present in query
   if (route.query.category) {
     selectedCategory.value = String(route.query.category)
   }
@@ -307,20 +306,26 @@ const getCompanyName = (employerId) => {
 
 const filteredJobs = computed(() => {
   return jobStore.jobs.filter((job) => {
+    if (!job || !job.id || (!job.title && !job.slug)) return false
+
     const query = searchQuery.value.toLowerCase()
+
     const companyName = getCompanyName(job.employer_id).toLowerCase()
 
+    const title = (job.title || '').toLowerCase()
+    const location = (job.location || '').toLowerCase()
+
     const matchesSearch =
-      job.title?.toLowerCase().includes(query) ||
-      companyName.includes(query) ||
-      job.location?.toLowerCase().includes(query)
+      title.includes(query) || companyName.includes(query) || location.includes(query)
 
-    const matchesType = selectedType.value ? job.type === selectedType.value : true
-    const matchesCategory = selectedCategory.value
-      ? String(job.category_id) === String(selectedCategory.value)
-      : true
+    const currentJobType = job.type || job.work_type
+    const matchesType = !selectedType.value || currentJobType === selectedType.value
 
-    return matchesSearch && matchesType && matchesCategory
+    const matchesCategory =
+      !selectedCategory.value || String(job.category_id) === String(selectedCategory.value)
+
+    const isActive = job.status !== 'draft'
+    return matchesSearch && matchesType && matchesCategory && isActive
   })
 })
 
