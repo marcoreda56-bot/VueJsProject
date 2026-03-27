@@ -14,6 +14,8 @@ export const useCandidateStore = defineStore('candidate', {
       await this.fetchDashboardData()
     },
 
+    // داخل fetchDashboardData في ملف candidate.store.js
+
     async fetchDashboardData() {
       const auth = useAuthStore()
       const user = auth.user || JSON.parse(localStorage.getItem('user'))
@@ -25,18 +27,31 @@ export const useCandidateStore = defineStore('candidate', {
 
         const [appsRes, profileRes] = await Promise.all([
           applicationsApi.getAll(),
+          // ندهنا الـ API اللي بيدور بـ ?user_id=
           candidatesApi.getById(userId).catch(() => null),
         ])
 
+        // 1. معالجة التقديمات (Applications)
         if (appsRes && appsRes.data) {
           this.applications = appsRes.data.filter((app) => String(app.candidate_id) === userId)
         }
 
+        // 2. الفخ هنا: لازم نتأكد هي Array ولا Object
         if (profileRes && profileRes.data) {
-          this.profile = profileRes.data
-        } else {
+          // لو راجعة مصفوفة (بسبب الفلتر)، ناخد أول عنصر
+          if (Array.isArray(profileRes.data)) {
+            this.profile = profileRes.data.length > 0 ? profileRes.data[0] : null
+          } else {
+            // لو راجعة كائن مباشر (getById قديمة)
+            this.profile = profileRes.data
+          }
+        }
+
+        // 3. لو ملقيناش بروفايل خالص (لليوزر الجديد)، نجهز كائن "وهمي" عشان الـ UI ما يضربش
+        if (!this.profile) {
           this.profile = {
             id: userId,
+            user_id: userId, // مهم جداً للربط
             title: '',
             location: 'Egypt',
             bio: '',

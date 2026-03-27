@@ -40,9 +40,9 @@ export const usersApi = {
 
 export const candidatesApi = {
   getAll: () => api.get('/candidates'),
-  getById: (id) => api.get(`/candidates/${id}`),
+  getById: (user_id) => api.get(`/candidates/${user_id}`),
   create: (data) => api.post('/candidates', data),
-  update: (id, data) => api.put(`/candidates/${id}`, data),
+  update: (id, data) => api.patch(`/candidates/${id}`, data),
   delete: (id) => api.delete(`/candidates/${id}`),
 }
 

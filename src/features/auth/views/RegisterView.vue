@@ -8,11 +8,28 @@ const router = useRouter()
 const { register, isLoading, error } = useAuth()
 
 const selectedRole = ref('candidate')
-const form = reactive({ name: '', email: '', password: '', company_name: '' })
+const form = reactive({
+  name: '',
+  email: '',
+  password: '',
+  company_name: '',
+})
 
 const handleRegister = async () => {
-  const success = await register(form, selectedRole.value)
-  if (success) router.push({ name: `${selectedRole.value}.dashboard` })
+  const submitData = {
+    name: form.name,
+    email: form.email,
+    password: form.password,
+  }
+
+  if (selectedRole.value === 'employer') {
+    submitData.company_name = form.company_name
+  }
+
+  const success = await register(submitData, selectedRole.value)
+  if (success) {
+    router.push({ name: `${selectedRole.value}.dashboard` })
+  }
 }
 </script>
 
@@ -33,7 +50,7 @@ const handleRegister = async () => {
         <button
           v-for="role in [
             { id: 'candidate', label: 'Candidate', icon: 'pi-user' },
-            { id: 'employer', label: 'Employer', icon: 'pi-briefcase' }
+            { id: 'employer', label: 'Employer', icon: 'pi-briefcase' },
           ]"
           :key="role.id"
           @click="selectedRole = role.id"
@@ -41,7 +58,7 @@ const handleRegister = async () => {
           :class="[
             selectedRole === role.id
               ? 'bg-white dark:bg-slate-800 text-indigo-600 shadow-sm'
-              : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+              : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300',
           ]"
           class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl transition-all duration-300 font-black text-xs uppercase tracking-widest"
         >
@@ -56,7 +73,9 @@ const handleRegister = async () => {
         <div class="space-y-5 transition-all duration-500">
           <!-- Full Name -->
           <div class="space-y-2">
-            <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">
+            <label
+              class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1"
+            >
               Full Name
             </label>
             <input
@@ -69,8 +88,13 @@ const handleRegister = async () => {
           </div>
 
           <!-- Company Name (Employer only) -->
-          <div v-if="selectedRole === 'employer'" class="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
-            <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">
+          <div
+            v-if="selectedRole === 'employer'"
+            class="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300"
+          >
+            <label
+              class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1"
+            >
               Company Name
             </label>
             <input
@@ -84,7 +108,9 @@ const handleRegister = async () => {
 
           <!-- Email -->
           <div class="space-y-2">
-            <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">
+            <label
+              class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1"
+            >
               Email Address
             </label>
             <input
@@ -98,7 +124,9 @@ const handleRegister = async () => {
 
           <!-- Password -->
           <div class="space-y-2">
-            <label class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1">
+            <label
+              class="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] ml-1"
+            >
               Password
             </label>
             <input
@@ -132,9 +160,13 @@ const handleRegister = async () => {
       </form>
 
       <!-- Footer -->
-      <p class="text-center text-sm text-slate-500 dark:text-slate-400 mt-10 font-medium tracking-tight">
+      <p
+        class="text-center text-sm text-slate-500 dark:text-slate-400 mt-10 font-medium tracking-tight"
+      >
         Already have an account?
-        <router-link to="/auth/login" class="text-indigo-600 font-black hover:underline underline-offset-4 ml-1"
+        <router-link
+          to="/auth/login"
+          class="text-indigo-600 font-black hover:underline underline-offset-4 ml-1"
           >Log in</router-link
         >
       </p>
@@ -146,10 +178,11 @@ const handleRegister = async () => {
         <i class="pi pi-sparkles text-6xl text-purple-400 relative z-10"></i>
       </div>
     </template>
-    
+
     <template #illustration-title>Join our community</template>
     <template #illustration-description>
-      Whether you're hiring or looking for work, our platform provides the tools you need to succeed in the modern market.
+      Whether you're hiring or looking for work, our platform provides the tools you need to succeed
+      in the modern market.
     </template>
   </AuthLayout>
 </template>
