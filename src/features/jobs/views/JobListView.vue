@@ -66,7 +66,7 @@
             <i class="pi pi-search text-slate-300 text-2xl"></i>
           </div>
           <p class="text-slate-500 font-bold uppercase tracking-widest text-xs">
-            No opportunities found for "{{ searchQuery }}"
+            No opportunities found for "{{ selectedType ? selectedType.replace('_', ' ') : searchQuery || 'this filter' }}"
           </p>
         </div>
 
@@ -133,9 +133,9 @@ const searchQuery = ref('')
 const selectedType = ref(null)
 
 const jobTypes = [
-  { id: 'full-time', label: 'Full Time' },
+  { id: 'full_time', label: 'Full Time' },
   { id: 'remote', label: 'Remote' },
-  { id: 'part-time', label: 'Part Time' },
+  { id: 'part_time', label: 'Part Time' },
 ]
 
 onMounted(() => jobStore.initialize())
@@ -164,7 +164,6 @@ const filteredJobs = computed(() => {
 const toggleType = (id) => {
   selectedType.value = selectedType.value === id ? null : id
 }
-
 const resetFilters = () => {
   searchQuery.value = ''
   selectedType.value = null
