@@ -1,12 +1,13 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import api, { usersApi, jobsApi, applicationsApi, employersApi } from '@/api/services/api'
+import api, { usersApi, jobsApi, applicationsApi, employersApi, candidatesApi } from '@/api/services/api'
 
 export const useAdminStore = defineStore('admin', () => {
   const users = ref([])
   const jobs = ref([])
   const applications = ref([])
   const employers = ref([])
+  const candidates = ref([])
   const categories = ref([])
   const loading = ref(false)
   const error = ref(null)
@@ -29,18 +30,20 @@ export const useAdminStore = defineStore('admin', () => {
     loading.value = true
     error.value = null
     try {
-      const [uRes, jRes, aRes, eRes, catRes] = await Promise.all([
+      const [uRes, jRes, aRes, eRes, catRes, cRes] = await Promise.all([
         usersApi.getAll(),
         jobsApi.getAll(),
         applicationsApi.getAll(),
         employersApi.getAll(),
-        api.get('/categories')
+        api.get('/categories'),
+        candidatesApi.getAll()
       ])
       users.value = uRes.data
       jobs.value = jRes.data
       applications.value = aRes.data
       employers.value = eRes.data
       categories.value = catRes.data
+      candidates.value = cRes.data
     } catch (err) {
       error.value = err.message
       console.error('Admin Store: Failed to fetch data', err)
@@ -109,6 +112,7 @@ export const useAdminStore = defineStore('admin', () => {
     jobs,
     applications,
     employers,
+    candidates,
     categories,
     loading,
     error,
