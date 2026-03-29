@@ -31,13 +31,8 @@
             <img
               :src="userAvatar"
               class="w-full h-full object-cover rounded-[2.5rem] shadow-2xl transition-transform group-hover:scale-105"
-              alt="Profile Picture"
+              alt="Profile"
             />
-            <div
-              class="absolute inset-0 bg-black/40 rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
-            >
-              <i class="pi pi-camera text-white text-xl"></i>
-            </div>
           </div>
           <h3 class="text-xl font-black text-slate-900 dark:text-white mb-1">
             {{ auth.user?.name }}
@@ -65,7 +60,6 @@
               >
                 {{ field.label }}
               </label>
-
               <input
                 v-if="field.type !== 'textarea'"
                 v-model="formData[field.key]"
@@ -73,7 +67,6 @@
                 class="w-full px-8 py-5 bg-slate-50 dark:bg-slate-800/50 border border-transparent focus:border-indigo-500/30 focus:bg-white dark:focus:bg-slate-800 rounded-[1.5rem] outline-none transition-all font-bold text-slate-700 dark:text-slate-200"
                 :placeholder="field.placeholder"
               />
-
               <textarea
                 v-else
                 v-model="formData[field.key]"
@@ -90,37 +83,17 @@
                 Technical Skills
               </label>
 
-              <div class="flex flex-wrap gap-3 mb-6">
-                <span
-                  v-for="(skill, index) in formData.skills"
-                  :key="index"
-                  class="group px-5 py-2.5 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 rounded-xl text-[10px] font-black uppercase flex items-center gap-3 transition-all hover:bg-indigo-600 hover:text-white"
-                >
-                  {{ skill }}
-                  <i
-                    @click="removeSkill(index)"
-                    class="pi pi-times cursor-pointer text-[8px] opacity-50 group-hover:opacity-100"
-                  ></i>
-                </span>
+              <SkillSelector
+                v-model="formData.skills"
+                :skills="allSkills"
+                placeholder="Search for skills (e.g. JavaScript, PHP)..."
+              />
 
-                <div v-if="formData.skills.length === 0" class="text-slate-300 italic text-xs ml-2">
-                  No skills added yet...
-                </div>
-              </div>
-
-              <div class="relative">
-                <input
-                  v-model="skillInput"
-                  @keyup.enter="addSkill"
-                  class="w-full px-8 py-5 bg-slate-50 dark:bg-slate-800/50 border border-transparent focus:border-indigo-500/30 focus:bg-white dark:focus:bg-slate-800 rounded-[1.5rem] outline-none transition-all font-bold text-slate-700 dark:text-slate-200"
-                  placeholder="Type a skill and press Enter (e.g. Vue.js, Node.js)"
-                />
-                <button
-                  @click="addSkill"
-                  class="absolute right-4 top-1/2 -translate-y-1/2 p-3 text-indigo-500 hover:text-indigo-700 transition-colors"
-                >
-                  <i class="pi pi-plus"></i>
-                </button>
+              <div
+                v-if="loadingSkills"
+                class="mt-2 flex items-center gap-2 text-[10px] text-slate-400"
+              >
+                <i class="pi pi-spin pi-spinner"></i> Syncing skills...
               </div>
             </div>
           </div>
@@ -134,12 +107,15 @@
 import { reactive, onMounted, ref, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth.store'
 import { useCandidateStore } from '@/stores/candidate.store'
+import { skillsApi } from '@/api/services/api'
+import SkillSelector from '@/components/shared/SkillsSelector.vue'
 import Swal from 'sweetalert2'
 
 const auth = useAuthStore()
 const candidateStore = useCandidateStore()
 const saving = ref(false)
-const skillInput = ref('')
+const loadingSkills = ref(true)
+const allSkills = ref([])
 
 const fields = [
   {
@@ -159,7 +135,21 @@ const formData = reactive({
   skills: [],
 })
 
+const fetchAllSkills = async () => {
+  try {
+    loadingSkills.value = true
+    const response = await skillsApi.getAll()
+    allSkills.value = response.data
+  } catch (error) {
+    console.error('Failed to fetch skills:', error)
+  } finally {
+    loadingSkills.value = false
+  }
+}
+
 onMounted(async () => {
+  await fetchAllSkills()
+
   await candidateStore.initialize()
   if (candidateStore.profile) {
     Object.assign(formData, {
@@ -167,7 +157,7 @@ onMounted(async () => {
       location: candidateStore.profile.location || '',
       bio: candidateStore.profile.bio || '',
       skills: Array.isArray(candidateStore.profile.skills)
-        ? [...candidateStore.profile.skills]
+        ? candidateStore.profile.skills.map((s) => String(s))
         : [],
     })
   }
@@ -179,36 +169,25 @@ const userAvatar = computed(() => {
   return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=6366f1&color=fff&bold=true`
 })
 
-const addSkill = () => {
-  const val = skillInput.value.trim()
-  if (val && !formData.skills.includes(val)) {
-    formData.skills.push(val)
-    skillInput.value = ''
-  }
-}
-
-const removeSkill = (index) => {
-  formData.skills.splice(index, 1)
-}
-
 const saveProfile = async () => {
   saving.value = true
   try {
     await candidateStore.updateProfile({
       ...candidateStore.profile,
       ...formData,
+      skills: formData.skills,
     })
 
     Swal.fire({
       title: 'Profile Updated!',
-      text: 'Your professional presence is now live.',
+      text: 'Your skills and info have been synchronized.',
       icon: 'success',
       confirmButtonColor: '#6366f1',
       customClass: { popup: 'rounded-[2.5rem] font-sans' },
     })
   } catch (err) {
     console.error('Save Error:', err)
-    Swal.fire('Error', "We couldn't save your changes. Try again.", 'error')
+    Swal.fire('Error', 'Failed to save profile changes.', 'error')
   } finally {
     saving.value = false
   }

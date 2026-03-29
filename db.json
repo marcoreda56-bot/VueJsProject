@@ -475,11 +475,13 @@
       "currency": "EGP",
       "profile_completion": 40,
       "created_at": "2024-06-01T12:00:00Z",
-      "updated_at": "2026-03-29T15:58:00.201Z",
+      "updated_at": "2026-03-29T17:36:13.052Z",
       "title": "senior backend ",
       "skills": [
         "node js",
-        "figma"
+        "26",
+        "24",
+        "27"
       ]
     },
     {
@@ -2226,6 +2228,21 @@
       "status": "accepted",
       "applied_at": "2026-03-29T15:49:07.501Z",
       "id": "btKwHMh2NzA"
+    },
+    {
+      "candidate_id": "6",
+      "job_id": "4",
+      "cover_letter": "\"I am a Frontend Developer with a passion for building clean, scalable UIs. I specialize in Vue.js and modern CSS frameworks like Tailwind. I'm excited about the opportunity to bring my technical skills and eye for detail to the Paymob team to help streamline the digital payment experience.\"",
+      "candidate_snapshot": {
+        "name": "Laila Farouk",
+        "email": "laila.farouk@email.com",
+        "title": "senior backend ",
+        "location": "Mansoura, Egypt",
+        "bio": "Fresh graduate with strong portfolio in branding and visual identity design and figma."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-29T17:34:04.212Z",
+      "id": "Bq7e_tETGMI"
     }
   ],
   "application_stages": [
