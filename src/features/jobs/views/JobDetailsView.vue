@@ -10,7 +10,9 @@
       >
         <div
           class="w-8 h-8 rounded-full border border-slate-200 dark:border-slate-800 flex items-center justify-center group-hover:border-indigo-600 transition-colors"
-        ></div>
+        >
+          <i class="pi pi-arrow-left text-[8px]"></i>
+        </div>
         Back
       </button>
 
@@ -103,7 +105,7 @@
               </h4>
 
               <button
-                @click="showApplyModal = true"
+                @click="checkAndOpenModal"
                 :disabled="hasApplied"
                 class="w-full py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 shadow-xl"
                 :class="
@@ -163,18 +165,22 @@
             ></textarea>
           </div>
 
-          <div class="flex items-center gap-6">
-            <button
-              @click="showApplyModal = false"
-              class="flex-1 py-5 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 hover:text-rose-500 transition-colors italic"
-            >
-              Discard
-            </button>
+          <div class="space-y-4">
             <button
               @click="submitApplication"
-              class="flex-[2] py-5 bg-slate-900 dark:bg-indigo-600 text-white rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.3em] hover:scale-[1.02] active:scale-95 transition-all shadow-2xl shadow-indigo-500/20"
+              :disabled="isApplying"
+              class="w-full py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black uppercase tracking-widest transition-all shadow-xl shadow-indigo-100 flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50"
             >
-              Submit My Track <i class="pi pi-arrow-right ml-2 text-[8px]"></i>
+              <i v-if="isApplying" class="pi pi-spin pi-spinner"></i>
+              <i v-else class="pi pi-bolt"></i>
+              {{ isApplying ? 'Processing...' : 'Confirm & Apply' }}
+            </button>
+
+            <button
+              @click="showApplyModal = false"
+              class="w-full py-2 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-rose-500 transition-colors"
+            >
+              Cancel
             </button>
           </div>
         </div>
@@ -188,17 +194,21 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useJobsStore } from '@/stores/jobs'
 import { useCandidateStore } from '@/stores/candidate.store'
+import { useAuthStore } from '@/stores/auth.store'
 import Swal from 'sweetalert2'
 
 const route = useRoute()
 const router = useRouter()
 const jobsStore = useJobsStore()
 const candidateStore = useCandidateStore()
+const authStore = useAuthStore()
 
 const showApplyModal = ref(false)
+const isApplying = ref(false)
 const coverLetter = ref('')
 
 const job = computed(() => jobsStore.jobs.find((j) => String(j.id) === String(route.params.id)))
+
 const companyName = computed(() => {
   const emp = jobsStore.employers.find((e) => String(e.id) === String(job.value?.employer_id))
   return emp?.company_name || 'HireMasr Partner'
@@ -210,8 +220,20 @@ const hasApplied = computed(() => {
 
 onMounted(async () => {
   if (jobsStore.jobs.length === 0) await jobsStore.initialize()
-  if (candidateStore.applications.length === 0) await candidateStore.initialize()
+  if (authStore.isAuthenticated && candidateStore.applications.length === 0) {
+    await candidateStore.initialize()
+  }
 })
+
+const checkAndOpenModal = () => {
+  if (!authStore.isAuthenticated) {
+    return router.push({
+      name: 'login',
+      query: { redirect: route.fullPath },
+    })
+  }
+  showApplyModal.value = true
+}
 
 const submitApplication = async () => {
   if (!coverLetter.value) {
@@ -225,8 +247,11 @@ const submitApplication = async () => {
   }
 
   try {
+    isApplying.value = true
     await candidateStore.applyForJob(job.value.id, coverLetter.value)
+
     showApplyModal.value = false
+    coverLetter.value = ''
 
     Swal.fire({
       icon: 'success',
@@ -236,12 +261,22 @@ const submitApplication = async () => {
       timer: 3000,
     })
   } catch (error) {
-    Swal.fire('Error', 'Something went wrong. Check your connection.', 'error')
+    Swal.fire({
+      title: 'Error',
+      text: error.message || 'Something went wrong. Check your connection.',
+      icon: 'error',
+      confirmButtonColor: '#6366f1',
+    })
+  } finally {
+    isApplying.value = false
   }
 }
 </script>
 
 <style scoped>
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;

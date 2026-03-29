@@ -1,29 +1,25 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { jobsApi, categoriesApi, applicationsApi, employersApi } from '@/api/services/api'
-
+import { jobsApi, categoriesApi, employersApi } from '@/api/services/api'
 export const useJobsStore = defineStore('jobs', () => {
   const jobs = ref([])
   const categories = ref([])
   const employers = ref([])
   const loading = ref(false)
-  const error = ref(null)
-  const currentUserId = ref(null)
-
   const activeJobs = () => jobs.value.filter((job) => job.status === 'active')
   const featuredJobs = () => activeJobs().slice(0, 6)
-  const jobsByCategory = (categoryId) => jobs.value.filter((job) => job.category_id === categoryId)
+  const jobsByCategory = (categoryId) =>
+    jobs.value.filter((job) => String(job.category_id) === String(categoryId))
+
   const jobCountByCategory = (categoryId) => jobsByCategory(categoryId).length
 
   const fetchActiveJobs = async () => {
     try {
       loading.value = true
-      error.value = null
       const response = await jobsApi.getActive()
       jobs.value = response.data
     } catch (err) {
-      error.value = err.message
-      console.error('Failed to fetch jobs:', err)
+      console.error('Fetch Jobs Error:', err)
     } finally {
       loading.value = false
     }
@@ -32,12 +28,12 @@ export const useJobsStore = defineStore('jobs', () => {
   const fetchAllCategories = async () => {
     try {
       const response = await categoriesApi.getActive()
-      categories.value = response.data
-      categories.value.forEach((cat) => {
-        cat.jobs_count = jobCountByCategory(cat.id)
-      })
+      categories.value = response.data.map((cat) => ({
+        ...cat,
+        jobs_count: jobCountByCategory(cat.id),
+      }))
     } catch (err) {
-      console.error('Failed to fetch categories:', err)
+      console.error('Fetch Categories Error:', err)
     }
   }
 
@@ -46,44 +42,18 @@ export const useJobsStore = defineStore('jobs', () => {
       const response = await employersApi.getAll()
       employers.value = response.data
     } catch (err) {
-      console.error('Failed to fetch employers:', err)
+      console.error('Fetch Employers Error:', err)
     }
-  }
-
-  const fetchJobById = async (id) => {
-    try {
-      const response = await jobsApi.getById(id)
-      return response.data
-    } catch (err) {
-      console.error('Failed to fetch job:', err)
-      throw err
-    }
-  }
-
-  const applyForJob = async (jobId) => {
-    if (!currentUserId.value) {
-      throw new Error('User not logged in')
-    }
-    try {
-      const application = await applicationsApi.create({
-        job_id: jobId,
-        candidate_id: currentUserId.value,
-        cover_letter: 'Auto-generated application via Jobs Store',
-        status: 'pending',
-      })
-      return application.data
-    } catch (err) {
-      console.error('Failed to apply for job:', err)
-      throw err
-    }
-  }
-
-  const getJobApplications = (jobId) => {
-    return applications.value?.filter((app) => app.job_id === jobId) || []
   }
 
   const initialize = async () => {
-    await Promise.all([fetchActiveJobs(), fetchAllCategories(), fetchEmployers()])
+    loading.value = true
+    try {
+      await fetchActiveJobs()
+      await Promise.all([fetchAllCategories(), fetchEmployers()])
+    } finally {
+      loading.value = false
+    }
   }
 
   return {
@@ -91,7 +61,6 @@ export const useJobsStore = defineStore('jobs', () => {
     categories,
     employers,
     loading,
-    error,
     activeJobs,
     featuredJobs,
     jobsByCategory,
@@ -99,12 +68,6 @@ export const useJobsStore = defineStore('jobs', () => {
     fetchActiveJobs,
     fetchAllCategories,
     fetchEmployers,
-    fetchJobById,
-    applyForJob,
-    getJobApplications,
     initialize,
-    setCurrentUser: (userId) => {
-      currentUserId.value = userId
-    },
   }
 })

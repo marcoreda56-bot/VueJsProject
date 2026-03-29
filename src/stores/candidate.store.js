@@ -44,7 +44,7 @@ export const useCandidateStore = defineStore('candidate', {
           }
         }
 
-        console.log(`✅ Sync Complete: ${this.applications.length} Tracks Loaded.`)
+        console.log(`Sync Complete: ${this.applications.length} Tracks Loaded.`)
       } catch (error) {
         console.error('Store Fetch Error:', error)
       } finally {

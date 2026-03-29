@@ -10,6 +10,12 @@ const router = useRouter()
 const mobileMenu = ref(false)
 const isDark = ref(false)
 
+const navSearch = ref('')
+
+const handleSearch = () => {
+  router.push({ name: 'jobs', query: { q: navSearch.value } })
+}
+
 const isLoggedIn = computed(() => !!auth.token)
 const currentUser = computed(() => auth.user)
 
@@ -38,7 +44,7 @@ onMounted(() => {
 <template>
   <nav class="fixed top-1 inset-x-0 z-50 px-4 font-['Plus_Jakarta_Sans',sans-serif]">
     <div
-      class="max-w-6xl mx-auto backdrop-blur-md bg-white/70 dark:bg-slate-950/70 border border-white/20 dark:border-slate-800/50 rounded-full px-6 py-2.5 flex items-center justify-between shadow-xl"
+      class="max-w-[1800px] mx-auto backdrop-blur-md bg-white/70 dark:bg-slate-950/70 border border-white/20 dark:border-slate-800/50 rounded-full px-6 py-2.5 flex items-center justify-between shadow-xl"
     >
       <router-link to="/" class="flex items-center gap-2 no-underline group">
         <div
@@ -67,6 +73,21 @@ onMounted(() => {
         >
           {{ link.n }}
         </router-link>
+      </div>
+
+      <div class="hidden lg:flex items-center flex-1 max-w-md mx-8">
+        <div class="relative w-full group">
+          <i
+            class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors"
+          ></i>
+          <input
+            v-model="navSearch"
+            @keyup.enter="handleSearch"
+            type="text"
+            placeholder="Search for your dream job..."
+            class="w-full bg-slate-100/50 dark:bg-slate-800/50 border border-transparent focus:border-indigo-500/30 focus:bg-white dark:focus:bg-slate-900 rounded-full py-2.5 pl-11 pr-4 text-xs font-medium text-slate-900 dark:text-white outline-none transition-all shadow-sm"
+          />
+        </div>
       </div>
 
       <div class="flex items-center gap-2">
@@ -110,13 +131,6 @@ onMounted(() => {
             /></router-link>
           </div>
         </template>
-
-        <Button
-          icon="pi pi-bars"
-          @click="toggleMenu"
-          class="md:hidden !w-9 !h-9 !p-0 !text-slate-600 dark:!text-slate-300 !border-none"
-          text
-        />
       </div>
     </div>
 

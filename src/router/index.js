@@ -11,12 +11,17 @@ const router = createRouter({
       name: 'public.jobs',
       component: () => import('@/features/jobs/views/JobListView.vue'),
     },
+    {
+      path: '/jobs/:id',
+      name: 'job.detail',
+      component: () => import('@/features/jobs/views/JobDetailsView.vue'),
+    },
 
     // 2. Auth Routes (Guest Only)
     {
       path: '/auth',
       component: () => import('@/components/layout/AuthLayout.vue'),
-      meta: { guestOnly: true },
+      meta: { guestOnly: true, hideNavbar: true },
       children: [
         {
           path: 'login',
@@ -91,6 +96,60 @@ const router = createRouter({
           name: 'employer.manage-jobs',
           component: () => import('@/features/employer/views/ManageJobsView.vue'),
         },
+        {
+          path: 'applications',
+          name: 'employer.applications',
+          component: () => import('@/features/employer/views/EmployerApplicationsView.vue'),
+        },
+        {
+          path: 'jobs/:id',
+          name: 'employer.job-details',
+          component: () => import('@/features/jobs/views/JobDetailsView.vue'),
+        },
+        {
+          path: 'edit-job/:id',
+          name: 'employer.edit-job',
+          component: () => import('@/features/employer/views/EditJobView.vue'),
+        },
+        {
+          path: 'find-jobs',
+          name: 'employeer.find-jobs',
+          component: () => import('@/features/jobs/views/JobListView.vue'),
+        },
+      ],
+    },
+
+    // 5. Admin Routes
+    {
+      path: '/admin',
+      component: () => import('@/components/layout/AdminLayout.vue'),
+      meta: { requiresAuth: true, role: 'admin', hideNavbar: true },
+      children: [
+        {
+          path: 'dashboard',
+          name: 'admin.dashboard',
+          component: () => import('@/features/admin/views/AdminDashboardView.vue'),
+        },
+        {
+          path: 'management/users',
+          name: 'admin.users',
+          component: () => import('@/features/admin/views/ManageUsersView.vue'),
+        },
+        {
+          path: 'management/users/:id',
+          name: 'admin.user-details',
+          component: () => import('@/features/admin/views/AdminUserDetailsView.vue'),
+        },
+        {
+          path: 'management/jobs',
+          name: 'admin.jobs',
+          component: () => import('@/features/admin/views/ManageJobsView.vue'),
+        },
+        {
+          path: 'management/jobs/:id',
+          name: 'admin.job-details',
+          component: () => import('@/features/admin/views/AdminJobDetailsView.vue'),
+        },
       ],
     },
 
@@ -105,13 +164,20 @@ const router = createRouter({
 // Navigation Guard
 router.beforeEach((to) => {
   const token = localStorage.getItem('token')
-  const user = JSON.parse(localStorage.getItem('user'))
+  let user = null
+  try {
+    user = JSON.parse(localStorage.getItem('user'))
+  } catch {
+    // Corrupted localStorage — clear and redirect to login
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+  }
 
-  if (token && (to.name === 'home' || to.meta.guestOnly)) {
+  if (token && user && (to.name === 'home' || to.meta.guestOnly)) {
     return { name: `${user.role}.dashboard` }
   }
 
-  if (to.meta.requiresAuth && !token) {
+  if (to.meta.requiresAuth && (!token || !user)) {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
 

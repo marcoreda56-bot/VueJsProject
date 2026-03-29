@@ -58,12 +58,12 @@
       "email": "karim.mahmoud@email.com",
       "password": "$2y$10$hashedpassword",
       "role": "candidate",
-      "avatar": "https://i.pravatar.cc/150?img=60",
-      "phone": "+20 109 678 9012",
+      "avatar": "https://i.pravatar.cc/150?img=15",
+      "phone": "+20 110 678 9012",
       "is_active": true,
       "email_verified_at": "2024-05-22T11:00:00Z",
       "created_at": "2024-05-22T11:00:00Z",
-      "updated_at": "2024-10-30T16:00:00Z"
+      "updated_at": "2024-11-01T10:00:00Z"
     },
     {
       "id": "6",
@@ -160,7 +160,7 @@
       "id": "13",
       "name": "Mariam Adel",
       "email": "mariam.admin@jobplatform.com",
-      "password": "$2y$10$hashedpassword",
+      "password": "123456",
       "role": "admin",
       "avatar": "https://i.pravatar.cc/150?img=20",
       "phone": "+20 100 000 0098",
@@ -175,7 +175,7 @@
       "password": "123456",
       "company_name": "",
       "role": "candidate",
-      "id": "AilQdwHkr-8"
+      "id": "123456"
     },
     {
       "name": "Marco",
@@ -192,6 +192,93 @@
       "company_name": "",
       "role": "candidate",
       "id": "s97csuwlRT8"
+    },
+    {
+      "name": "abdo",
+      "email": "abdo@gmail.com",
+      "password": "abdoRabie14",
+      "company_name": "abdocomp",
+      "role": "employer",
+      "id": "Ig9klbp1P-I"
+    },
+    {
+      "name": "mahmoud",
+      "email": "mahmoud@gmail.com",
+      "password": "123456",
+      "company_name": "",
+      "role": "candidate",
+      "id": "KupEhge2G8g"
+    },
+    {
+      "name": "mahmoud",
+      "email": "marco1@gmail.com",
+      "password": "123456",
+      "company_name": "",
+      "role": "candidate",
+      "id": "2-91LFz9B0Q"
+    },
+    {
+      "name": "john",
+      "email": "john@gmail.com",
+      "password": "123456",
+      "role": "candidate",
+      "id": "pknmKRbZlMk"
+    },
+    {
+      "name": "john2",
+      "email": "john2@gmail.com",
+      "password": "123456",
+      "role": "candidate",
+      "created_at": "2026-03-27T17:06:48.622Z",
+      "id": "27saq9Ca1OE"
+    },
+    {
+      "name": "john3",
+      "email": "jo@gmail.com",
+      "password": "123456",
+      "role": "candidate",
+      "created_at": "2026-03-27T17:20:40.723Z",
+      "id": "9XUbxCq21Vs"
+    },
+    {
+      "name": "marcos",
+      "email": "marcos@gmail.com",
+      "password": "123456",
+      "role": "candidate",
+      "created_at": "2026-03-27T17:29:49.338Z",
+      "id": "htP77xgvwk8"
+    },
+    {
+      "id": "OgwD80Lg3Jw",
+      "name": "mo",
+      "email": "marcoreda56@gmail.com",
+      "password": "123456",
+      "role": "candidate",
+      "created_at": "2026-03-27T17:36:01.815Z"
+    },
+    {
+      "name": "mo",
+      "email": "marcoreda56@gmail.com",
+      "password": "123456",
+      "role": "candidate",
+      "created_at": "2026-03-27T17:39:38.747Z",
+      "id": "N6vhDWJbYgc"
+    },
+    {
+      "id": "ImM-d85B0bY",
+      "name": "mo",
+      "email": "marcoreda55@gmail.com",
+      "password": "123456",
+      "role": "candidate",
+      "created_at": "2026-03-27T17:47:52.603Z"
+    },
+    {
+      "id": "Wazsd9cnMok",
+      "name": "sara",
+      "email": "sara@gmail.com",
+      "password": "123456",
+      "role": "candidate",
+      "created_at": "2026-03-27T18:09:29.202Z"
     }
   ],
   "candidates": [
@@ -221,11 +308,39 @@
       "updated_at": "2024-11-01T10:00:00Z"
     },
     {
+      "0": {
+        "id": "2",
+        "user_id": 2,
+        "headline": "UI/UX Designer | Figma & Adobe XD",
+        "bio": "Creative UI/UX designer with a passion for building intuitive and beautiful user experiences. 3 years of experience working with product teams.",
+        "location": "Giza, Egypt",
+        "experience_years": 3,
+        "education_level": "bachelor",
+        "resume_url": "/resumes/sara-mohamed-cv.pdf",
+        "linkedin_url": "https://linkedin.com/in/saramohamed",
+        "github_url": null,
+        "portfolio_url": "https://saramohamed.design",
+        "is_open_to_work": true,
+        "preferred_job_type": "full_time",
+        "preferred_locations": [
+          "Giza",
+          "Cairo",
+          "Remote"
+        ],
+        "expected_salary_min": 18000,
+        "expected_salary_max": 28000,
+        "currency": "EGP",
+        "profile_completion": 85,
+        "created_at": "2024-02-14T09:00:00Z",
+        "updated_at": "2026-03-24T21:40:37.043Z",
+        "title": "softwere engineer",
+        "skills": []
+      },
       "id": "2",
       "user_id": 2,
       "headline": "UI/UX Designer | Figma & Adobe XD",
-      "bio": "Creative UI/UX designer with a passion for building intuitive and beautiful user experiences. 3 years of experience working with product teams.",
-      "location": "Giza, Egypt",
+      "bio": "senior back end developer",
+      "location": "cairo",
       "experience_years": 3,
       "education_level": "bachelor",
       "resume_url": "/resumes/sara-mohamed-cv.pdf",
@@ -244,9 +359,12 @@
       "currency": "EGP",
       "profile_completion": 85,
       "created_at": "2024-02-14T09:00:00Z",
-      "updated_at": "2026-03-24T21:40:37.043Z",
-      "title": "softwere engineer",
-      "skills": []
+      "updated_at": "2026-03-27T18:13:56.565Z",
+      "title": "senior fullstack",
+      "skills": [
+        "node js",
+        "mysql"
+      ]
     },
     {
       "id": "3",
@@ -321,7 +439,9 @@
       "currency": "EGP",
       "profile_completion": 95,
       "created_at": "2024-05-22T11:00:00Z",
-      "updated_at": "2024-10-30T16:00:00Z"
+      "updated_at": "2026-03-25T10:36:26.104Z",
+      "title": "fullstack developer",
+      "skills": []
     },
     {
       "id": "6",
@@ -346,7 +466,11 @@
       "currency": "EGP",
       "profile_completion": 40,
       "created_at": "2024-06-01T12:00:00Z",
-      "updated_at": "2024-06-01T12:00:00Z"
+      "updated_at": "2026-03-27T17:04:02.812Z",
+      "title": "senior backend ",
+      "skills": [
+        "node js"
+      ]
     },
     {
       "id": "9d88E6oi_sg",
@@ -395,6 +519,159 @@
       "bio": "Welcome to HireMasr! Complete your profile to stand out.",
       "skills": [],
       "updated_at": "2026-03-24T21:30:20.817Z"
+    },
+    {
+      "id": "ixDyUXe3lZE",
+      "title": "senior",
+      "location": "Egypt",
+      "bio": "",
+      "skills": [],
+      "updated_at": "2026-03-24T22:44:47.939Z"
+    },
+    {
+      "id": "a_JmVoFHKqs",
+      "title": "senior fullstack",
+      "location": "Egypt",
+      "bio": "",
+      "skills": [],
+      "updated_at": "2026-03-27T16:57:03.117Z"
+    },
+    {
+      "id": "xBmJvNkYye8",
+      "title": "sssss",
+      "location": "Egypt",
+      "bio": "",
+      "skills": [],
+      "updated_at": "2026-03-27T17:05:15.753Z"
+    },
+    {
+      "id": "mky8QKUytj8",
+      "title": "",
+      "location": "Egypt",
+      "bio": "",
+      "skills": []
+    },
+    {
+      "id": "27saq9Ca1OE",
+      "title": "Software Engineer",
+      "location": "Egypt",
+      "bio": "",
+      "skills": [],
+      "updated_at": "2026-03-27T17:29:15.814Z"
+    },
+    {
+      "id": "htP77xgvwk8",
+      "title": "",
+      "location": "Egypt",
+      "bio": "",
+      "skills": []
+    },
+    {
+      "id": "0tOvIYAJNnk",
+      "user_id": "gndetwdfe",
+      "title": "",
+      "location": "Egypt",
+      "bio": "",
+      "skills": []
+    },
+    {
+      "id": "5SGC5YeR1yQ",
+      "title": "",
+      "location": "Egypt",
+      "bio": "",
+      "skills": [],
+      "updated_at": "2026-03-27T17:37:02.287Z"
+    },
+    {
+      "id": "G9OM84MmrtY",
+      "user_id": "N6vhDWJbYgc",
+      "title": "",
+      "location": "Egypt",
+      "bio": "",
+      "skills": []
+    },
+    {
+      "id": "2jmRovQcx0s",
+      "user_id": "ffc2c756-02bc-4da0-b535-734710695310",
+      "title": "",
+      "location": "Egypt",
+      "bio": "",
+      "skills": []
+    },
+    {
+      "title": "full stack",
+      "location": "",
+      "bio": "",
+      "skills": [],
+      "id": "yNkmaAtFAwM",
+      "updated_at": "2026-03-27T17:52:27.421Z"
+    },
+    {
+      "0": {
+        "id": "2",
+        "user_id": 2,
+        "headline": "UI/UX Designer | Figma & Adobe XD",
+        "bio": "Creative UI/UX designer with a passion for building intuitive and beautiful user experiences. 3 years of experience working with product teams.",
+        "location": "Giza, Egypt",
+        "experience_years": 3,
+        "education_level": "bachelor",
+        "resume_url": "/resumes/sara-mohamed-cv.pdf",
+        "linkedin_url": "https://linkedin.com/in/saramohamed",
+        "github_url": null,
+        "portfolio_url": "https://saramohamed.design",
+        "is_open_to_work": true,
+        "preferred_job_type": "full_time",
+        "preferred_locations": [
+          "Giza",
+          "Cairo",
+          "Remote"
+        ],
+        "expected_salary_min": 18000,
+        "expected_salary_max": 28000,
+        "currency": "EGP",
+        "profile_completion": 85,
+        "created_at": "2024-02-14T09:00:00Z",
+        "updated_at": "2026-03-24T21:40:37.043Z",
+        "title": "softwere engineer",
+        "skills": []
+      },
+      "id": "DuVv0A20kYg",
+      "user_id": 2,
+      "headline": "UI/UX Designer | Figma & Adobe XD",
+      "bio": "s",
+      "location": "cairo",
+      "experience_years": 3,
+      "education_level": "bachelor",
+      "resume_url": "/resumes/sara-mohamed-cv.pdf",
+      "linkedin_url": "https://linkedin.com/in/saramohamed",
+      "github_url": null,
+      "portfolio_url": "https://saramohamed.design",
+      "is_open_to_work": true,
+      "preferred_job_type": "full_time",
+      "preferred_locations": [
+        "Giza",
+        "Cairo",
+        "Remote"
+      ],
+      "expected_salary_min": 18000,
+      "expected_salary_max": 28000,
+      "currency": "EGP",
+      "profile_completion": 85,
+      "created_at": "2024-02-14T09:00:00Z",
+      "updated_at": "2026-03-27T18:08:10.990Z",
+      "title": "senior fullstack",
+      "skills": [
+        "node js",
+        "mysql"
+      ]
+    },
+    {
+      "id": "50IMjxOGZtQ",
+      "user_id": "aac0599f-ac29-4f61-a17e-0023391bfa6b",
+      "title": "",
+      "location": "Egypt",
+      "bio": "",
+      "skills": []
     }
   ],
   "candidate_education": [
@@ -957,60 +1234,6 @@
   ],
   "jobs": [
     {
-      "id": "1",
-      "employer_id": 3,
-      "category_id": 1,
-      "title": "Senior Frontend Developer",
-      "slug": "senior-frontend-developer-instabug-2024",
-      "description": "We are looking for a Senior Frontend Developer to join our SDK team at Instabug. You will work on building and improving our JavaScript SDK and web dashboards that are used by thousands of mobile app developers worldwide.\n\nYou will collaborate closely with backend engineers, designers, and product managers to deliver high-quality user interfaces.",
-      "requirements": "- 4+ years of experience in frontend development\n- Strong proficiency in Vue.js or React\n- Experience with TypeScript\n- Familiarity with testing (Jest, Cypress)\n- Experience with CI/CD pipelines",
-      "benefits": "- Competitive salary in EGP\n- Full remote option\n- Health insurance\n- Annual performance bonus\n- Learning & development budget",
-      "type": "full_time",
-      "workplace_type": "hybrid",
-      "experience_level": "senior",
-      "career_level": "Senior",
-      "education_level": "bachelor",
-      "salary_min": 30000,
-      "salary_max": 50000,
-      "currency": "EGP",
-      "is_salary_visible": true,
-      "location": "Cairo, Egypt",
-      "vacancies": 2,
-      "status": "active",
-      "views": 1240,
-      "applications_count": 47,
-      "expires_at": "2024-12-31T00:00:00Z",
-      "created_at": "2024-10-01T09:00:00Z",
-      "updated_at": "2024-10-01T09:00:00Z"
-    },
-    {
-      "id": "2",
-      "employer_id": 2,
-      "category_id": 1,
-      "title": "Backend Laravel Developer",
-      "slug": "backend-laravel-developer-fawry-2024",
-      "description": "Fawry is hiring a Backend Laravel Developer to work on our core payment processing systems. You will design and implement APIs consumed by millions of users daily.\n\nThis is a great opportunity to work on high-load, mission-critical systems in Egypt's fintech space.",
-      "requirements": "- 3+ years of experience with PHP & Laravel\n- Strong understanding of REST API design\n- Experience with MySQL and Redis\n- Knowledge of payment systems is a plus\n- Experience with Docker",
-      "benefits": "- Competitive package\n- Medical insurance (for employee and family)\n- Transportation allowance\n- Profit sharing\n- Flexible working hours",
-      "type": "full_time",
-      "workplace_type": "on_site",
-      "experience_level": "mid",
-      "career_level": "Mid-Senior",
-      "education_level": "bachelor",
-      "salary_min": 22000,
-      "salary_max": 38000,
-      "currency": "EGP",
-      "is_salary_visible": true,
-      "location": "Cairo, Egypt",
-      "vacancies": 3,
-      "status": "active",
-      "views": 876,
-      "applications_count": 38,
-      "expires_at": "2024-12-15T00:00:00Z",
-      "created_at": "2024-10-05T10:00:00Z",
-      "updated_at": "2024-10-05T10:00:00Z"
-    },
-    {
       "id": "3",
       "employer_id": 3,
       "category_id": 2,
@@ -1254,31 +1477,125 @@
       "updated_at": "2024-10-28T09:00:00Z"
     },
     {
-      "id": "12",
-      "employer_id": 5,
-      "category_id": 5,
-      "title": "Business Intelligence Analyst",
-      "slug": "bi-analyst-jumia-2024",
-      "description": "Jumia Egypt is seeking a BI Analyst to help the business understand key metrics across supply chain, marketing, and seller performance.",
-      "requirements": "- 2+ years in BI or data analytics\n- Advanced SQL\n- Tableau or Looker experience\n- Python for data wrangling\n- E-commerce or marketplace experience preferred",
-      "benefits": "- Competitive salary\n- Medical insurance\n- Pan-African exposure\n- Career development",
+      "status": "active",
+      "id": "12"
+    },
+    {
+      "status": "active",
+      "id": "13"
+    },
+    {
+      "title": "front-end",
+      "employer_id": "2",
+      "category_id": "1",
       "type": "full_time",
-      "workplace_type": "on_site",
-      "experience_level": "junior",
-      "career_level": "Junior-Mid",
-      "education_level": "bachelor",
-      "salary_min": 12000,
-      "salary_max": 20000,
+      "workplace_type": "hybrid",
+      "location": "new giza",
+      "description": "نقاش",
+      "requirements": "خبره في الدهانات و الالوان\nمعده حديد تستحمل لحد 100 كوبايه شاي ف اليوم",
+      "benefits": "",
+      "salary_min": 2500,
+      "salary_max": 5000,
       "currency": "EGP",
-      "is_salary_visible": true,
-      "location": "Cairo, Egypt",
+      "experience_level": "mid_level",
+      "career_level": "Entry Level",
+      "vacancies": 2,
+      "status": "active",
+      "slug": "front-end",
+      "created_at": "2026-03-25T16:01:57.096Z",
+      "updated_at": "2026-03-25T16:01:57.096Z",
+      "views": 0,
+      "applications_count": 0,
+      "id": "mdSrD8IYhSI"
+    },
+    {
+      "title": "backend",
+      "employer_id": "1",
+      "category_id": "1",
+      "type": "part_time",
+      "workplace_type": "remote",
+      "location": "dairmawas",
+      "description": "  بشمهدس رايق ومبيحبش النقاشه",
+      "requirements": "  فهمان \n ",
+      "benefits": "",
+      "salary_min": 5000,
+      "salary_max": 10000,
+      "currency": "EGP",
+      "experience_level": "senior",
+      "career_level": "Entry Level",
       "vacancies": 1,
       "status": "closed",
       "views": 1456,
       "applications_count": 92,
       "expires_at": "2024-10-01T00:00:00Z",
       "created_at": "2024-08-01T08:00:00Z",
-      "updated_at": "2024-10-01T08:00:00Z"
+      "updated_at": "2024-10-01T08:00:00Z",
+      "id": "uziiYJqIETA"
+    },
+    {
+      "title": "Senior AI Developer",
+      "category_id": "1",
+      "location": "Minia",
+      "work_type": "remote",
+      "experience_level": "junior",
+      "salary_min": 1500,
+      "salary_max": 1600,
+      "technologies": [
+        "AI",
+        "Python",
+        "DSA"
+      ],
+      "description": "Here is the description",
+      "requirements": "- 5 YOE",
+      "benefits": "no benefits , it an honor to work with us",
+      "employer_id": "Ig9klbp1P-I",
+      "status": "active",
+      "created_at": "2026-03-25T06:36:45.718Z",
+      "updated_at": "2026-03-25T06:40:41.139Z",
+      "id": "ohgT_CR_ybY"
+    },
+    {
+      "title": "Ceo Ui/Ux design",
+      "category_id": "2",
+      "location": "Minya",
+      "work_type": "remote",
+      "experience_level": "lead",
+      "salary_min": 20000,
+      "salary_max": 30000,
+      "technologies": [],
+      "description": "any thing",
+      "requirements": "any thing",
+      "benefits": "",
+      "employer_id": "7",
+      "status": "active",
+      "created_at": "2026-03-25T14:33:41.387Z",
+      "updated_at": "2026-03-25T15:26:43.772Z",
+      "id": "CqAfGePSMhY"
+    },
+    {
+      "title": "senior backend development",
+      "category_id": "1",
+      "location": "alex",
+      "work_type": "remote",
+      "experience_level": "lead",
+      "salary_min": 50000,
+      "salary_max": 100000,
+      "technologies": [
+        "nodejs",
+        "laravel",
+        "php",
+        "mysql",
+        "mongodb",
+        "rest api"
+      ],
+      "description": "any thing",
+      "requirements": "nodejs\nlaravel\nphp\nmysql",
+      "benefits": "",
+      "employer_id": "11",
+      "status": "active",
+      "created_at": "2026-03-27T18:37:10.529Z",
+      "updated_at": "2026-03-27T18:37:10.529Z",
+      "id": "A4Vx8CCOq1I"
     }
   ],
   "job_skills": [
@@ -1590,6 +1907,268 @@
       "cover_letter": "Auto-generated application via Jobs Store",
       "status": "pending",
       "id": "uMGGSC99psw"
+    },
+    {
+      "candidate_id": "1",
+      "job_id": "ohgT_CR_ybY",
+      "cover_letter": "I am alwayse perfect",
+      "candidate_snapshot": {
+        "name": "Ahmed Khaled",
+        "email": "ahmed.khaled@email.com",
+        "title": "Professional Candidate",
+        "location": "Cairo, Egypt",
+        "bio": "Passionate frontend developer with 5 years of experience building scalable web applications. Specialized in Vue.js, React, and modern CSS frameworks."
+      },
+      "status": "rejected",
+      "applied_at": "2026-03-25T06:53:51.187Z",
+      "id": "fR1PiqmFnRg"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "hello",
+      "status": "pending",
+      "applied_at": "2026-03-24T18:48:34.791Z",
+      "id": "0TmHW3mWtuY"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "ddd",
+      "status": "pending",
+      "applied_at": "2026-03-24T18:48:47.099Z",
+      "id": "wOZNpbCU8tI"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "5",
+      "cover_letter": "d",
+      "status": "pending",
+      "applied_at": "2026-03-24T18:50:38.065Z",
+      "id": "t_iqsXpq1uk"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "hello",
+      "candidate_snapshot": {
+        "name": "Omar Hassan",
+        "email": "omar.hassan@email.com",
+        "title": "senior backend",
+        "location": "Alexandria, Egypt",
+        "bio": "Backend developer specializing in Laravel and RESTful APIs. Experienced in building high-performance systems and integrating third-party services."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T18:54:40.676Z",
+      "id": "IpAnB39PTtI"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "d",
+      "candidate_snapshot": {
+        "name": "Omar Hassan",
+        "email": "omar.hassan@email.com",
+        "title": "senior backend",
+        "location": "Alexandria, Egypt",
+        "bio": "Backend developer specializing in Laravel and RESTful APIs. Experienced in building high-performance systems and integrating third-party services."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T18:55:04.958Z",
+      "id": "gx3i4KRP-UY"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "1",
+      "cover_letter": "d",
+      "candidate_snapshot": {
+        "name": "Omar Hassan",
+        "email": "omar.hassan@email.com",
+        "title": "senior backend"
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T19:00:40.074Z",
+      "id": "TPvjKhbaJ7A"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "10",
+      "cover_letter": "hello dear",
+      "candidate_snapshot": {
+        "name": "Omar Hassan",
+        "email": "omar.hassan@email.com",
+        "title": "senior backend",
+        "location": "Alexandria, Egypt",
+        "bio": "Backend developer specializing in Laravel and RESTful APIs. Experienced in building high-performance systems and integrating third-party services."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T19:09:35.632Z",
+      "id": "ReJWJ_6Ht-I"
+    },
+    {
+      "candidate_id": "2",
+      "job_id": "6",
+      "cover_letter": "s",
+      "candidate_snapshot": {
+        "name": "Sara Mohamed",
+        "email": "sara.mohamed@email.com",
+        "title": "softwere engineer",
+        "location": "Giza, Egypt",
+        "bio": "Creative UI/UX designer with a passion for building intuitive and beautiful user experiences. 3 years of experience working with product teams."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T19:48:34.550Z",
+      "id": "yHQ9rTPIluw"
+    },
+    {
+      "candidate_id": "2",
+      "job_id": "4",
+      "cover_letter": "",
+      "candidate_snapshot": {
+        "name": "Sara Mohamed",
+        "email": "sara.mohamed@email.com",
+        "title": "softwere engineer",
+        "location": "Giza, Egypt",
+        "bio": "Creative UI/UX designer with a passion for building intuitive and beautiful user experiences. 3 years of experience working with product teams."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T19:50:49.004Z",
+      "id": "82-6mlL7QD0"
+    },
+    {
+      "candidate_id": "2",
+      "job_id": "5",
+      "cover_letter": "i hope to be aproved",
+      "candidate_snapshot": {
+        "name": "Sara Mohamed",
+        "email": "sara.mohamed@email.com",
+        "title": "softwere engineer",
+        "location": "Giza, Egypt",
+        "bio": "Creative UI/UX designer with a passion for building intuitive and beautiful user experiences. 3 years of experience working with product teams."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T19:55:42.982Z",
+      "id": "hqj7yNE73vw"
+    },
+    {
+      "candidate_id": "Vbfyp7DU1co",
+      "job_id": "1",
+      "cover_letter": "hello",
+      "candidate_snapshot": {
+        "name": "marco",
+        "email": "marcoreda560@gmail.com",
+        "title": "New Candidate",
+        "location": "Egypt",
+        "bio": "Welcome to HireMasr! Complete your profile to stand out."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T21:27:03.328Z",
+      "id": "C-7Dr0TjoAc"
+    },
+    {
+      "candidate_id": "6",
+      "job_id": "1",
+      "cover_letter": "hello\n",
+      "candidate_snapshot": {
+        "name": "Laila Farouk",
+        "email": "laila.farouk@email.com",
+        "title": "senior backend",
+        "location": "Mansoura, Egypt",
+        "bio": "Fresh graduate with strong portfolio in branding and visual identity design."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-24T22:42:36.547Z",
+      "id": "569kArgrWts"
+    },
+    {
+      "candidate_id": "5",
+      "job_id": "3",
+      "cover_letter": "any thing",
+      "candidate_snapshot": {
+        "name": "Karim Mahmoud",
+        "email": "karim.mahmoud@email.com",
+        "title": "fullstack developer",
+        "location": "Cairo, Egypt",
+        "bio": "Strategic product manager with 6+ years leading cross-functional teams. Experienced in Agile methodologies and data-driven decision making."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-25T10:37:17.484Z",
+      "id": "EDifOX1pu-0"
+    },
+    {
+      "candidate_id": "6",
+      "job_id": "CqAfGePSMhY",
+      "cover_letter": "hello",
+      "candidate_snapshot": {
+        "name": "Laila Farouk",
+        "email": "laila.farouk@email.com",
+        "title": "senior backend",
+        "location": "Mansoura, Egypt",
+        "bio": "Fresh graduate with strong portfolio in branding and visual identity design."
+      },
+      "status": "accepted",
+      "applied_at": "2026-03-25T14:35:54.388Z",
+      "id": "VI7x0NRThNE"
+    },
+    {
+      "candidate_id": "6",
+      "job_id": "3",
+      "cover_letter": "hello",
+      "candidate_snapshot": {
+        "name": "Laila Farouk",
+        "email": "laila.farouk@email.com",
+        "title": "senior backend",
+        "location": "Mansoura, Egypt",
+        "bio": "Fresh graduate with strong portfolio in branding and visual identity design."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-25T15:25:32.231Z",
+      "id": "Ff8U4hliP5Q"
+    },
+    {
+      "candidate_id": "6",
+      "job_id": "7",
+      "cover_letter": "thanks",
+      "candidate_snapshot": {
+        "name": "Laila Farouk",
+        "email": "laila.farouk@email.com",
+        "title": "senior backend ",
+        "location": "Mansoura, Egypt",
+        "bio": "Fresh graduate with strong portfolio in branding and visual identity design."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-27T16:37:45.050Z",
+      "id": "EicBU-l-g7Q"
+    },
+    {
+      "candidate_id": "ImM-d85B0bY",
+      "job_id": "3",
+      "cover_letter": "thanks\n",
+      "candidate_snapshot": {
+        "name": "mo",
+        "email": "marcoreda55@gmail.com",
+        "title": "Professional Candidate",
+        "location": "Egypt",
+        "bio": ""
+      },
+      "status": "pending",
+      "applied_at": "2026-03-27T17:48:29.151Z",
+      "id": "oPn9I62WsTE"
+    },
+    {
+      "candidate_id": "6",
+      "job_id": "10",
+      "cover_letter": "thanks",
+      "candidate_snapshot": {
+        "name": "Laila Farouk",
+        "email": "laila.farouk@email.com",
+        "title": "senior backend ",
+        "location": "Mansoura, Egypt",
+        "bio": "Fresh graduate with strong portfolio in branding and visual identity design."
+      },
+      "status": "pending",
+      "applied_at": "2026-03-27T18:28:11.285Z",
+      "id": "zd9XLLSTG4I"
     }
   ],
   "application_stages": [

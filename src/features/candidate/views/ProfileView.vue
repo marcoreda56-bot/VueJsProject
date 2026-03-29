@@ -194,7 +194,6 @@ const removeSkill = (index) => {
 const saveProfile = async () => {
   saving.value = true
   try {
-    // ندمج البيانات القديمة مع التعديلات الجديدة
     await candidateStore.updateProfile({
       ...candidateStore.profile,
       ...formData,

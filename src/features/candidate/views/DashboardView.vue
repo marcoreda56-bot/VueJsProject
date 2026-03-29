@@ -2,7 +2,7 @@
   <div
     class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Plus_Jakarta_Sans',sans-serif] selection:bg-indigo-100"
   >
-    <div class="max-w-[1400px] mx-auto p-6">
+    <div class="max-w-[1800px] mx-auto p-6">
       <section
         class="relative overflow-hidden bg-slate-900 rounded-[3rem] py-20 px-12 shadow-2xl animate-[fadeIn_0.8s_ease-out]"
       >

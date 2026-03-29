@@ -1,104 +1,195 @@
 <template>
-  <div
-    class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 flex items-center justify-center p-6 font-['Plus_Jakarta_Sans',sans-serif] relative overflow-hidden"
-  >
-    <div class="absolute inset-0 pointer-events-none">
-      <div
-        class="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-indigo-500/10 blur-[150px] rounded-full animate-pulse"
-      ></div>
-      <div
-        class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-600/5 blur-[120px] rounded-full"
-      ></div>
-      <div
-        class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] dark:opacity-[0.05]"
-      ></div>
+  <div class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Plus_Jakarta_Sans',sans-serif]">
+    <!-- Hero Banner -->
+    <div class="max-w-[1800px] mx-auto mb-8">
+      <section
+        class="relative overflow-hidden bg-slate-900 rounded-[3rem] py-16 px-12 shadow-2xl animate-[fadeIn_0.8s_ease-out]"
+      >
+        <div class="absolute -top-24 -right-24 w-96 h-96 bg-indigo-600/30 blur-[120px] rounded-full animate-pulse"></div>
+        <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-600/20 blur-[100px] rounded-full"></div>
+        <div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div>
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/10 rounded-full mb-5">
+              <span class="text-xs font-black text-indigo-400 uppercase tracking-[0.2em]">Employer Workspace</span>
+            </div>
+            <h1 class="text-5xl md:text-6xl font-black text-white tracking-tighter leading-[0.9] mb-4 italic">
+              Hello, <span class="text-indigo-400">{{ firstName }}</span>
+            </h1>
+            <p class="text-slate-400 font-medium text-lg">
+              You have <span class="text-white border-b-2 border-indigo-500/50">{{ employerStore.jobs.length }} posted jobs</span> and
+              <span class="text-white border-b-2 border-indigo-500/50">{{ employerStore.pendingApplications.length }} pending applications</span>.
+            </p>
+          </div>
+          <div class="flex gap-4">
+            <button
+              @click="$router.push({ name: 'employer.post-job' })"
+              class="px-8 py-4 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-indigo-500 transition-all active:scale-95 flex items-center gap-3"
+            >
+              <i class="pi pi-plus-circle"></i> Post Job
+            </button>
+            <button
+              @click="$router.push({ name: 'employer.manage-jobs' })"
+              class="px-8 py-4 bg-white text-slate-900 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-indigo-50 transition-all active:scale-95 flex items-center gap-3"
+            >
+              <i class="pi pi-briefcase"></i> My Jobs
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
 
-    <div class="max-w-4xl w-full text-center relative z-10 animate-[fadeIn_1s_ease-out]">
+    <!-- Stats -->
+    <section class="max-w-[1400px] mx-auto px-4 mb-10 grid grid-cols-2 md:grid-cols-4 gap-6">
       <div
-        class="inline-flex items-center gap-3 px-6 py-3 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl mb-12 shadow-2xl shadow-indigo-500/10 hover:-translate-y-1 transition-transform cursor-default"
+        v-for="stat in stats"
+        :key="stat.label"
+        class="p-8 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] hover:-translate-y-2 transition-all duration-500 group shadow-sm"
       >
-        <span class="relative flex h-3 w-3">
-          <span
-            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"
-          ></span>
-          <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-600"></span>
-        </span>
-        <span
-          class="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.4em] italic"
-          >System Under Development</span
+        <div
+          :class="stat.bg"
+          class="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-6 transition-transform"
         >
+          <i :class="[stat.icon, stat.color]" class="text-xl"></i>
+        </div>
+        <p class="text-slate-400 font-black text-[10px] uppercase tracking-[0.3em] mb-2">{{ stat.label }}</p>
+        <h3 class="text-4xl font-black text-slate-900 dark:text-white italic tracking-tighter">{{ stat.value }}</h3>
+      </div>
+    </section>
+
+    <!-- Recent Applications -->
+    <section class="max-w-[1400px] mx-auto px-4 pb-20">
+      <div class="flex items-center justify-between mb-8 px-2">
+        <h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tighter italic flex items-center gap-4">
+          <span class="w-10 h-[2px] bg-indigo-600"></span> Recent Applications
+        </h2>
+        <router-link
+          to="/employer/applications"
+          class="text-xs font-black uppercase tracking-[0.2em] text-indigo-600 hover:tracking-[0.3em] transition-all"
+        >
+          View All
+        </router-link>
       </div>
 
-      <h1
-        class="text-7xl md:text-9xl font-black text-slate-900 dark:text-white tracking-tighter italic leading-none mb-8"
-      >
-        Crafting <br />
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-indigo-400"
-          >Excellence.</span
-        >
-      </h1>
+      <div v-if="employerStore.loading" class="text-center py-16 text-slate-400 font-bold italic">
+        Loading...
+      </div>
 
-      <p
-        class="text-slate-500 dark:text-slate-400 font-bold text-xl max-w-xl mx-auto mb-16 leading-relaxed tracking-tight"
-      >
-        Marco is currently engineering a
-        <span class="text-slate-900 dark:text-white underline decoration-indigo-500/30 decoration-4"
-          >high-performance</span
-        >
-        experience. Something big is about to drop.
-      </p>
+      <div v-else-if="recentApplications.length === 0" class="text-center py-16">
+        <div class="w-20 h-20 bg-slate-100 dark:bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-3xl text-slate-300">
+          <i class="pi pi-inbox"></i>
+        </div>
+        <p class="text-slate-400 font-bold italic text-lg">No applications yet.</p>
+      </div>
 
-      <div class="flex justify-center gap-4 md:gap-8 mb-16">
+      <div v-else class="grid gap-5">
         <div
-          v-for="unit in ['Days', 'Hours', 'Mins']"
-          :key="unit"
-          class="flex flex-col items-center"
+          v-for="app in recentApplications"
+          :key="app.id"
+          class="group bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-7 rounded-[2.5rem] hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-500 flex flex-col md:flex-row justify-between items-center gap-6"
         >
-          <div
-            class="w-20 h-20 md:w-28 md:h-28 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2rem] flex items-center justify-center text-3xl md:text-4xl font-black text-indigo-600 italic shadow-sm"
-          >
-            00
+          <div class="flex items-center gap-6">
+            <div class="w-14 h-14 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-indigo-600 font-black text-2xl group-hover:bg-indigo-600 group-hover:text-white transition-all">
+              {{ (app.candidate_snapshot?.name || 'C').charAt(0).toUpperCase() }}
+            </div>
+            <div>
+              <h4 class="text-xl font-black text-slate-900 dark:text-white tracking-tighter group-hover:text-indigo-600 transition-colors">
+                {{ app.candidate_snapshot?.name || 'Candidate' }}
+              </h4>
+              <p class="text-slate-400 font-bold text-xs uppercase tracking-widest italic mt-1">
+                Applied for: <span class="text-indigo-500">{{ getJobTitle(app.job_id) }}</span>
+              </p>
+              <p class="text-slate-400 font-bold text-[10px] uppercase tracking-widest mt-0.5">
+                {{ formatDate(app.applied_at) }}
+              </p>
+            </div>
           </div>
-          <span class="mt-4 text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">{{
-            unit
-          }}</span>
+          <div class="flex items-center gap-4">
+            <span :class="statusStyle(app.status)" class="px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest border">
+              {{ app.status }}
+            </span>
+            <router-link
+              to="/employer/applications"
+              class="w-10 h-10 rounded-full bg-slate-900 dark:bg-indigo-600 text-white flex items-center justify-center hover:rotate-45 transition-transform shadow-lg"
+            >
+              <i class="pi pi-arrow-up-right text-xs"></i>
+            </router-link>
+          </div>
         </div>
       </div>
-
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-        <button
-          @click="$router.back()"
-          class="px-12 py-5 bg-slate-900 dark:bg-indigo-600 text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.3em] shadow-2xl hover:bg-indigo-700 hover:-translate-y-1 active:scale-95 transition-all flex items-center gap-3"
-        >
-          <i class="pi pi-arrow-left"></i> Go Back
-        </button>
-        <p
-          class="text-[10px] font-black text-slate-300 dark:text-slate-700 uppercase tracking-[0.5em] hidden sm:block"
-        >
-          Stay Tuned
-        </p>
-      </div>
-    </div>
+    </section>
   </div>
 </template>
 
-<style scoped>
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+<script setup>
+import { computed, onMounted } from 'vue'
+import { useAuthStore } from '@/stores/auth.store'
+import { useEmployerStore } from '@/stores/employer.store'
+
+const auth = useAuthStore()
+const employerStore = useEmployerStore()
+
+const firstName = computed(() => auth.user?.name?.split(' ')[0] || 'Employer')
+
+onMounted(async () => {
+  await employerStore.initialize()
+})
+
+const stats = computed(() => [
+  {
+    label: 'Jobs Posted',
+    value: employerStore.jobs.length,
+    icon: 'pi pi-briefcase',
+    color: 'text-indigo-600',
+    bg: 'bg-indigo-50 dark:bg-indigo-500/10',
+  },
+  {
+    label: 'Active Jobs',
+    value: employerStore.activeJobs.length,
+    icon: 'pi pi-check-circle',
+    color: 'text-emerald-500',
+    bg: 'bg-emerald-50 dark:bg-emerald-500/10',
+  },
+  {
+    label: 'Total Applications',
+    value: employerStore.totalApplications,
+    icon: 'pi pi-inbox',
+    color: 'text-amber-500',
+    bg: 'bg-amber-50 dark:bg-amber-500/10',
+  },
+  {
+    label: 'Pending Review',
+    value: employerStore.pendingApplications.length,
+    icon: 'pi pi-clock',
+    color: 'text-rose-500',
+    bg: 'bg-rose-50 dark:bg-rose-500/10',
+  },
+])
+
+const recentApplications = computed(() =>
+  [...employerStore.applications].reverse().slice(0, 5)
+)
+
+const getJobTitle = (jobId) => {
+  const job = employerStore.jobs.find((j) => String(j.id) === String(jobId))
+  return job?.title || 'Job Position'
 }
 
-h1 {
-  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.02);
+const formatDate = (dateStr) => {
+  if (!dateStr) return '—'
+  return new Date(dateStr).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 }
-.dark h1 {
-  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.02);
+
+const statusStyle = (status) => {
+  const s = (status || '').toLowerCase()
+  if (s === 'accepted') return 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-500/10'
+  if (s === 'rejected') return 'bg-rose-50 text-rose-600 border-rose-100 dark:bg-rose-500/10'
+  return 'bg-slate-50 text-slate-500 border-slate-100 dark:bg-slate-800'
+}
+</script>
+
+<style scoped>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 </style>
