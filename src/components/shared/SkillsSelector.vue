@@ -1,35 +1,39 @@
 <template>
   <div class="relative w-full font-['Outfit',sans-serif]">
-    <label v-if="label" class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">
+    <label
+      v-if="label"
+      class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2"
+    >
       {{ label }} <span v-if="required" class="text-rose-500">*</span>
     </label>
-    
-    <div 
+
+    <div
       @click="handleContainerClick"
       class="relative flex flex-wrap gap-2 p-3 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl transition-all min-h-[56px] cursor-text"
       :class="[
         { 'opacity-60 cursor-not-allowed': disabled },
-        { 'ring-2 ring-indigo-500 border-indigo-500 bg-white dark:bg-slate-900 shadow-lg shadow-indigo-500/5': isOpen }
+        {
+          'ring-2 ring-indigo-500 border-indigo-500 bg-white dark:bg-slate-900 shadow-lg shadow-indigo-500/5':
+            isOpen,
+        },
       ]"
     >
-      <!-- Selected Skills Tags -->
       <span
         v-for="skillId in modelValue"
         :key="skillId"
         class="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-bold shadow-sm animate-[fadeIn_0.2s_ease-out]"
       >
         {{ getSkillName(skillId) }}
-        <button 
+        <button
           v-if="!disabled"
-          type="button" 
-          @click.stop="removeSkill(skillId)" 
-          class="hover:text-indigo-200 transition-colors"
+          type="button"
+          @click.stop="removeSkill(skillId)"
+          class="hover:text-indigo-200 transition-colors cursor-pointer"
         >
           <i class="pi pi-times text-[9px]"></i>
         </button>
       </span>
 
-      <!-- Search Input -->
       <div class="flex-1 flex items-center min-w-[120px]">
         <input
           v-if="!disabled"
@@ -43,19 +47,22 @@
           @keydown.up.prevent="navigateResults(-1)"
           @keydown.enter.prevent="selectHighlighted"
           @keydown.esc="isOpen = false"
-          class="w-full bg-transparent border-none outline-none text-sm text-slate-900 dark:text-white placeholder:text-slate-300"
+          class="w-full bg-transparent border-none outline-none text-sm text-slate-900 dark:text-white placeholder:text-slate-300 cursor-text"
         />
       </div>
 
-      <!-- Arrow Icon -->
-      <div class="flex items-center px-1 text-slate-400">
-        <i :class="['pi text-[10px] transition-transform duration-300', isOpen ? 'pi-chevron-up rotate-180' : 'pi-chevron-down']"></i>
+      <div class="flex items-center px-1 text-slate-400 cursor-pointer">
+        <i
+          :class="[
+            'pi text-[10px] transition-transform duration-300',
+            isOpen ? 'pi-chevron-up rotate-180' : 'pi-chevron-down',
+          ]"
+        ></i>
       </div>
     </div>
 
-    <!-- Dropdown Results -->
     <transition name="fade">
-      <div 
+      <div
         v-if="isOpen"
         ref="dropdownRef"
         class="absolute z-[100] w-full mt-2 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-2xl max-h-64 overflow-y-auto overflow-x-hidden p-2"
@@ -68,12 +75,17 @@
             @click.stop="addSkill(skill.id)"
             @mouseenter="highlightedIndex = index"
             :class="[
-              'w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all flex items-center justify-between',
-              highlightedIndex === index ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
+              'w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-all flex items-center justify-between cursor-pointer',
+              highlightedIndex === index
+                ? 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600'
+                : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800',
             ]"
           >
             {{ skill.name }}
-            <i v-if="modelValue.includes(skill.id)" class="pi pi-check text-[10px] text-indigo-600"></i>
+            <i
+              v-if="modelValue.includes(skill.id)"
+              class="pi pi-check text-[10px] text-indigo-600"
+            ></i>
           </button>
         </div>
         <div v-else class="p-4 text-center">
@@ -92,28 +104,28 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 const props = defineProps({
   modelValue: {
     type: Array,
-    default: () => []
+    default: () => [],
   },
   skills: {
     type: Array,
-    required: true
+    required: true,
   },
   label: {
     type: String,
-    default: ''
+    default: '',
   },
   placeholder: {
     type: String,
-    default: 'Search and add skills...'
+    default: 'Search and add skills...',
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   required: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -125,8 +137,12 @@ const dropdownRef = ref(null)
 const highlightedIndex = ref(0)
 
 const handleClickOutside = (event) => {
-  if (dropdownRef.value && !dropdownRef.value.contains(event.target) && 
-      inputRef.value && !inputRef.value.contains(event.target)) {
+  if (
+    dropdownRef.value &&
+    !dropdownRef.value.contains(event.target) &&
+    inputRef.value &&
+    !inputRef.value.contains(event.target)
+  ) {
     isOpen.value = false
   }
 }
@@ -148,10 +164,9 @@ onUnmounted(() => {
 const filteredSkills = computed(() => {
   const query = searchQuery.value.toLowerCase().trim()
   if (!query && !isOpen.value) return []
-  
-  return props.skills.filter(s => 
-    s.name.toLowerCase().includes(query) && 
-    !props.modelValue.includes(s.id)
+
+  return props.skills.filter(
+    (s) => s.name.toLowerCase().includes(query) && !props.modelValue.includes(s.id),
   )
 })
 
@@ -160,7 +175,7 @@ watch(searchQuery, () => {
 })
 
 const getSkillName = (id) => {
-  return props.skills.find(s => String(s.id) === String(id))?.name || id
+  return props.skills.find((s) => String(s.id) === String(id))?.name || id
 }
 
 const addSkill = (id) => {
@@ -172,7 +187,7 @@ const addSkill = (id) => {
 }
 
 const removeSkill = (id) => {
-  const newValue = props.modelValue.filter(idx => idx !== id)
+  const newValue = props.modelValue.filter((idx) => idx !== id)
   emit('update:modelValue', newValue)
 }
 
@@ -200,17 +215,27 @@ const selectHighlighted = () => {
 </script>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.2s ease, transform 0.2s ease;
+.fade-enter-active,
+.fade-leave-active {
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
   transform: translateY(-10px);
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Custom Scrollbar */
@@ -226,5 +251,10 @@ const selectHighlighted = () => {
 }
 .dark ::-webkit-scrollbar-thumb {
   background: #1e293b;
+}
+
+/* Global Pointer for Buttons */
+button {
+  cursor: pointer;
 }
 </style>
