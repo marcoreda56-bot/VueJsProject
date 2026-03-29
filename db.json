@@ -1596,6 +1596,27 @@
       "created_at": "2026-03-27T18:37:10.529Z",
       "updated_at": "2026-03-27T18:37:10.529Z",
       "id": "A4Vx8CCOq1I"
+    },
+    {
+      "title": "اسطي نقاش react ",
+      "category_id": "1",
+      "location": "minya",
+      "work_type": "hybrid",
+      "experience_level": "senior",
+      "salary_min": 5000,
+      "salary_max": 100,
+      "technologies": [
+        "React",
+        "Node.js"
+      ],
+      "description": "نقاش متمكن من فرشته والوانه",
+      "requirements": "خبره جيده ف صناعه الشاي \nخبره جيده ف انكار شغل الغير",
+      "benefits": "بكو شاي العروسه + كيلو سكر +كاتل +طقم كوبايات خمسينه",
+      "employer_id": "8",
+      "status": "active",
+      "created_at": "2026-03-29T15:46:13.080Z",
+      "updated_at": "2026-03-29T15:46:13.080Z",
+      "id": "aZm32a0vAFs"
     }
   ],
   "job_skills": [
@@ -1723,6 +1744,16 @@
       "id": "25",
       "job_id": 12,
       "skill_id": 26
+    },
+    {
+      "job_id": "aZm32a0vAFs",
+      "skill_id": "4",
+      "id": "d9VxqW7bBQI"
+    },
+    {
+      "job_id": "aZm32a0vAFs",
+      "skill_id": "2",
+      "id": "yPDJkxzj72U"
     }
   ],
   "applications": [
@@ -2169,6 +2200,21 @@
       "status": "pending",
       "applied_at": "2026-03-27T18:28:11.285Z",
       "id": "zd9XLLSTG4I"
+    },
+    {
+      "candidate_id": "1",
+      "job_id": "aZm32a0vAFs",
+      "cover_letter": "نقاش جيد ذو خبره",
+      "candidate_snapshot": {
+        "name": "Ahmed Khaled",
+        "email": "ahmed.khaled@email.com",
+        "title": "Professional Candidate",
+        "location": "Cairo, Egypt",
+        "bio": "Passionate frontend developer with 5 years of experience building scalable web applications. Specialized in Vue.js, React, and modern CSS frameworks."
+      },
+      "status": "accepted",
+      "applied_at": "2026-03-29T15:49:07.501Z",
+      "id": "btKwHMh2NzA"
     }
   ],
   "application_stages": [

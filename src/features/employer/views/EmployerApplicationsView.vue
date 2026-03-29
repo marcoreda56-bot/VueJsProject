@@ -38,10 +38,10 @@
           v-for="f in filters"
           :key="f.value"
           @click="activeFilter = f.value"
-          :class="activeFilter === f.value
-            ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-100 dark:shadow-none'
-            : 'bg-white dark:bg-slate-900 text-slate-500 border border-slate-100 dark:border-slate-800 hover:border-indigo-300'"
-          class="px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all flex items-center gap-2"
+          :class="[
+            activeFilter === f.value ? filterStatusActiveStyle(f.value) : filterStatusInactiveStyle(f.value),
+            'px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all flex items-center gap-2 border shadow-sm'
+          ]"
         >
           {{ f.label }}
           <span
@@ -96,9 +96,15 @@
                   <span class="text-[11px] font-bold text-slate-400">{{ formatDate(app.applied_at) }}</span>
                 </div>
                 <!-- Cover Letter Preview -->
-                <p v-if="app.cover_letter" class="text-slate-400 text-sm mt-3 leading-relaxed line-clamp-2 max-w-lg">
+                <p v-if="app.cover_letter" class="text-slate-400 text-sm mt-3 leading-relaxed line-clamp-2 max-w-lg italic">
                   "{{ app.cover_letter }}"
                 </p>
+                <button 
+                  @click="$router.push({ name: 'employer.application-details', params: { id: app.id } })"
+                  class="mt-4 text-[10px] font-black text-indigo-600 uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all"
+                >
+                  View Full Application <i class="pi pi-arrow-right"></i>
+                </button>
               </div>
             </div>
 
@@ -188,9 +194,26 @@ const formatDate = (dateStr) => {
 
 const statusStyle = (status) => {
   const s = (status || '').toLowerCase()
-  if (s === 'accepted') return 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-500/10'
-  if (s === 'rejected') return 'bg-rose-50 text-rose-600 border-rose-100 dark:bg-rose-500/10'
-  return 'bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-500/10'
+  if (s === 'accepted') return 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-500/20 shadow-sm'
+  if (s === 'rejected') return 'bg-rose-50 text-rose-600 border-rose-100 dark:bg-rose-500/10 dark:border-rose-500/20 shadow-sm'
+  return 'bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-500/10 dark:border-amber-500/20 shadow-sm'
+}
+
+const filterStatusActiveStyle = (status) => {
+  if (status === 'all') return 'bg-slate-900 text-white shadow-xl shadow-slate-200 dark:shadow-none border-slate-900'
+  if (status === 'accepted') return 'bg-emerald-500 text-white shadow-xl shadow-emerald-100 dark:shadow-none border-emerald-500'
+  if (status === 'rejected') return 'bg-rose-500 text-white shadow-xl shadow-rose-100 dark:shadow-none border-rose-500'
+  if (status === 'pending') return 'bg-amber-500 text-white shadow-xl shadow-amber-100 dark:shadow-none border-amber-500'
+  return 'bg-indigo-600 text-white border-indigo-600'
+}
+
+const filterStatusInactiveStyle = (status) => {
+  const common = 'bg-white dark:bg-slate-900 transition-all border shadow-sm hover:translate-y-[-2px]'
+  if (status === 'all') return `${common} border-slate-200 dark:border-slate-700 text-slate-600 hover:border-slate-400`
+  if (status === 'accepted') return `${common} border-emerald-100 dark:border-emerald-500/20 text-emerald-600 hover:bg-emerald-50/50 dark:hover:bg-emerald-500/5`
+  if (status === 'rejected') return `${common} border-rose-100 dark:border-rose-500/20 text-rose-500 hover:bg-rose-50/50 dark:hover:bg-rose-500/5`
+  if (status === 'pending') return `${common} border-amber-100 dark:border-amber-500/20 text-amber-600 hover:bg-amber-50/50 dark:hover:bg-amber-500/5`
+  return common
 }
 
 const handleStatusUpdate = async (appId, status) => {
