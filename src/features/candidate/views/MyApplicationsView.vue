@@ -237,11 +237,26 @@ const formatDate = (dateStr) => {
 
 const statusStyle = (status) => {
   const s = status?.toLowerCase() || ''
-  if (s.includes('interview'))
-    return 'bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-500/10'
-  if (s.includes('reject')) return 'bg-rose-50 text-rose-600 border-rose-100 dark:bg-rose-500/10'
-  if (s.includes('offer'))
-    return 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-500/10'
-  return 'bg-slate-50 text-slate-500 border-slate-100 dark:bg-slate-800'
+
+  if (s.includes('accept') || s.includes('offer') || s.includes('hired')) {
+    return `
+      bg-emerald-100 text-emerald-700 border-emerald-400 
+      shadow-[0_0_15px_rgba(16,185,129,0.1)] 
+      dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-500/40
+    `
+  }
+  if (s.includes('interview')) {
+    return 'bg-amber-50 text-amber-600 border-amber-200 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20'
+  }
+
+  if (s.includes('reject') || s.includes('withdraw')) {
+    return 'bg-rose-50 text-rose-600 border-rose-200 dark:bg-rose-500/10 dark:text-rose-400 dark:border-rose-500/20'
+  }
+
+  if (s.includes('review') || s.includes('progress')) {
+    return 'bg-blue-50 text-blue-600 border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20'
+  }
+
+  return 'bg-slate-50 text-slate-500 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700'
 }
 </script>

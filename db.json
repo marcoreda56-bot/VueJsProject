@@ -2092,21 +2092,6 @@
       "id": "C-7Dr0TjoAc"
     },
     {
-      "candidate_id": "6",
-      "job_id": "1",
-      "cover_letter": "hello\n",
-      "candidate_snapshot": {
-        "name": "Laila Farouk",
-        "email": "laila.farouk@email.com",
-        "title": "senior backend",
-        "location": "Mansoura, Egypt",
-        "bio": "Fresh graduate with strong portfolio in branding and visual identity design."
-      },
-      "status": "pending",
-      "applied_at": "2026-03-24T22:42:36.547Z",
-      "id": "569kArgrWts"
-    },
-    {
       "candidate_id": "5",
       "job_id": "3",
       "cover_letter": "any thing",
@@ -2120,21 +2105,6 @@
       "status": "pending",
       "applied_at": "2026-03-25T10:37:17.484Z",
       "id": "EDifOX1pu-0"
-    },
-    {
-      "candidate_id": "6",
-      "job_id": "3",
-      "cover_letter": "hello",
-      "candidate_snapshot": {
-        "name": "Laila Farouk",
-        "email": "laila.farouk@email.com",
-        "title": "senior backend",
-        "location": "Mansoura, Egypt",
-        "bio": "Fresh graduate with strong portfolio in branding and visual identity design."
-      },
-      "status": "pending",
-      "applied_at": "2026-03-25T15:25:32.231Z",
-      "id": "Ff8U4hliP5Q"
     },
     {
       "candidate_id": "6",
@@ -2195,6 +2165,21 @@
       "status": "pending",
       "applied_at": "2026-03-29T13:41:01.327Z",
       "id": "oRAhWicg2H4"
+    },
+    {
+      "candidate_id": "6",
+      "job_id": "CqAfGePSMhY",
+      "cover_letter": "hello",
+      "candidate_snapshot": {
+        "name": "Laila Farouk",
+        "email": "laila.farouk@email.com",
+        "title": "senior backend ",
+        "location": "Mansoura, Egypt",
+        "bio": "Fresh graduate with strong portfolio in branding and visual identity design and figma."
+      },
+      "status": "accepted",
+      "applied_at": "2026-03-29T15:37:17.694Z",
+      "id": "lzOgNb3Y81w"
     }
   ],
   "application_stages": [
