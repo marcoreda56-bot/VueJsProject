@@ -175,7 +175,8 @@
       "password": "123456",
       "company_name": "",
       "role": "candidate",
-      "id": "123456"
+      "id": "123456",
+      "is_active": true
     },
     {
       "name": "Marco",
@@ -279,6 +280,14 @@
       "password": "123456",
       "role": "candidate",
       "created_at": "2026-03-27T18:09:29.202Z"
+    },
+    {
+      "id": "WarnlGhCEPk",
+      "name": "mostafa",
+      "email": "mostafa@gmail.com",
+      "password": "123456",
+      "role": "candidate",
+      "created_at": "2026-03-29T13:38:27.848Z"
     }
   ],
   "candidates": [
@@ -447,7 +456,7 @@
       "id": "6",
       "user_id": 6,
       "headline": "Junior Graphic Designer",
-      "bio": "Fresh graduate with strong portfolio in branding and visual identity design.",
+      "bio": "Fresh graduate with strong portfolio in branding and visual identity design and figma.",
       "location": "Mansoura, Egypt",
       "experience_years": 0,
       "education_level": "bachelor",
@@ -466,10 +475,11 @@
       "currency": "EGP",
       "profile_completion": 40,
       "created_at": "2024-06-01T12:00:00Z",
-      "updated_at": "2026-03-27T17:04:02.812Z",
+      "updated_at": "2026-03-29T14:00:10.518Z",
       "title": "senior backend ",
       "skills": [
-        "node js"
+        "node js",
+        "figma"
       ]
     },
     {
@@ -672,6 +682,22 @@
       "location": "Egypt",
       "bio": "",
       "skills": []
+    },
+    {
+      "id": "27CQ4ohBrvU",
+      "user_id": "de92ac5e-1cf7-4c67-8417-ec146711706c",
+      "title": "",
+      "location": "Egypt",
+      "bio": "",
+      "skills": []
+    },
+    {
+      "id": "7dp5Bxw51pw",
+      "title": "software engineer",
+      "location": "Egypt",
+      "bio": "",
+      "skills": [],
+      "updated_at": "2026-03-29T13:47:33.212Z"
     }
   ],
   "candidate_education": [
@@ -1253,7 +1279,7 @@
       "is_salary_visible": true,
       "location": "Remote, Egypt",
       "vacancies": 1,
-      "status": "active",
+      "status": "closed",
       "views": 934,
       "applications_count": 29,
       "expires_at": "2024-12-20T00:00:00Z",
@@ -1569,7 +1595,7 @@
       "employer_id": "7",
       "status": "active",
       "created_at": "2026-03-25T14:33:41.387Z",
-      "updated_at": "2026-03-25T15:26:43.772Z",
+      "updated_at": "2026-03-29T14:31:38.268Z",
       "id": "CqAfGePSMhY"
     },
     {
@@ -2097,21 +2123,6 @@
     },
     {
       "candidate_id": "6",
-      "job_id": "CqAfGePSMhY",
-      "cover_letter": "hello",
-      "candidate_snapshot": {
-        "name": "Laila Farouk",
-        "email": "laila.farouk@email.com",
-        "title": "senior backend",
-        "location": "Mansoura, Egypt",
-        "bio": "Fresh graduate with strong portfolio in branding and visual identity design."
-      },
-      "status": "accepted",
-      "applied_at": "2026-03-25T14:35:54.388Z",
-      "id": "VI7x0NRThNE"
-    },
-    {
-      "candidate_id": "6",
       "job_id": "3",
       "cover_letter": "hello",
       "candidate_snapshot": {
@@ -2169,6 +2180,21 @@
       "status": "pending",
       "applied_at": "2026-03-27T18:28:11.285Z",
       "id": "zd9XLLSTG4I"
+    },
+    {
+      "candidate_id": "WarnlGhCEPk",
+      "job_id": "3",
+      "cover_letter": "hello\n",
+      "candidate_snapshot": {
+        "name": "mostafa",
+        "email": "mostafa@gmail.com",
+        "title": "Professional Candidate",
+        "location": "Egypt",
+        "bio": ""
+      },
+      "status": "pending",
+      "applied_at": "2026-03-29T13:41:01.327Z",
+      "id": "oRAhWicg2H4"
     }
   ],
   "application_stages": [
