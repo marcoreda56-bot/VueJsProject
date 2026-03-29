@@ -1,7 +1,7 @@
 <template>
-  <div class="relative w-full font-['Plus_Jakarta_Sans',sans-serif]">
+  <div class="relative w-full font-['Outfit',sans-serif]">
     <label v-if="label" class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">
-      {{ label }}
+      {{ label }} <span v-if="required" class="text-rose-500">*</span>
     </label>
     
     <div 
@@ -107,6 +107,10 @@ const props = defineProps({
     default: 'Search and add skills...'
   },
   disabled: {
+    type: Boolean,
+    default: false
+  },
+  required: {
     type: Boolean,
     default: false
   }

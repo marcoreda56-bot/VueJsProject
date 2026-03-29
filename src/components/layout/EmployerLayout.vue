@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 flex font-['Plus_Jakarta_Sans',sans-serif]"
+    class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 flex font-['Outfit',sans-serif]"
   >
     <aside
       class="w-72 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 p-8 hidden lg:flex flex-col sticky top-0 h-screen transition-all duration-300"

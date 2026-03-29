@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Plus_Jakarta_Sans',sans-serif] pb-20">
+  <div class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Outfit',sans-serif] pb-20">
     <!-- Header -->
     <div class="max-w-6xl mx-auto px-6 pt-12">
       <div class="flex items-center gap-4 mb-8 animate-[fadeIn_0.5s_ease-out]">

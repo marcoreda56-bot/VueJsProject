@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Plus_Jakarta_Sans',sans-serif]">
+  <div class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Outfit',sans-serif]">
     <!-- Hero Banner -->
     <div class="max-w-[1800px] mx-auto mb-8">
       <section

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 flex items-center justify-center p-6 font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden relative"
+    class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 flex items-center justify-center p-6 font-['Outfit',sans-serif] overflow-hidden relative"
   >
     <div class="absolute top-0 left-0 w-full h-full opacity-50 dark:opacity-20 pointer-events-none">
       <div

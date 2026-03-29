@@ -1,5 +1,5 @@
 <template>
-  <footer class="relative overflow-hidden bg-slate-950 dark:bg-indigo-950/20 pt-32 pb-16 font-['Plus_Jakarta_Sans',sans-serif] border-t border-slate-900 dark:border-slate-800">
+  <footer class="relative overflow-hidden bg-slate-950 dark:bg-indigo-950/20 pt-32 pb-16 font-['Outfit',sans-serif] border-t border-slate-900 dark:border-slate-800">
     <!-- Decorative Orbs -->
     <div class="absolute -top-24 -left-24 w-96 h-96 bg-indigo-600/10 blur-[120px] rounded-full pointer-events-none"></div>
     <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-indigo-500/5 blur-[120px] rounded-full pointer-events-none"></div>

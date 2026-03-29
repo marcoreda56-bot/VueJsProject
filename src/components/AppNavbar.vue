@@ -42,7 +42,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <nav class="fixed top-1 inset-x-0 z-50 px-4 font-['Plus_Jakarta_Sans',sans-serif]">
+  <nav class="fixed top-1 inset-x-0 z-50 px-4 font-['Outfit',sans-serif]">
     <div
       class="max-w-[1800px] mx-auto backdrop-blur-md bg-white/70 dark:bg-slate-950/70 border border-white/20 dark:border-slate-800/50 rounded-full px-6 py-2.5 flex items-center justify-between shadow-xl"
     >

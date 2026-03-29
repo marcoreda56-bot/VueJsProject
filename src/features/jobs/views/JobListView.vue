@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#F1F5F9] dark:bg-slate-950 font-['Plus_Jakarta_Sans'] antialiased">
+  <div class="min-h-screen bg-[#F1F5F9] dark:bg-slate-950 font-['Outfit'] antialiased">
     <header
       class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30"
     >

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#FBFBFB] flex font-['Plus_Jakarta_Sans',sans-serif]">
+  <div class="min-h-screen bg-[#FBFBFB] flex font-['Outfit',sans-serif]">
     <!-- Desktop Sidebar -->
     <aside :class="[
       'w-72 bg-white border-r border-gray-100 flex flex-col sticky top-0 h-screen z-30 transition-transform duration-300',

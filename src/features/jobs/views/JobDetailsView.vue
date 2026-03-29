@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="job"
-    class="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 py-12 px-6 font-['Plus_Jakarta_Sans']"
+    class="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 py-12 px-6 font-['Outfit']"
   >
     <div class="max-w-5xl mx-auto">
       <button

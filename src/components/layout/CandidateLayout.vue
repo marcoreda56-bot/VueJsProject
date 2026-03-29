@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Plus_Jakarta_Sans',sans-serif]"
+    class="flex min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Outfit',sans-serif]"
   >
     <Transition name="fade">
       <div

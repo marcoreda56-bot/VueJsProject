@@ -102,7 +102,7 @@ const getCompanyName = (employerId) => {
 
 <template>
   <div
-    class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Plus_Jakarta_Sans',sans-serif] selection:bg-indigo-100"
+    class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Outfit',sans-serif] selection:bg-indigo-100"
   >
     <div class="max-w-[1800px] mx-auto p-6">
       <!-- Hero Slider Section -->

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Plus_Jakarta_Sans',sans-serif]">
+  <div class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Outfit',sans-serif]">
     <div class="max-w-4xl mx-auto">
       <!-- Header -->
       <div class="mb-10">
@@ -44,7 +44,7 @@
           </h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="md:col-span-2">
-              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Job Title *</label>
+              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Job Title <span class="text-rose-500">*</span></label>
               <input
                 v-model="form.title"
                 type="text"
@@ -55,7 +55,7 @@
               />
             </div>
             <div>
-              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Category *</label>
+              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Category <span class="text-rose-500">*</span></label>
               <select
                 v-model="form.category_id"
                 :class="[
@@ -68,7 +68,7 @@
               </select>
             </div>
             <div>
-              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Location *</label>
+              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Location <span class="text-rose-500">*</span></label>
               <input
                 v-model="form.location"
                 type="text"
@@ -79,7 +79,7 @@
               />
             </div>
             <div>
-              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Work Type *</label>
+              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Work Type <span class="text-rose-500">*</span></label>
               <div class="flex gap-3">
                 <button
                   v-for="type in workTypes"
@@ -152,7 +152,8 @@
           <SkillsSelector
             v-model="form.skills"
             :skills="employerStore.skills"
-            label="Technologies / Skills *"
+            label="Technologies / Skills"
+            required
             placeholder="Select required tech stack..."
           />
           <p class="text-[10px] text-slate-400 mt-2 font-medium italic">Update the required technologies for this role.</p>
@@ -161,7 +162,7 @@
         <!-- Section: Description -->
         <div>
           <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
-            <span class="w-6 h-[2px] bg-indigo-600"></span> Job Description *
+            <span class="w-6 h-[2px] bg-indigo-600"></span> Job Description <span class="text-rose-500">*</span>
           </h3>
           <textarea
             v-model="form.description"
@@ -176,7 +177,7 @@
         <!-- Section: Requirements -->
         <div>
           <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
-            <span class="w-6 h-[2px] bg-indigo-600"></span> Requirements *
+            <span class="w-6 h-[2px] bg-indigo-600"></span> Requirements <span class="text-rose-500">*</span>
           </h3>
           <textarea
             v-model="form.requirements"

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 py-20 px-6 lg:px-12 font-['Plus_Jakarta_Sans',sans-serif]"
+    class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 py-20 px-6 lg:px-12 font-['Outfit',sans-serif]"
   >
     <div class="max-w-6xl mx-auto text-center mb-24 animate-[fadeIn_0.8s_ease-out]">
       <div

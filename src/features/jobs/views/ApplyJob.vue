@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="auth.user"
-    class="min-h-screen py-20 px-6 font-['Plus_Jakarta_Sans'] bg-[#FAFAFA] dark:bg-slate-950"
+    class="min-h-screen py-20 px-6 font-['Outfit'] bg-[#FAFAFA] dark:bg-slate-950"
   >
     <div class="max-w-2xl mx-auto">
       <header class="text-center mb-12 animate-[fadeIn_0.5s_ease-out]">

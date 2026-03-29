@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Plus_Jakarta_Sans',sans-serif]">
+  <div class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Outfit',sans-serif]">
     <!-- Header -->
     <div class="mb-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
       <div>
@@ -98,12 +98,12 @@
 
           <!-- Actions -->
           <div class="flex items-center gap-3 flex-shrink-0 flex-wrap">
-            <router-link
-              :to="{ name: 'employer.job-details', params: { id: job.id } }"
+            <button
+              @click="openJobDetails(job)"
               class="px-5 py-3 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border border-slate-100 dark:border-slate-700 flex items-center gap-2"
             >
               <i class="pi pi-eye text-[9px]"></i> View Details
-            </router-link>
+            </button>
 
             <router-link
               :to="{ name: 'employer.edit-job', params: { id: job.id } }"
@@ -133,15 +133,40 @@
         </div>
       </div>
     </div>
+
+    <!-- Job Details Modal -->
+    <JobDetailsModal 
+      v-if="selectedJob"
+      :is-open="showDetailsModal"
+      :job="selectedJob"
+      @close="showDetailsModal = false"
+      @edit="handleEditFromModal"
+    />
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useEmployerStore } from '@/stores/employer.store'
+import JobDetailsModal from '../components/JobDetailsModal.vue'
 import Swal from 'sweetalert2'
 
+const router = useRouter()
 const employerStore = useEmployerStore()
+
+const showDetailsModal = ref(false)
+const selectedJob = ref(null)
+
+const openJobDetails = (job) => {
+  selectedJob.value = job
+  showDetailsModal.value = true
+}
+
+const handleEditFromModal = (jobId) => {
+  showDetailsModal.value = false
+  router.push({ name: 'employer.edit-job', params: { id: jobId } })
+}
 
 onMounted(async () => {
   await employerStore.initialize()

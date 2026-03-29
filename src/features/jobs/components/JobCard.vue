@@ -26,7 +26,7 @@ const handleApply = () => {
 
 <template>
   <div
-    class="group relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/50 p-7 rounded-[2.5rem] shadow-[0_10px_40px_-15px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_60px_-15px_rgba(79,70,229,0.1)] hover:-translate-y-2 transition-all duration-500 flex flex-col justify-between overflow-hidden font-['Plus_Jakarta_Sans',sans-serif]"
+    class="group relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800/50 p-7 rounded-[2.5rem] shadow-[0_10px_40px_-15px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_60px_-15px_rgba(79,70,229,0.1)] hover:-translate-y-2 transition-all duration-500 flex flex-col justify-between overflow-hidden font-['Outfit',sans-serif]"
   >
     <div
       class="absolute -top-24 -right-24 w-48 h-48 bg-indigo-500/5 blur-[80px] group-hover:bg-indigo-500/10 transition-colors duration-500"
