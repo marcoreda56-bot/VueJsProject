@@ -102,6 +102,11 @@ const router = createRouter({
           component: () => import('@/features/employer/views/EmployerApplicationsView.vue'),
         },
         {
+          path: 'applications/:id',
+          name: 'employer.application-details',
+          component: () => import('@/features/employer/views/ApplicationDetailsView.vue'),
+        },
+        {
           path: 'jobs/:id',
           name: 'employer.job-details',
           component: () => import('@/features/jobs/views/JobDetailsView.vue'),

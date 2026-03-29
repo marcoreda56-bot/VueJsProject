@@ -44,6 +44,8 @@ export const candidatesApi = {
   create: (data) => api.post('/candidates', data),
   update: (id, data) => api.patch(`/candidates/${id}`, data),
   delete: (id) => api.delete(`/candidates/${id}`),
+  getEducation: (candidateId) => api.get(`/candidate_education?candidate_id=${candidateId}`),
+  getExperience: (candidateId) => api.get(`/candidate_experiences?candidate_id=${candidateId}`),
 }
 
 export const employersApi = {
@@ -91,6 +93,8 @@ export const candidateSkillsApi = {
 
 export const jobSkillsApi = {
   getByJob: (jobId) => api.get(`/job_skills?job_id=${jobId}`),
+  create: (data) => api.post('/job_skills', data),
+  delete: (id) => api.delete(`/job_skills/${id}`),
 }
 
 export default api

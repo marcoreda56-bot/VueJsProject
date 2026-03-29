@@ -1,5 +1,14 @@
 import { defineStore } from 'pinia'
-import { jobsApi, applicationsApi, categoriesApi, employersApi } from '@/api/services/api'
+import {
+  jobsApi,
+  applicationsApi,
+  categoriesApi,
+  employersApi,
+  skillsApi,
+  jobSkillsApi,
+  candidatesApi,
+  candidateSkillsApi,
+} from '@/api/services/api'
 import { useAuthStore } from './auth.store'
 
 export const useEmployerStore = defineStore('employer', {
@@ -7,6 +16,7 @@ export const useEmployerStore = defineStore('employer', {
     jobs: [],
     applications: [],
     categories: [],
+    skills: [],
     employerProfile: null,
     loading: false,
     error: null,
@@ -26,7 +36,12 @@ export const useEmployerStore = defineStore('employer', {
 
   actions: {
     async initialize() {
-      await Promise.all([this.fetchMyJobs(), this.fetchCategories(), this.fetchEmployerProfile()])
+      await Promise.all([
+        this.fetchMyJobs(),
+        this.fetchCategories(),
+        this.fetchSkills(),
+        this.fetchEmployerProfile(),
+      ])
       await this.fetchMyApplications()
     },
 
@@ -70,6 +85,14 @@ export const useEmployerStore = defineStore('employer', {
         console.error('Failed to fetch categories:', err)
       }
     },
+    async fetchSkills() {
+      try {
+        const res = await skillsApi.getAll()
+        this.skills = res.data
+      } catch (err) {
+        console.error('Failed to fetch skills:', err)
+      }
+    },
 
     async fetchMyApplications() {
       try {
@@ -90,16 +113,31 @@ export const useEmployerStore = defineStore('employer', {
       if (!user?.id) throw new Error('Not authenticated')
       this.loading = true
       try {
+        const { skills, ...jobPayload } = payload
         const jobData = {
-          ...payload,
+          ...jobPayload,
           employer_id: String(user.id),
           status: 'active',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         }
         const res = await jobsApi.create(jobData)
-        this.jobs.unshift(res.data)
-        return res.data
+        const newJob = res.data
+
+        // Handle skills (save to job_skills)
+        if (skills && skills.length) {
+          await Promise.all(
+            skills.map((skillId) =>
+              jobSkillsApi.create({
+                job_id: newJob.id,
+                skill_id: skillId,
+              }),
+            ),
+          )
+        }
+
+        this.jobs.unshift(newJob)
+        return newJob
       } catch (err) {
         console.error('Failed to post job:', err)
         throw err
@@ -111,11 +149,32 @@ export const useEmployerStore = defineStore('employer', {
     async updateJob(id, payload) {
       this.loading = true
       try {
-        const updated = { ...payload, updated_at: new Date().toISOString() }
+        const { skills, ...jobPayload } = payload
+        const updated = { ...jobPayload, updated_at: new Date().toISOString() }
         const res = await jobsApi.update(id, updated)
+        const newJob = res.data
+
+        // Sync skills
+        if (skills !== undefined) {
+          const currentSkillsRes = await jobSkillsApi.getByJob(id)
+          const currentSkills = currentSkillsRes.data
+          const currentSkillIds = currentSkills.map((s) => String(s.skill_id))
+          const newSkillIds = skills.map((s) => String(s))
+
+          // Skills to delete
+          const toDelete = currentSkills.filter((s) => !newSkillIds.includes(String(s.skill_id)))
+          // Skills to add
+          const toAdd = newSkillIds.filter((id) => !currentSkillIds.includes(id))
+
+          await Promise.all([
+            ...toDelete.map((s) => jobSkillsApi.delete(s.id)),
+            ...toAdd.map((skillId) => jobSkillsApi.create({ job_id: id, skill_id: skillId })),
+          ])
+        }
+
         const idx = this.jobs.findIndex((j) => String(j.id) === String(id))
-        if (idx !== -1) this.jobs[idx] = res.data
-        return res.data
+        if (idx !== -1) this.jobs[idx] = newJob
+        return newJob
       } catch (err) {
         console.error('Failed to update job:', err)
         throw err
@@ -162,6 +221,38 @@ export const useEmployerStore = defineStore('employer', {
 
     getJobById(id) {
       return this.jobs.find((j) => String(j.id) === String(id)) || null
+    },
+
+    async fetchApplicationDetails(appId) {
+      this.loading = true
+      try {
+        const appRes = await applicationsApi.getById(appId)
+        const application = appRes.data
+
+        // Fetch candidate details
+        const candidateRes = await candidatesApi.getById(application.candidate_id)
+        const candidate = candidateRes.data
+
+        // Fetch education and experience
+        const [eduRes, expRes, skillRes] = await Promise.all([
+          candidatesApi.getEducation(application.candidate_id),
+          candidatesApi.getExperience(application.candidate_id),
+          candidateSkillsApi.getByCandidate(application.candidate_id),
+        ])
+
+        return {
+          application,
+          candidate,
+          education: eduRes.data,
+          experience: expRes.data,
+          skills: skillRes.data,
+        }
+      } catch (err) {
+        console.error('Failed to fetch application details:', err)
+        throw err
+      } finally {
+        this.loading = false
+      }
     },
   },
 })

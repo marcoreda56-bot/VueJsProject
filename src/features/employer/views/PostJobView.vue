@@ -32,17 +32,21 @@
               <input
                 v-model="form.title"
                 type="text"
-                required
                 placeholder="e.g. Senior Frontend Developer"
-                class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-300"
+                :class="[
+                  errors.title ? 'border-rose-500 ring-rose-500' : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
+                  'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all placeholder:text-slate-300'
+                ]"
               />
             </div>
             <div>
               <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Category *</label>
               <select
                 v-model="form.category_id"
-                required
-                class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                :class="[
+                  errors.category ? 'border-rose-500 ring-rose-500' : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
+                  'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all'
+                ]"
               >
                 <option value="" disabled>Select category</option>
                 <option v-for="cat in employerStore.categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
@@ -53,9 +57,11 @@
               <input
                 v-model="form.location"
                 type="text"
-                required
                 placeholder="e.g. Cairo, Egypt"
-                class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-300"
+                :class="[
+                  errors.location ? 'border-rose-500 ring-rose-500' : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
+                  'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all placeholder:text-slate-300'
+                ]"
               />
             </div>
             <div>
@@ -104,7 +110,10 @@
                 type="number"
                 min="0"
                 placeholder="e.g. 15000"
-                class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-300"
+                :class="[
+                  errors.salary ? 'border-rose-500 ring-rose-500' : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
+                  'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all placeholder:text-slate-300'
+                ]"
               />
             </div>
             <div>
@@ -114,46 +123,27 @@
                 type="number"
                 min="0"
                 placeholder="e.g. 30000"
-                class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-300"
+                :class="[
+                  errors.salary ? 'border-rose-500 ring-rose-500' : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
+                  'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all placeholder:text-slate-300'
+                ]"
               />
             </div>
           </div>
+          <p v-if="errors.salary" class="text-[10px] text-rose-500 mt-2 font-bold italic animate-[fadeIn_0.3s_ease-out]">
+            <i class="pi pi-exclamation-circle text-[9px] mr-1"></i> {{ errors.salary }}
+          </p>
         </div>
 
         <!-- Section: Technologies -->
         <div>
-          <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
-            <span class="w-6 h-[2px] bg-indigo-600"></span> Technologies / Skills
-          </h3>
-          <div class="flex gap-3 mb-4">
-            <input
-              v-model="techInput"
-              type="text"
-              placeholder="Add technology (press Enter)"
-              @keydown.enter.prevent="addTech"
-              class="flex-1 px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-300"
-            />
-            <button
-              type="button"
-              @click="addTech"
-              class="px-6 py-4 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-500 transition-all"
-            >
-              Add
-            </button>
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <span
-              v-for="(tech, i) in form.technologies"
-              :key="tech"
-              class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 rounded-xl text-xs font-black border border-indigo-100 dark:border-indigo-500/20"
-            >
-              {{ tech }}
-              <button type="button" @click="removeTech(i)" class="text-indigo-400 hover:text-red-500 transition-colors">
-                <i class="pi pi-times text-[9px]"></i>
-              </button>
-            </span>
-            <span v-if="form.technologies.length === 0" class="text-slate-300 text-xs font-medium italic">No technologies added yet</span>
-          </div>
+          <SkillsSelector
+            v-model="form.skills"
+            :skills="employerStore.skills"
+            label="Technologies / Skills *"
+            placeholder="Select required tech stack..."
+          />
+          <p class="text-[10px] text-slate-400 mt-2 font-medium italic">Selecting from the standard skills table ensures better candidate matching.</p>
         </div>
 
         <!-- Section: Description -->
@@ -163,10 +153,12 @@
           </h3>
           <textarea
             v-model="form.description"
-            required
             rows="5"
             placeholder="Describe the role, team, and what a typical day looks like..."
-            class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-300 resize-none leading-relaxed"
+            :class="[
+              errors.description ? 'border-rose-500 ring-rose-500' : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
+              'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all placeholder:text-slate-300 resize-none leading-relaxed'
+            ]"
           ></textarea>
         </div>
 
@@ -177,10 +169,12 @@
           </h3>
           <textarea
             v-model="form.requirements"
-            required
             rows="5"
             placeholder="List the skills, experience, and qualifications needed..."
-            class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-300 resize-none leading-relaxed"
+            :class="[
+              errors.requirements ? 'border-rose-500 ring-rose-500' : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
+              'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all placeholder:text-slate-300 resize-none leading-relaxed'
+            ]"
           ></textarea>
         </div>
 
@@ -224,11 +218,13 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useEmployerStore } from '@/stores/employer.store'
+import SkillsSelector from '@/components/shared/SkillsSelector.vue'
 import Swal from 'sweetalert2'
 
 const router = useRouter()
 const employerStore = useEmployerStore()
 
+const errors = ref({})
 const workTypes = [
   { label: 'Remote', value: 'remote' },
   { label: 'Onsite', value: 'onsite' },
@@ -244,7 +240,8 @@ const form = ref({
   experience_level: '',
   salary_min: '',
   salary_max: '',
-  technologies: [],
+  skills: [], // New: Skill IDs from shared component
+  technologies: [], // Keeping for backward compatibility or display
   description: '',
   requirements: '',
   benefits: '',
@@ -254,22 +251,47 @@ onMounted(async () => {
   if (!employerStore.categories.length) {
     await employerStore.fetchCategories()
   }
-})
-
-const addTech = () => {
-  const val = techInput.value.trim()
-  if (val && !form.value.technologies.includes(val)) {
-    form.value.technologies.push(val)
+  if (!employerStore.skills.length) {
+    await employerStore.fetchSkills()
   }
-  techInput.value = ''
-}
+})
+// Removed addTech and removeTech as SkillsSelector handles it
 
-const removeTech = (i) => {
-  form.value.technologies.splice(i, 1)
+const validateForm = () => {
+  const errs = {}
+  
+  if (!form.value.title?.trim()) errs.title = 'Job title is required'
+  if (!form.value.category_id) errs.category = 'Please select a category'
+  if (!form.value.location?.trim()) errs.location = 'Location is required'
+  if (!form.value.description?.trim()) errs.description = 'Job description is required'
+  if (!form.value.requirements?.trim()) errs.requirements = 'Requirements are required'
+  
+  if (form.value.salary_min && form.value.salary_max) {
+    if (Number(form.value.salary_min) >= Number(form.value.salary_max)) {
+      errs.salary = 'Minimum salary must be less than maximum salary'
+    }
+  }
+  
+  errors.value = errs
+  return Object.keys(errs).length === 0
 }
 
 const handleSubmit = async () => {
+  if (!validateForm()) {
+    Swal.fire({
+      title: 'Validation Error',
+      text: 'Please check the form for errors.',
+      icon: 'warning',
+      customClass: { popup: 'rounded-[2rem] p-10' },
+    })
+    return
+  }
+  
   try {
+    // Generate technologies array from skill names for backward compatibility if needed
+    const selectedSkills = employerStore.skills.filter(s => form.value.skills.includes(s.id))
+    form.value.technologies = selectedSkills.map(s => s.name)
+
     await employerStore.postJob({ ...form.value })
 
     await Swal.fire({
