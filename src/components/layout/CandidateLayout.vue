@@ -19,7 +19,7 @@
     >
       <button
         @click="isCollapsed = !isCollapsed"
-        class="hidden lg:flex absolute -right-4 top-12 w-8 h-8 bg-indigo-600 text-white rounded-full items-center justify-center shadow-lg hover:scale-110 active:scale-90 transition-all z-[90]"
+        class="cursor-pointer hidden lg:flex absolute -right-4 top-12 w-8 h-8 bg-indigo-600 text-white rounded-full items-center justify-center shadow-lg hover:scale-110 active:scale-90 transition-all z-[90]"
       >
         <i
           :class="[

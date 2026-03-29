@@ -75,21 +75,6 @@ onMounted(() => {
         </router-link>
       </div>
 
-      <div class="hidden lg:flex items-center flex-1 max-w-md mx-8">
-        <div class="relative w-full group">
-          <i
-            class="pi pi-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors"
-          ></i>
-          <input
-            v-model="navSearch"
-            @keyup.enter="handleSearch"
-            type="text"
-            placeholder="Search for your dream job..."
-            class="w-full bg-slate-100/50 dark:bg-slate-800/50 border border-transparent focus:border-indigo-500/30 focus:bg-white dark:focus:bg-slate-900 rounded-full py-2.5 pl-11 pr-4 text-xs font-medium text-slate-900 dark:text-white outline-none transition-all shadow-sm"
-          />
-        </div>
-      </div>
-
       <div class="flex items-center gap-2">
         <Button
           @click="toggleTheme"
