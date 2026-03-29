@@ -72,7 +72,7 @@ onUnmounted(() => {
 })
 
 const goToJob = (id) => router.push(`/jobs/${id}`)
-const goToCategory = (id) => router.push({ name: 'jobs', query: { category: id } })
+const goToCategory = (id) => router.push({ name: 'public.jobs', query: { category: id } })
 
 const lucideToPrime = {
   'Code': { icon: 'pi pi-desktop', bg: 'bg-blue-50 dark:bg-blue-900/20', text: 'text-blue-600 dark:text-blue-400', border: 'border-blue-100 dark:border-blue-800' },
