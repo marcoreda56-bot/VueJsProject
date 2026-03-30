@@ -54,9 +54,8 @@ export const useEmployerStore = defineStore('employer', {
       const user = this._getCurrentUser()
       if (!user?.id) return
       try {
-        const res = await employersApi.getAll()
-        const profile = res.data.find((e) => String(e.user_id) === String(user.id))
-        this.employerProfile = profile || null
+        const res = await employersApi.getByUser(user.id)
+        this.employerProfile = res.data?.[0] || null
       } catch (err) {
         console.error('Failed to fetch employer profile:', err)
       }
@@ -117,7 +116,7 @@ export const useEmployerStore = defineStore('employer', {
         const jobData = {
           ...jobPayload,
           employer_id: String(user.id),
-          status: 'active',
+          status: 'pending',
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         }
@@ -229,15 +228,16 @@ export const useEmployerStore = defineStore('employer', {
         const appRes = await applicationsApi.getById(appId)
         const application = appRes.data
 
-        // Fetch candidate details
-        const candidateRes = await candidatesApi.getById(application.candidate_id)
-        const candidate = candidateRes.data
+        // Use getByUser filter for robust candidate lookup
+        const candidateProfileRes = await candidatesApi.getByUser(application.candidate_id)
+        const candidate = candidateProfileRes.data?.[0] || null
 
-        // Fetch education and experience
+        // Fetch education and experience using the real Candidate PROFILE ID
+        const targetCandidateId = candidate?.id || application.candidate_id
         const [eduRes, expRes, skillRes] = await Promise.all([
-          candidatesApi.getEducation(application.candidate_id),
-          candidatesApi.getExperience(application.candidate_id),
-          candidateSkillsApi.getByCandidate(application.candidate_id),
+          candidatesApi.getEducation(targetCandidateId),
+          candidatesApi.getExperience(targetCandidateId),
+          candidateSkillsApi.getByCandidate(targetCandidateId),
         ])
 
         return {

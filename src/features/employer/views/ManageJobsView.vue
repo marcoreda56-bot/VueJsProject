@@ -58,6 +58,8 @@
                 <span
                   :class="job.status === 'active'
                     ? 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-500/10 dark:border-emerald-500/20'
+                    : job.status === 'pending'
+                    ? 'bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-500/10 dark:border-amber-500/20'
                     : 'bg-slate-100 text-slate-400 border-slate-200 dark:bg-slate-800 dark:border-slate-700'"
                   class="px-3 py-1 rounded-xl text-[9px] font-black uppercase tracking-widest border"
                 >
@@ -113,6 +115,7 @@
             </router-link>
 
             <button
+              v-if="job.status !== 'pending'"
               @click="handleToggleStatus(job)"
               :class="job.status === 'active'
                 ? 'bg-amber-50 text-amber-600 border-amber-100 hover:bg-amber-500 hover:text-white dark:bg-amber-500/10 dark:border-amber-500/20'

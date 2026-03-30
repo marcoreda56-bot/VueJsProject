@@ -232,7 +232,6 @@ const workTypes = [
   { label: 'Hybrid', value: 'hybrid' },
 ]
 
-const techInput = ref('')
 const form = ref({
   title: '',
   category_id: '',
@@ -296,8 +295,8 @@ const handleSubmit = async () => {
     await employerStore.postJob({ ...form.value })
 
     await Swal.fire({
-      title: 'Job Posted!',
-      text: 'Your job listing is now live.',
+      title: 'Job Submitted!',
+      text: 'Your job listing has been sent for administrative approval.',
       icon: 'success',
       timer: 2000,
       showConfirmButton: false,

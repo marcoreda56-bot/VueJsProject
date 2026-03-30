@@ -11,7 +11,7 @@ const jobId = route.params.id
 const actionLoading = ref(null)
 
 const job = computed(() => adminStore.jobs.find(j => j.id == jobId) || {})
-const employer = computed(() => adminStore.employers.find(e => e.id == job.value.employer_id) || {})
+const employer = computed(() => adminStore.employers.find(e => String(e.user_id) === String(job.value.employer_id)) || {})
 
 const jobApplications = computed(() => {
   return adminStore.applications.filter(app => app.job_id == jobId)

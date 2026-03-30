@@ -158,7 +158,7 @@ const getStatusBadgeClass = (status) => {
 }
 
 const getEmployerName = (employerId) => {
-  const employer = adminStore.employers.find(e => e.id == employerId)
+  const employer = adminStore.employers.find(e => String(e.user_id) === String(employerId))
   return employer ? employer.company_name : 'Unknown Employer'
 }
 

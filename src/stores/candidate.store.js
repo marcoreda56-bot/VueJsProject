@@ -23,20 +23,23 @@ export const useCandidateStore = defineStore('candidate', {
       try {
         const userId = String(user.id)
 
-        const [appsRes, profileRes] = await Promise.all([
+        // Use getByUser filter instead of getById(userId) for robustness
+        const [appsRes, profileListRes] = await Promise.all([
           applicationsApi.getAll(),
-          candidatesApi.getById(userId).catch(() => null),
+          candidatesApi.getByUser(userId).catch(() => ({ data: [] })),
         ])
 
         if (appsRes && appsRes.data) {
           this.applications = appsRes.data.filter((app) => String(app.candidate_id) === userId)
         }
 
-        if (profileRes && profileRes.data) {
-          this.profile = profileRes.data
+        const profileData = profileListRes.data?.[0]
+        if (profileData) {
+          this.profile = profileData
         } else {
+          // Fallback if no profile exists yet
           this.profile = {
-            id: userId,
+            user_id: userId,
             title: '',
             location: 'Egypt',
             bio: '',
@@ -96,17 +99,23 @@ export const useCandidateStore = defineStore('candidate', {
       this.loading = true
       try {
         const userId = String(user.id)
+        
+        // Use the existing profile ID if available, otherwise fallback to userId (if they matched)
+        const profileId = this.profile?.id || userId
+
         const payload = {
           ...profileData,
-          id: userId,
+          user_id: userId,
           updated_at: new Date().toISOString(),
         }
 
         let res
         try {
-          res = await candidatesApi.update(userId, payload)
+          // Use the real record ID for the update
+          res = await candidatesApi.update(profileId, payload)
         } catch (err) {
           if (err.response?.status === 404) {
+            // If it failed with 404, try creating it (though it should exist if linked correctly)
             res = await candidatesApi.create(payload)
           } else {
             throw err

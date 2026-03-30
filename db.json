@@ -288,6 +288,38 @@
       "password": "123456",
       "role": "candidate",
       "created_at": "2026-03-29T13:38:27.848Z"
+    },
+    {
+      "name": "ger",
+      "email": "ger@jobplatform.com",
+      "password": "123456",
+      "role": "candidate",
+      "created_at": "2026-03-30T10:45:16.262Z",
+      "id": "3gWVc2CgZMs"
+    },
+    {
+      "name": "moooo",
+      "email": "mooo@jobplatform.com",
+      "password": "12345678",
+      "role": "candidate",
+      "created_at": "2026-03-30T10:51:39.543Z",
+      "id": "2UKn-BfNfsc"
+    },
+    {
+      "name": "abood",
+      "email": "abood@jobplatform.com",
+      "password": "123456789",
+      "role": "candidate",
+      "created_at": "2026-03-30T10:56:12.458Z",
+      "id": "rZ29pg_UTnI"
+    },
+    {
+      "name": "so",
+      "email": "so@jobplatform.com",
+      "password": "123456789",
+      "role": "candidate",
+      "created_at": "2026-03-30T11:15:01.391Z",
+      "id": "1MbzH0f4UQA"
     }
   ],
   "candidates": [
@@ -701,6 +733,102 @@
       "bio": "",
       "skills": [],
       "updated_at": "2026-03-29T13:47:33.212Z"
+    },
+    {
+      "user_id": "3gWVc2CgZMs",
+      "title": "",
+      "location": "Egypt",
+      "bio": "",
+      "skills": [],
+      "id": "xVZT-JKfwMo"
+    },
+    {
+      "id": "tg5xMdFwQaU",
+      "title": "senior",
+      "location": "Egypt",
+      "bio": "",
+      "skills": [],
+      "updated_at": "2026-03-30T10:45:29.434Z"
+    },
+    {
+      "id": "yEJH8qTZO-I",
+      "title": "asasa",
+      "location": "Egypt",
+      "bio": "",
+      "skills": [],
+      "updated_at": "2026-03-30T10:45:53.450Z"
+    },
+    {
+      "id": "3FFYsylz7Uk",
+      "title": "senior",
+      "location": "Egypt",
+      "bio": "",
+      "skills": [],
+      "updated_at": "2026-03-30T10:49:15.442Z"
+    },
+    {
+      "id": "nAKwshXiCs0",
+      "title": "sen",
+      "location": "Egypt",
+      "bio": "",
+      "skills": [],
+      "updated_at": "2026-03-30T10:49:42.594Z"
+    },
+    {
+      "id": "hI2DkLNMlPg",
+      "title": "sen",
+      "location": "Egypt",
+      "bio": "",
+      "skills": [],
+      "updated_at": "2026-03-30T10:50:12.369Z"
+    },
+    {
+      "id": "obMWb-RvWQk",
+      "user_id": "2UKn-BfNfsc",
+      "title": "",
+      "location": "Egypt",
+      "bio": "",
+      "skills": []
+    },
+    {
+      "id": "ZNrdIRSRijg",
+      "title": "senior",
+      "location": "Egypt",
+      "bio": "",
+      "skills": [],
+      "updated_at": "2026-03-30T10:52:03.745Z"
+    },
+    {
+      "id": "cs8iRrqxyY8",
+      "user_id": "rZ29pg_UTnI",
+      "title": "senior",
+      "location": "Egypt",
+      "bio": "anything",
+      "skills": [
+        "4",
+        "6",
+        "2"
+      ],
+      "updated_at": "2026-03-30T11:08:59.641Z"
+    },
+    {
+      "id": "NICI-LWJKyY",
+      "title": "abbbpppd",
+      "location": "Egypt",
+      "bio": "",
+      "skills": [],
+      "updated_at": "2026-03-30T10:56:23.834Z"
+    },
+    {
+      "id": "ca-lzmYYEXo",
+      "user_id": "1MbzH0f4UQA",
+      "title": "senior",
+      "location": "Egypt",
+      "bio": "ss",
+      "skills": [
+        "3"
+      ],
+      "updated_at": "2026-03-30T11:15:24.142Z"
     }
   ],
   "candidate_education": [
@@ -1646,6 +1774,28 @@
       "created_at": "2026-03-29T15:46:13.080Z",
       "updated_at": "2026-03-29T15:46:13.080Z",
       "id": "aZm32a0vAFs"
+    },
+    {
+      "title": "Omnis molestiae reic",
+      "category_id": "4",
+      "location": "Voluptates quis ex e",
+      "work_type": "onsite",
+      "experience_level": "junior",
+      "salary_min": 4000,
+      "salary_max": 5999,
+      "technologies": [
+        "Vue.js",
+        "Node.js",
+        "Python"
+      ],
+      "description": "Doloremque repellend",
+      "requirements": "Ad sed adipisicing e",
+      "benefits": "Sint quam quam molli",
+      "employer_id": "8",
+      "status": "active",
+      "created_at": "2026-03-30T10:38:30.269Z",
+      "updated_at": "2026-03-30T10:38:30.269Z",
+      "id": "ntpzmdc7TUk"
     }
   ],
   "job_skills": [
@@ -1783,6 +1933,21 @@
       "job_id": "aZm32a0vAFs",
       "skill_id": "2",
       "id": "yPDJkxzj72U"
+    },
+    {
+      "job_id": "ntpzmdc7TUk",
+      "skill_id": "1",
+      "id": "ZLcN-Hvb8t0"
+    },
+    {
+      "job_id": "ntpzmdc7TUk",
+      "skill_id": "4",
+      "id": "spHxyxoFF3k"
+    },
+    {
+      "job_id": "ntpzmdc7TUk",
+      "skill_id": "6",
+      "id": "mFcPKvaVWW0"
     }
   ],
   "applications": [
@@ -2244,6 +2409,51 @@
       "status": "pending",
       "applied_at": "2026-03-29T17:34:04.212Z",
       "id": "Bq7e_tETGMI"
+    },
+    {
+      "candidate_id": "rZ29pg_UTnI",
+      "job_id": "ntpzmdc7TUk",
+      "cover_letter": "anthing",
+      "candidate_snapshot": {
+        "name": "abood",
+        "email": "abood@jobplatform.com",
+        "title": "senior",
+        "location": "Egypt",
+        "bio": "anything"
+      },
+      "status": "pending",
+      "applied_at": "2026-03-30T11:09:35.740Z",
+      "id": "_Eo4XIw-SEs"
+    },
+    {
+      "candidate_id": "1MbzH0f4UQA",
+      "job_id": "ntpzmdc7TUk",
+      "cover_letter": "sssss",
+      "candidate_snapshot": {
+        "name": "so",
+        "email": "so@jobplatform.com",
+        "title": "senior",
+        "location": "Egypt",
+        "bio": "ss"
+      },
+      "status": "accepted",
+      "applied_at": "2026-03-30T11:15:39.771Z",
+      "id": "D_DoV-mnRp0"
+    },
+    {
+      "candidate_id": "3",
+      "job_id": "ntpzmdc7TUk",
+      "cover_letter": "aaaatttttt",
+      "candidate_snapshot": {
+        "name": "Omar Hassan",
+        "email": "omar.hassan@email.com",
+        "title": "senior backend",
+        "location": "Alexandria, Egypt",
+        "bio": "Backend developer specializing in Laravel and RESTful APIs. Experienced in building high-performance systems and integrating third-party services."
+      },
+      "status": "accepted",
+      "applied_at": "2026-03-30T11:23:45.592Z",
+      "id": "RqaTAuEOqsc"
     }
   ],
   "application_stages": [

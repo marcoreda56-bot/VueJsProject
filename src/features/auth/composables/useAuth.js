@@ -22,7 +22,7 @@ export function useAuth() {
       } else {
         error.value = 'error in email or password'
       }
-    } catch (err) {
+    } catch {
       error.value = 'server error connection'
     } finally {
       isLoading.value = false
@@ -41,10 +41,7 @@ export function useAuth() {
         return false
       }
 
-      const fixedId = window.crypto.randomUUID()
-
       const userRes = await api.post('/users', {
-        id: fixedId,
         ...userData,
         role: role,
         created_at: new Date().toISOString(),
@@ -54,8 +51,8 @@ export function useAuth() {
 
       if (newUser && role === 'candidate') {
         await api.post('/candidates', {
-          id: fixedId,
-          user_id: fixedId,
+          id: newUser.id,
+          user_id: newUser.id,
           title: '',
           location: 'Egypt',
           bio: '',
@@ -63,7 +60,8 @@ export function useAuth() {
         })
       } else if (newUser && role === 'employer') {
         await api.post('/employers', {
-          id: fixedId,
+          id: newUser.id,
+          user_id: newUser.id,
           company_name: userData.company_name || '',
           location: 'Egypt',
           bio: '',
