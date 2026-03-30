@@ -50,7 +50,7 @@ const updateJobStatus = async (jobId, status) => {
   try {
     await adminStore.updateJobStatus(jobId, status)
     Swal.fire({ title: 'Updated!', icon: 'success', timer: 1500, showConfirmButton: false })
-  } catch (err) {
+  } catch {
     Swal.fire('Error', 'Failed to update job status.', 'error')
   } finally {
     actionLoading.value = null
@@ -72,7 +72,7 @@ const deleteJob = async (jobId) => {
   try {
     await adminStore.deleteJob(jobId)
     Swal.fire({ title: 'Deleted!', text: 'Job posting has been removed.', icon: 'success', timer: 1500, showConfirmButton: false })
-  } catch (err) {
+  } catch {
     Swal.fire('Error', 'Failed to delete job.', 'error')
   } finally {
     actionLoading.value = null
@@ -139,7 +139,7 @@ const submitJob = async () => {
     showModal.value = false
     resetForm()
     Swal.fire({ title: 'Published!', text: 'Job listing has been created successfully.', icon: 'success', timer: 2000, showConfirmButton: false })
-  } catch (err) {
+  } catch {
     Swal.fire('Error', 'Failed to create job listing.', 'error')
   } finally {
     submitLoading.value = false

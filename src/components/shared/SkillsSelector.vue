@@ -88,7 +88,17 @@
             ></i>
           </button>
         </div>
-        <div v-else class="p-4 text-center">
+        <div v-if="searchQuery.trim() && !exactMatch" class="p-2 border-t border-slate-50 dark:border-slate-800 mt-2">
+          <button
+            type="button"
+            @click.stop="addSkill(searchQuery.trim())"
+            class="w-full text-left px-4 py-3 rounded-xl text-sm font-bold text-indigo-600 bg-indigo-50 dark:bg-indigo-500/10 hover:bg-indigo-100 transition-all flex items-center gap-2 cursor-pointer"
+          >
+            <i class="pi pi-plus-circle text-xs"></i>
+            Add "{{ searchQuery.trim() }}" as a new skill
+          </button>
+        </div>
+        <div v-else-if="filteredSkills.length === 0 && !searchQuery.trim()" class="p-4 text-center">
           <p class="text-sm text-slate-400 italic">
             {{ skills.length === 0 ? 'Loading skills...' : 'No matching skills found.' }}
           </p>
@@ -168,6 +178,11 @@ const filteredSkills = computed(() => {
   return props.skills.filter(
     (s) => s.name.toLowerCase().includes(query) && !props.modelValue.includes(s.id),
   )
+})
+
+const exactMatch = computed(() => {
+  const query = searchQuery.value.toLowerCase().trim()
+  return props.skills.some((s) => s.name.toLowerCase() === query)
 })
 
 watch(searchQuery, () => {

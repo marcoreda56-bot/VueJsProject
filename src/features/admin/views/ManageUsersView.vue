@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useAdminStore } from '@/stores/admin.store'
 import { useAuthStore } from '@/stores/auth.store'
 import Swal from 'sweetalert2'
@@ -55,7 +55,7 @@ const toggleUserStatus = async (user) => {
       timer: 1500,
       showConfirmButton: false
     })
-  } catch (err) {
+  } catch {
     Swal.fire('Error', 'Failed to update user status.', 'error')
   } finally {
     actionLoading.value = null

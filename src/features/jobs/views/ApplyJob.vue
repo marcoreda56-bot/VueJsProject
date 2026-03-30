@@ -120,7 +120,7 @@ const handleApply = async () => {
     })
 
     router.push({ name: 'candidate.applications' })
-  } catch (err) {
+  } catch {
     Swal.fire('Error', 'Something went wrong with the server.', 'error')
   } finally {
     loading.value = false

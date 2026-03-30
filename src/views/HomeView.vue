@@ -94,10 +94,6 @@ const getCategoryStyle = (iconName) => {
   }
 }
 
-const getCompanyName = (employerId) => {
-  const employer = jobStore.employers.find((e) => String(e.id) === String(employerId))
-  return employer?.company_name || 'HireMasr Partner'
-}
 </script>
 
 <template>

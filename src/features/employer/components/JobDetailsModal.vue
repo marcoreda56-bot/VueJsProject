@@ -139,7 +139,7 @@ const props = defineProps({
   }
 })
 
-defineEmits(['close', 'edit'])
+const emit = defineEmits(['close', 'edit'])
 
 const formatDate = (dateStr) => {
   if (!dateStr) return 'N/A'

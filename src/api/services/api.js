@@ -44,9 +44,21 @@ export const candidatesApi = {
   create: (data) => api.post('/candidates', data),
   update: (id, data) => api.patch(`/candidates/${id}`, data),
   delete: (id) => api.delete(`/candidates/${id}`),
-  getEducation: (candidateId) => api.get(`/candidate_education?candidate_id=${candidateId}`),
-  getExperience: (candidateId) => api.get(`/candidate_experiences?candidate_id=${candidateId}`),
   getByUser: (userId) => api.get(`/candidates?user_id=${userId}`),
+}
+
+export const candidateEducationApi = {
+  getByCandidate: (candidateId) => api.get(`/candidate_education?candidate_id=${candidateId}`),
+  create: (data) => api.post('/candidate_education', data),
+  update: (id, data) => api.patch(`/candidate_education/${id}`, data),
+  delete: (id) => api.delete(`/candidate_education/${id}`),
+}
+
+export const candidateExperienceApi = {
+  getByCandidate: (candidateId) => api.get(`/candidate_experiences?candidate_id=${candidateId}`),
+  create: (data) => api.post('/candidate_experiences', data),
+  update: (id, data) => api.patch(`/candidate_experiences/${id}`, data),
+  delete: (id) => api.delete(`/candidate_experiences/${id}`),
 }
 
 export const employersApi = {
@@ -87,10 +99,13 @@ export const applicationsApi = {
 
 export const skillsApi = {
   getAll: () => api.get('/skills'),
+  create: (data) => api.post('/skills', data),
 }
 
 export const candidateSkillsApi = {
   getByCandidate: (candidateId) => api.get(`/candidate_skills?candidate_id=${candidateId}`),
+  create: (data) => api.post('/candidate_skills', data),
+  delete: (id) => api.delete(`/candidate_skills/${id}`),
 }
 
 export const jobSkillsApi = {

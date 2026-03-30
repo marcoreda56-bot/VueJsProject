@@ -10,11 +10,6 @@ const router = useRouter()
 const mobileMenu = ref(false)
 const isDark = ref(false)
 
-const navSearch = ref('')
-
-const handleSearch = () => {
-  router.push({ name: 'jobs', query: { q: navSearch.value } })
-}
 
 const isLoggedIn = computed(() => !!auth.token)
 const currentUser = computed(() => auth.user)

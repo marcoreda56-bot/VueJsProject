@@ -240,7 +240,6 @@ const loading = ref(true)
 const saving = ref(false)
 const form = ref(null)
 const errors = ref({})
-const techInput = ref('')
 
 const workTypes = [
   { label: 'Remote', value: 'remote' },

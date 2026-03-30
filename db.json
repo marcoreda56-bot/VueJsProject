@@ -320,6 +320,14 @@
       "role": "candidate",
       "created_at": "2026-03-30T11:15:01.391Z",
       "id": "1MbzH0f4UQA"
+    },
+    {
+      "name": "adooob",
+      "email": "adooob@jobplatform.com",
+      "password": "123456789",
+      "role": "candidate",
+      "created_at": "2026-03-30T12:15:29.552Z",
+      "id": "cQshl4U3d_M"
     }
   ],
   "candidates": [
@@ -409,10 +417,10 @@
     },
     {
       "id": "3",
-      "user_id": 3,
+      "user_id": "3",
       "headline": "Backend Developer | Laravel & PHP",
-      "bio": "Backend developer specializing in Laravel and RESTful APIs. Experienced in building high-performance systems and integrating third-party services.",
-      "location": "Alexandria, Egypt",
+      "bio": "",
+      "location": "Egypt",
       "experience_years": 4,
       "education_level": "bachelor",
       "resume_url": "/resumes/omar-hassan-cv.pdf",
@@ -430,8 +438,9 @@
       "currency": "EGP",
       "profile_completion": 75,
       "created_at": "2024-03-05T10:00:00Z",
-      "updated_at": "2026-03-24T19:14:11.236Z",
-      "title": "senior backend"
+      "updated_at": "2026-03-30T11:43:23.962Z",
+      "title": "sen",
+      "skills": []
     },
     {
       "id": "4",
@@ -801,15 +810,16 @@
     {
       "id": "cs8iRrqxyY8",
       "user_id": "rZ29pg_UTnI",
-      "title": "senior",
+      "title": "senior react dev",
       "location": "Egypt",
       "bio": "anything",
       "skills": [
         "4",
         "6",
-        "2"
+        "2",
+        "30"
       ],
-      "updated_at": "2026-03-30T11:08:59.641Z"
+      "updated_at": "2026-03-30T12:14:18.837Z"
     },
     {
       "id": "NICI-LWJKyY",
@@ -829,6 +839,19 @@
         "3"
       ],
       "updated_at": "2026-03-30T11:15:24.142Z"
+    },
+    {
+      "id": "YZcRn-Tzqiw",
+      "user_id": "cQshl4U3d_M",
+      "title": "php developer",
+      "location": "Egypt",
+      "bio": "php is the best",
+      "skills": [
+        "1",
+        "4",
+        "3"
+      ],
+      "updated_at": "2026-03-30T12:16:36.597Z"
     }
   ],
   "candidate_education": [
@@ -875,6 +898,28 @@
       "end_year": 2021,
       "grade": "Excellent",
       "is_current": false
+    },
+    {
+      "degree": "computer ",
+      "institution": "minia",
+      "field_of_study": "cs",
+      "start_year": 2023,
+      "end_year": 2026,
+      "grade": "good",
+      "is_current": false,
+      "candidate_id": "cs8iRrqxyY8",
+      "id": "8LF2u0XZ7p8"
+    },
+    {
+      "degree": "",
+      "institution": "",
+      "field_of_study": "",
+      "start_year": 2026,
+      "end_year": 2026,
+      "grade": "",
+      "is_current": false,
+      "candidate_id": "cs8iRrqxyY8",
+      "id": "wfr3srEq4OM"
     }
   ],
   "candidate_experiences": [
@@ -925,6 +970,42 @@
       "end_date": null,
       "is_current": true,
       "description": "Owning the merchant dashboard product with a team of 8 engineers and 2 designers."
+    },
+    {
+      "title": "develope ",
+      "company": "google",
+      "location": "minia",
+      "job_type": "full_time",
+      "start_date": "2024-06-05",
+      "end_date": null,
+      "is_current": true,
+      "description": "hello",
+      "candidate_id": "cs8iRrqxyY8",
+      "id": "itLt4mr8OKU"
+    },
+    {
+      "title": "",
+      "company": "",
+      "location": "",
+      "job_type": "full_time",
+      "start_date": "2026-03-30",
+      "end_date": null,
+      "is_current": true,
+      "description": "",
+      "candidate_id": "cs8iRrqxyY8",
+      "id": "jZos7_BpbcU"
+    },
+    {
+      "title": "developer",
+      "company": "Akex",
+      "location": "minai",
+      "job_type": "freelance",
+      "start_date": "2025-06-05",
+      "end_date": null,
+      "is_current": true,
+      "description": "I am happy",
+      "candidate_id": "YZcRn-Tzqiw",
+      "id": "l05xF6hgIkg"
     }
   ],
   "employers": [
@@ -1329,24 +1410,6 @@
       "level": "intermediate"
     },
     {
-      "id": "9",
-      "candidate_id": 3,
-      "skill_id": 3,
-      "level": "expert"
-    },
-    {
-      "id": "10",
-      "candidate_id": 3,
-      "skill_id": 7,
-      "level": "advanced"
-    },
-    {
-      "id": "11",
-      "candidate_id": 3,
-      "skill_id": 9,
-      "level": "intermediate"
-    },
-    {
       "id": "12",
       "candidate_id": 4,
       "skill_id": 20,
@@ -1387,6 +1450,66 @@
       "candidate_id": 5,
       "skill_id": 18,
       "level": "advanced"
+    },
+    {
+      "candidate_id": "3",
+      "skill_id": "1",
+      "level": "intermediate",
+      "id": "Wx510-deEuk"
+    },
+    {
+      "candidate_id": "3",
+      "skill_id": "1",
+      "level": "intermediate",
+      "id": "4IPmdFC81ss"
+    },
+    {
+      "candidate_id": "3",
+      "skill_id": "2",
+      "level": "intermediate",
+      "id": "a-zt9nrH9r4"
+    },
+    {
+      "candidate_id": "cs8iRrqxyY8",
+      "skill_id": "4",
+      "level": "intermediate",
+      "id": "kxlHSwk_t_U"
+    },
+    {
+      "candidate_id": "cs8iRrqxyY8",
+      "skill_id": "6",
+      "level": "intermediate",
+      "id": "Ogzfx15fPlc"
+    },
+    {
+      "candidate_id": "cs8iRrqxyY8",
+      "skill_id": "2",
+      "level": "intermediate",
+      "id": "ydsKTFqZh9o"
+    },
+    {
+      "candidate_id": "cs8iRrqxyY8",
+      "skill_id": "30",
+      "level": "intermediate",
+      "id": "XpiFIteq6Gk"
+    },
+    {
+      "candidate_id": "YZcRn-Tzqiw",
+      "skill_id": "1",
+      "level": "intermediate",
+      "id": "NpRHivuy4E8"
+    },
+    {
+      "candidate_id": "YZcRn-Tzqiw",
+      "skill_id": "4",
+      "level": "intermediate",
+      "id": "DR9aS8HAnHI"
+    },
+    {
+      "candidate_id": "YZcRn-Tzqiw",
+      "skill_id": "3",
+      "level": "intermediate",
+      "id": "mLRLrSvqAOg"
     }
   ],
   "jobs": [
@@ -2391,7 +2514,7 @@
         "location": "Cairo, Egypt",
         "bio": "Passionate frontend developer with 5 years of experience building scalable web applications. Specialized in Vue.js, React, and modern CSS frameworks."
       },
-      "status": "accepted",
+      "status": "rejected",
       "applied_at": "2026-03-29T15:49:07.501Z",
       "id": "btKwHMh2NzA"
     },
@@ -2454,6 +2577,21 @@
       "status": "accepted",
       "applied_at": "2026-03-30T11:23:45.592Z",
       "id": "RqaTAuEOqsc"
+    },
+    {
+      "candidate_id": "cQshl4U3d_M",
+      "job_id": "ntpzmdc7TUk",
+      "cover_letter": "You must accept me",
+      "candidate_snapshot": {
+        "name": "adooob",
+        "email": "adooob@jobplatform.com",
+        "title": "php developer",
+        "location": "Egypt",
+        "bio": "php is the best"
+      },
+      "status": "pending",
+      "applied_at": "2026-03-30T12:17:25.513Z",
+      "id": "ekHYsgUyWUI"
     }
   ],
   "application_stages": [

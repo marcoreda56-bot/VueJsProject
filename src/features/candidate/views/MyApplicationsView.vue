@@ -210,7 +210,7 @@ const handleWithdraw = async (appId) => {
     try {
       await candidateStore.withdrawApplication(appId)
       Swal.fire({ title: 'Removed', icon: 'success', timer: 2000, showConfirmButton: false })
-    } catch (error) {
+    } catch {
       Swal.fire('Error', 'Could not withdraw at this time.', 'error')
     }
   }

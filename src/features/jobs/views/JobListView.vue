@@ -221,7 +221,6 @@ watch(
 
 const selectedType = ref(null)
 const selectedCategory = ref(null)
-const showFilters = ref(false)
 
 const jobTypes = [
   { id: 'full_time', label: 'Full Time' },

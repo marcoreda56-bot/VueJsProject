@@ -29,21 +29,21 @@
             
             <div class="relative z-10 text-center">
               <div class="w-24 h-24 bg-indigo-50 dark:bg-indigo-500/10 rounded-[2rem] flex items-center justify-center text-indigo-600 text-4xl font-black italic mx-auto mb-6 border border-indigo-100 dark:border-indigo-500/20 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500">
-                {{ (details.candidate.name || 'C').charAt(0).toUpperCase() }}
+                {{ (details.candidate?.name || 'C').charAt(0).toUpperCase() }}
               </div>
-              <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight mb-1">{{ details.candidate.name }}</h2>
+              <h2 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight mb-1">{{ details.candidate?.name || 'Unknown' }}</h2>
               <p class="text-indigo-500 font-black text-[10px] uppercase tracking-widest italic mb-6">
-                {{ details.candidate.email }}
+                {{ details.candidate?.email || 'No email' }}
               </p>
               
               <div class="flex flex-col gap-3">
                 <div class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
                   <i class="pi pi-map-marker text-indigo-400"></i>
-                  <span class="text-sm font-bold text-slate-600 dark:text-slate-400">{{ details.candidate.location || 'N/A' }}</span>
+                  <span class="text-sm font-bold text-slate-600 dark:text-slate-400">{{ details.candidate?.location || 'N/A' }}</span>
                 </div>
-                <div v-if="details.candidate.phone" class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                <div v-if="details.candidate?.phone" class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
                   <i class="pi pi-phone text-indigo-400"></i>
-                  <span class="text-sm font-bold text-slate-600 dark:text-slate-400">{{ details.candidate.phone }}</span>
+                  <span class="text-sm font-bold text-slate-600 dark:text-slate-400">{{ details.candidate?.phone }}</span>
                 </div>
               </div>
             </div>
@@ -197,7 +197,7 @@ onMounted(async () => {
   try {
     const data = await employerStore.fetchApplicationDetails(route.params.id)
     details.value = data
-  } catch (err) {
+  } catch {
     Swal.fire('Error', 'Could not load application details.', 'error')
     router.push({ name: 'employer.applications' })
   } finally {
@@ -244,7 +244,7 @@ const updateStatus = async (status) => {
       showConfirmButton: false,
       customClass: { popup: 'rounded-[2rem] p-10' }
     })
-  } catch (err) {
+  } catch {
     Swal.fire('Error', 'Failed to update status.', 'error')
   }
 }

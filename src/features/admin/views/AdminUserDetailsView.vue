@@ -74,7 +74,7 @@ const toggleStatus = async () => {
       timer: 1500,
       showConfirmButton: false,
     })
-  } catch (err) {
+  } catch {
     Swal.fire('Error', 'Failed to update status.', 'error')
   } finally {
     actionLoading.value = false

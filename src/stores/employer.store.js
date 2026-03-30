@@ -8,6 +8,9 @@ import {
   jobSkillsApi,
   candidatesApi,
   candidateSkillsApi,
+  candidateEducationApi,
+  candidateExperienceApi,
+  usersApi,
 } from '@/api/services/api'
 import { useAuthStore } from './auth.store'
 
@@ -228,16 +231,35 @@ export const useEmployerStore = defineStore('employer', {
         const appRes = await applicationsApi.getById(appId)
         const application = appRes.data
 
-        // Use getByUser filter for robust candidate lookup
-        const candidateProfileRes = await candidatesApi.getByUser(application.candidate_id)
-        const candidate = candidateProfileRes.data?.[0] || null
+        // 1. Fetch User Record (Reliable source for name/email)
+        const userRes = await usersApi.getById(application.candidate_id).catch(() => ({ data: null }))
+        const user = userRes.data
 
-        // Fetch education and experience using the real Candidate PROFILE ID
-        const targetCandidateId = candidate?.id || application.candidate_id
+        // 2. Fetch Candidate Profile (For bio, location, education, etc.)
+        // Try searching by user_id first
+        let candidateProfileRes = await candidatesApi.getByUser(application.candidate_id).catch(() => ({ data: [] }))
+        let candidateProfile = candidateProfileRes.data?.[0] || null
+
+        // If not found, try searching by candidate record ID (fallback)
+        if (!candidateProfile) {
+          candidateProfileRes = await candidatesApi.getById(application.candidate_id).catch(() => ({ data: null }))
+          candidateProfile = candidateProfileRes.data
+        }
+
+        // 3. Merge User info into candidate object
+        const candidate = {
+          ...candidateProfile,
+          name: user?.name || candidateProfile?.name || 'Unknown Candidate',
+          email: user?.email || candidateProfile?.email || 'N/A',
+          phone: user?.phone || candidateProfile?.phone || '',
+        }
+
+        // 4. Fetch related data using the candidate record ID if available, otherwise user ID
+        const targetCandidateId = candidateProfile?.id || application.candidate_id
         const [eduRes, expRes, skillRes] = await Promise.all([
-          candidatesApi.getEducation(targetCandidateId),
-          candidatesApi.getExperience(targetCandidateId),
-          candidateSkillsApi.getByCandidate(targetCandidateId),
+          candidateEducationApi.getByCandidate(targetCandidateId).catch(() => ({ data: [] })),
+          candidateExperienceApi.getByCandidate(targetCandidateId).catch(() => ({ data: [] })),
+          candidateSkillsApi.getByCandidate(targetCandidateId).catch(() => ({ data: [] })),
         ])
 
         return {
