@@ -68,17 +68,18 @@ const routes = [
       {
         path: 'post-job',
         name: 'job-create',
-        component: () => import('@/views/employer/CreateJobView.vue'),
+        component: () => import('@/views/employer/PostJobView.vue'),
       },
       {
         path: 'edit-job/:id',
         name: 'job-edit',
         component: () => import('@/views/employer/EditJobView.vue'),
       },
+      // داخل router/index.js في قسم الـ employer
       {
         path: 'manage-jobs',
         name: 'employer-manage-jobs',
-        component: () => import('@/views/employer/DashboardView.vue'),
+        component: () => import('@/views/employer/ManageJobsView.vue'), // خليها ManageJobsView
       },
       {
         path: 'applications',
