@@ -1,191 +1,161 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/AuthStore'
+
+const routes = [
+  // --- Public Routes ---
+  {
+    path: '/',
+    name: 'home',
+    component: () => import('@/views/HomeView.vue'),
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/auth/LoginView.vue'),
+    meta: { guest: true },
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('@/views/auth/RegisterView.vue'),
+    meta: { guest: true },
+  },
+  {
+    path: '/jobs',
+    name: 'jobs',
+    component: () => import('@/views/jobs/JobListView.vue'),
+  },
+  {
+    path: '/jobs/:slug',
+    name: 'job-details',
+    component: () => import('@/views/jobs/JobDetailView.vue'),
+  },
+
+  {
+    path: '/candidate',
+    component: () => import('@/layouts/CandidateLayout.vue'),
+    meta: { requiresAuth: true, role: 'candidate' },
+    children: [
+      {
+        path: 'dashboard',
+        name: 'candidate-dashboard',
+        component: () => import('@/views/candidate/DashboardView.vue'),
+      },
+      {
+        path: 'profile',
+        name: 'candidate-profile',
+        component: () => import('@/views/candidate/ProfileView.vue'),
+      },
+      {
+        path: 'applications',
+        name: 'candidate-applications',
+        component: () => import('@/views/candidate/DashboardView.vue'),
+      },
+    ],
+  },
+
+  // --- Employer Routes ---
+  {
+    path: '/employer',
+    component: () => import('@/layouts/EmployerLayout.vue'),
+    meta: { requiresAuth: true, role: 'employer' },
+    children: [
+      {
+        path: 'dashboard',
+        name: 'employer-dashboard',
+        component: () => import('@/views/employer/DashboardView.vue'),
+      },
+      {
+        path: 'post-job',
+        name: 'job-create',
+        component: () => import('@/views/employer/CreateJobView.vue'),
+      },
+      {
+        path: 'edit-job/:id',
+        name: 'job-edit',
+        component: () => import('@/views/employer/EditJobView.vue'),
+      },
+      {
+        path: 'manage-jobs',
+        name: 'employer-manage-jobs',
+        component: () => import('@/views/employer/DashboardView.vue'),
+      },
+      {
+        path: 'applications',
+        name: 'employer-applications',
+        component: () => import('@/views/employer/ApplicationsView.vue'),
+      },
+    ],
+  },
+
+  {
+    path: '/admin',
+    component: () => import('@/layouts/AdminLayout.vue'),
+    meta: { requiresAuth: true, role: 'admin' },
+    children: [
+      {
+        path: 'dashboard',
+        name: 'admin-dashboard',
+        component: () => import('@/views/admin/DashboardView.vue'),
+      },
+      {
+        path: 'management/taxonomy',
+        name: 'admin-taxonomy',
+        component: () => import('@/views/admin/TaxonomyView.vue'),
+      },
+      {
+        path: 'management/users',
+        name: 'admin-users',
+        component: () => import('@/views/admin/UsersView.vue'),
+      },
+      {
+        path: 'management/jobs',
+        name: 'admin-jobs',
+        component: () => import('@/views/admin/JobsModerationView.vue'),
+      },
+    ],
+  },
+
+  // --- 404 Route ---
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'not-found',
+    component: () => import('@/views/NotFoundView.vue'),
+  },
+]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    // 1. Public Routes
-    { path: '/', name: 'home', component: () => import('../views/HomeView.vue') },
-    { path: '/about', name: 'about', component: () => import('../views/AboutView.vue') },
-    {
-      path: '/jobs',
-      name: 'public.jobs',
-      component: () => import('@/features/jobs/views/JobListView.vue'),
-    },
-    {
-      path: '/jobs/:id',
-      name: 'job.detail',
-      component: () => import('@/features/jobs/views/JobDetailsView.vue'),
-    },
-
-    // 2. Auth Routes (Guest Only)
-    {
-      path: '/auth',
-      component: () => import('@/components/layout/AuthLayout.vue'),
-      meta: { guestOnly: true, hideNavbar: true },
-      children: [
-        {
-          path: 'login',
-          name: 'login',
-          component: () => import('@/features/auth/views/LoginView.vue'),
-        },
-        {
-          path: 'register',
-          name: 'register',
-          component: () => import('@/features/auth/views/RegisterView.vue'),
-        },
-      ],
-    },
-
-    // 3. Candidate Routes
-    {
-      path: '/candidate',
-      component: () => import('@/components/layout/CandidateLayout.vue'),
-      meta: { requiresAuth: true, role: 'candidate', hideNavbar: true },
-      children: [
-        {
-          path: 'dashboard',
-          name: 'candidate.dashboard',
-          component: () => import('@/features/candidate/views/DashboardView.vue'),
-        },
-        {
-          path: 'find-jobs',
-          name: 'candidate.find-jobs',
-          component: () => import('@/features/jobs/views/JobListView.vue'),
-        },
-        {
-          path: 'jobs/:id',
-          name: 'candidate.job-details',
-          component: () => import('@/features/jobs/views/JobDetailsView.vue'),
-        },
-        {
-          path: 'jobs/:id/apply',
-          name: 'candidate.job-apply',
-          component: () => import('@/features/jobs/views/ApplyJob.vue'),
-        },
-        {
-          path: 'profile',
-          name: 'candidate.profile',
-          component: () => import('@/features/candidate/views/ProfileView.vue'),
-        },
-        {
-          path: 'applications',
-          name: 'candidate.applications',
-          component: () => import('@/features/candidate/views/MyApplicationsView.vue'),
-        },
-      ],
-    },
-
-    // 4. Employer Routes
-    {
-      path: '/employer',
-      component: () => import('@/components/layout/EmployerLayout.vue'),
-      meta: { requiresAuth: true, role: 'employer', hideNavbar: true },
-      children: [
-        {
-          path: 'dashboard',
-          name: 'employer.dashboard',
-          component: () => import('@/features/employer/views/EmployerDashboardView.vue'),
-        },
-        {
-          path: 'post-job',
-          name: 'employer.post-job',
-          component: () => import('@/features/employer/views/PostJobView.vue'),
-        },
-        {
-          path: 'manage-jobs',
-          name: 'employer.manage-jobs',
-          component: () => import('@/features/employer/views/ManageJobsView.vue'),
-        },
-        {
-          path: 'applications',
-          name: 'employer.applications',
-          component: () => import('@/features/employer/views/EmployerApplicationsView.vue'),
-        },
-        {
-          path: 'applications/:id',
-          name: 'employer.application-details',
-          component: () => import('@/features/employer/views/ApplicationDetailsView.vue'),
-        },
-        {
-          path: 'edit-job/:id',
-          name: 'employer.edit-job',
-          component: () => import('@/features/employer/views/EditJobView.vue'),
-        },
-        {
-          path: 'find-jobs',
-          name: 'employeer.find-jobs',
-          component: () => import('@/features/jobs/views/JobListView.vue'),
-        },
-      ],
-    },
-
-    // 5. Admin Routes
-    {
-      path: '/admin',
-      component: () => import('@/components/layout/AdminLayout.vue'),
-      meta: { requiresAuth: true, role: 'admin', hideNavbar: true },
-      children: [
-        {
-          path: 'dashboard',
-          name: 'admin.dashboard',
-          component: () => import('@/features/admin/views/AdminDashboardView.vue'),
-        },
-        {
-          path: 'management/users',
-          name: 'admin.users',
-          component: () => import('@/features/admin/views/ManageUsersView.vue'),
-        },
-        {
-          path: 'management/users/:id',
-          name: 'admin.user-details',
-          component: () => import('@/features/admin/views/AdminUserDetailsView.vue'),
-        },
-        {
-          path: 'management/jobs',
-          name: 'admin.jobs',
-          component: () => import('@/features/admin/views/ManageJobsView.vue'),
-        },
-        {
-          path: 'management/jobs/:id',
-          name: 'admin.job-details',
-          component: () => import('@/features/admin/views/AdminJobDetailsView.vue'),
-        },
-      ],
-    },
-
-    {
-      path: '/:pathMatch(.*)*',
-      name: 'not-found',
-      component: () => import('@/views/NotFoundView.vue'),
-    },
-  ],
+  history: createWebHistory(),
+  routes,
+  // Add scroll behavior for better UX
+  scrollBehavior(to, from, savedPosition) {
+    return savedPosition || { top: 0 }
+  },
 })
 
 // Navigation Guard
-router.beforeEach((to) => {
-  const token = localStorage.getItem('token')
-  let user = null
-  try {
-    user = JSON.parse(localStorage.getItem('user'))
-  } catch {
-    // Corrupted localStorage — clear and redirect to login
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
+router.beforeEach(async (to, from, next) => {
+  const auth = useAuthStore()
+
+  // 1. Check if route requires authentication
+  if (to.meta.requiresAuth && !auth.isAuthenticated) {
+    return next({ name: 'login' })
   }
 
-  if (token && user && (to.name === 'home' || to.meta.guestOnly)) {
-    return { name: `${user.role}.dashboard` }
+  // 2. Prevent authenticated users from visiting guest pages (Login/Register)
+  if (to.meta.guest && auth.isAuthenticated) {
+    // Redirect based on role instead of just home
+    if (auth.userRole === 'admin') return next({ name: 'admin-dashboard' })
+    if (auth.userRole === 'employer') return next({ name: 'employer-dashboard' })
+    return next({ name: 'candidate-dashboard' })
   }
 
-  if (to.meta.requiresAuth && (!token || !user)) {
-    return { name: 'login', query: { redirect: to.fullPath } }
+  // 3. Check Role Authorization
+  if (to.meta.role && auth.userRole !== to.meta.role) {
+    return next({ name: 'home' })
   }
 
-  if (to.meta.role && user && to.meta.role !== user.role) {
-    return { name: `${user.role}.dashboard` }
-  }
-
-  return true
+  next()
 })
 
 export default router

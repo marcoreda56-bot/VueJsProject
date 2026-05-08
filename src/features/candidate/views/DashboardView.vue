@@ -134,8 +134,8 @@
 <script setup>
 import { onMounted, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth.store'
-import { useCandidateStore } from '@/stores/candidate.store'
-import { useJobsStore } from '@/stores/jobs'
+import { useCandidateStore } from '@/stores/CandidateStore'
+import { useJobsStore } from '@/stores/JobStore'
 
 const auth = useAuthStore()
 const candidateStore = useCandidateStore()

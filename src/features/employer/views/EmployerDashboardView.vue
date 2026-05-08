@@ -5,19 +5,35 @@
       <section
         class="relative overflow-hidden bg-slate-900 rounded-[3rem] py-16 px-12 shadow-2xl animate-[fadeIn_0.8s_ease-out]"
       >
-        <div class="absolute -top-24 -right-24 w-96 h-96 bg-indigo-600/30 blur-[120px] rounded-full animate-pulse"></div>
-        <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-600/20 blur-[100px] rounded-full"></div>
+        <div
+          class="absolute -top-24 -right-24 w-96 h-96 bg-indigo-600/30 blur-[120px] rounded-full animate-pulse"
+        ></div>
+        <div
+          class="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-600/20 blur-[100px] rounded-full"
+        ></div>
         <div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
           <div>
-            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/10 rounded-full mb-5">
-              <span class="text-xs font-black text-indigo-400 uppercase tracking-[0.2em]">Employer Workspace</span>
+            <div
+              class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/10 rounded-full mb-5"
+            >
+              <span class="text-xs font-black text-indigo-400 uppercase tracking-[0.2em]"
+                >Employer Workspace</span
+              >
             </div>
-            <h1 class="text-5xl md:text-6xl font-black text-white tracking-tighter leading-[0.9] mb-4 italic">
+            <h1
+              class="text-5xl md:text-6xl font-black text-white tracking-tighter leading-[0.9] mb-4 italic"
+            >
               Hello, <span class="text-indigo-400">{{ firstName }}</span>
             </h1>
             <p class="text-slate-400 font-medium text-lg">
-              You have <span class="text-white border-b-2 border-indigo-500/50">{{ employerStore.jobs.length }} posted jobs</span> and
-              <span class="text-white border-b-2 border-indigo-500/50">{{ employerStore.pendingApplications.length }} pending applications</span>.
+              You have
+              <span class="text-white border-b-2 border-indigo-500/50"
+                >{{ employerStore.jobs.length }} posted jobs</span
+              >
+              and
+              <span class="text-white border-b-2 border-indigo-500/50"
+                >{{ employerStore.pendingApplications.length }} pending applications</span
+              >.
             </p>
           </div>
           <div class="flex gap-4">
@@ -51,15 +67,21 @@
         >
           <i :class="[stat.icon, stat.color]" class="text-xl"></i>
         </div>
-        <p class="text-slate-400 font-black text-[10px] uppercase tracking-[0.3em] mb-2">{{ stat.label }}</p>
-        <h3 class="text-4xl font-black text-slate-900 dark:text-white italic tracking-tighter">{{ stat.value }}</h3>
+        <p class="text-slate-400 font-black text-[10px] uppercase tracking-[0.3em] mb-2">
+          {{ stat.label }}
+        </p>
+        <h3 class="text-4xl font-black text-slate-900 dark:text-white italic tracking-tighter">
+          {{ stat.value }}
+        </h3>
       </div>
     </section>
 
     <!-- Recent Applications -->
     <section class="max-w-[1400px] mx-auto px-4 pb-20">
       <div class="flex items-center justify-between mb-8 px-2">
-        <h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tighter italic flex items-center gap-4">
+        <h2
+          class="text-3xl font-black text-slate-900 dark:text-white tracking-tighter italic flex items-center gap-4"
+        >
           <span class="w-10 h-[2px] bg-indigo-600"></span> Recent Applications
         </h2>
         <router-link
@@ -75,7 +97,9 @@
       </div>
 
       <div v-else-if="recentApplications.length === 0" class="text-center py-16">
-        <div class="w-20 h-20 bg-slate-100 dark:bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-3xl text-slate-300">
+        <div
+          class="w-20 h-20 bg-slate-100 dark:bg-slate-900 rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-3xl text-slate-300"
+        >
           <i class="pi pi-inbox"></i>
         </div>
         <p class="text-slate-400 font-bold italic text-lg">No applications yet.</p>
@@ -88,11 +112,15 @@
           class="group bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-7 rounded-[2.5rem] hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-500 flex flex-col md:flex-row justify-between items-center gap-6"
         >
           <div class="flex items-center gap-6">
-            <div class="w-14 h-14 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-indigo-600 font-black text-2xl group-hover:bg-indigo-600 group-hover:text-white transition-all">
+            <div
+              class="w-14 h-14 bg-slate-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-indigo-600 font-black text-2xl group-hover:bg-indigo-600 group-hover:text-white transition-all"
+            >
               {{ (app.candidate_snapshot?.name || 'C').charAt(0).toUpperCase() }}
             </div>
             <div>
-              <h4 class="text-xl font-black text-slate-900 dark:text-white tracking-tighter group-hover:text-indigo-600 transition-colors">
+              <h4
+                class="text-xl font-black text-slate-900 dark:text-white tracking-tighter group-hover:text-indigo-600 transition-colors"
+              >
                 {{ app.candidate_snapshot?.name || 'Candidate' }}
               </h4>
               <p class="text-slate-400 font-bold text-xs uppercase tracking-widest italic mt-1">
@@ -104,7 +132,10 @@
             </div>
           </div>
           <div class="flex items-center gap-4">
-            <span :class="statusStyle(app.status)" class="px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest border">
+            <span
+              :class="statusStyle(app.status)"
+              class="px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest border"
+            >
               {{ app.status }}
             </span>
             <router-link
@@ -123,7 +154,7 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth.store'
-import { useEmployerStore } from '@/stores/employer.store'
+import { useEmployerStore } from '@/stores/EmployerStore'
 
 const auth = useAuthStore()
 const employerStore = useEmployerStore()
@@ -165,9 +196,7 @@ const stats = computed(() => [
   },
 ])
 
-const recentApplications = computed(() =>
-  [...employerStore.applications].reverse().slice(0, 5)
-)
+const recentApplications = computed(() => [...employerStore.applications].reverse().slice(0, 5))
 
 const getJobTitle = (jobId) => {
   const job = employerStore.jobs.find((j) => String(j.id) === String(jobId))
@@ -176,12 +205,17 @@ const getJobTitle = (jobId) => {
 
 const formatDate = (dateStr) => {
   if (!dateStr) return '—'
-  return new Date(dateStr).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+  return new Date(dateStr).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  })
 }
 
 const statusStyle = (status) => {
   const s = (status || '').toLowerCase()
-  if (s === 'accepted') return 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-500/10'
+  if (s === 'accepted')
+    return 'bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-500/10'
   if (s === 'rejected') return 'bg-rose-50 text-rose-600 border-rose-100 dark:bg-rose-500/10'
   return 'bg-slate-50 text-slate-500 border-slate-100 dark:bg-slate-800'
 }
@@ -189,7 +223,13 @@ const statusStyle = (status) => {
 
 <style scoped>
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

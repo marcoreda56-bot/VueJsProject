@@ -83,7 +83,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth.store'
-import { useCandidateStore } from '@/stores/candidate.store'
+import { useCandidateStore } from '@/stores/CandidateStore'
 import Swal from 'sweetalert2'
 
 const auth = useAuthStore()

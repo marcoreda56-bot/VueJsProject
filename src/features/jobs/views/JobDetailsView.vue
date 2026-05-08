@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="job"
-    class="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 py-12 px-6 font-['Outfit']"
-  >
+  <div v-if="job" class="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 py-12 px-6 font-['Outfit']">
     <div class="max-w-5xl mx-auto">
       <button
         @click="$router.back()"
@@ -192,8 +189,8 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useJobsStore } from '@/stores/jobs'
-import { useCandidateStore } from '@/stores/candidate.store'
+import { useJobsStore } from '@/stores/JobStore'
+import { useCandidateStore } from '@/stores/CandidateStore'
 import { useAuthStore } from '@/stores/auth.store'
 import Swal from 'sweetalert2'
 

@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000',
-  timeout: 10000,
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
@@ -18,83 +18,107 @@ api.interceptors.request.use((config) => {
 })
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // بناءً على الـ Postman، البيانات تأتي دائماً داخل response.data.data
+    return response.data?.success ? response.data.data : response.data
+  },
   (error) => {
-    console.error('HireMasr API Error:', error.response?.data || error.message)
+    if (error.response?.status === 401) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login'
+      }
+    }
     return Promise.reject(error)
   },
 )
 
-export const usersApi = {
-  login: (email, password) => api.get(`/users?email=${email}&password=${password}`),
-  register: (data) => api.post('/users', data),
-  getAll: () => api.get('/users'),
-  getById: (id) => api.get(`/users/${id}`),
-  update: (id, data) => api.patch(`/users/${id}`, data),
-  delete: (id) => api.delete(`/users/${id}`),
-  getByRole: (role) => api.get(`/users?role=${role}`),
-  getCandidates: () => api.get('/users?role=candidate'),
-  getEmployers: () => api.get('/users?role=employer'),
-  getAdmins: () => api.get('/users?role=admin'),
+export const authApi = {
+  login: (credentials) => api.post('auth/login', credentials),
+  register: (data) => api.post('auth/register', data),
+  logout: () => api.post('auth/logout'),
+  me: () => api.get('/auth/me'),
 }
 
-export const candidatesApi = {
-  getAll: () => api.get('/candidates'),
-  getById: (id) => api.get(`/candidates/${id}`),
-  create: (data) => api.post('/candidates', data),
-  update: (id, data) => api.patch(`/candidates/${id}`, data),
-  delete: (id) => api.delete(`/candidates/${id}`),
-  getEducation: (candidateId) => api.get(`/candidate_education?candidate_id=${candidateId}`),
-  getExperience: (candidateId) => api.get(`/candidate_experiences?candidate_id=${candidateId}`),
+export const publicApi = {
+  // --- US2: Categories & Skills ---
+  getCategories: () => api.get('/categories'),
+  getCategoryBySlug: (slug) => api.get(`/categories/${slug}`),
+  getSkills: (categoryId = null) => api.get('/skills', { params: { category_id: categoryId } }),
+  getSkillsAutocomplete: (query) => api.get('/skills/autocomplete', { params: { q: query } }),
+
+  // Jobs & Employers
+  getJobs: (params) => api.get('/jobs', { params }),
+  getJobBySlug: (slug) => api.get(`/jobs/${slug}`),
+  getEmployers: (params) => api.get('/employers', { params }),
+  getEmployerBySlug: (slug) => api.get(`/employers/${slug}`),
 }
 
-export const employersApi = {
-  getAll: () => api.get('/employers'),
-  getById: (id) => api.get(`/employers/${id}`),
-  create: (data) => api.post('/employers', data),
-  update: (id, data) => api.put(`/employers/${id}`, data),
-  delete: (id) => api.delete(`/employers/${id}`),
+export const candidateApi = {
+  getProfile: () => api.get('/candidate/profile'),
+  updateProfile: (data) => api.put('/candidate/profile', data),
+
+  // Skills & Experience (US3.9 - 3.11)
+  addSkills: (data) => api.post('/candidate/skills', data),
+  deleteSkill: (skillId) => api.delete(`/candidate/skills/${skillId}`),
+  addExperience: (data) => api.post('/candidate/experience', data),
+  deleteExperience: (id) => api.delete(`/candidate/experience/${id}`),
+
+  // Resumes
+  uploadResume: (formData) =>
+    api.post('/candidate/resumes', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
+  getResumes: () => api.get('/candidate/resumes'),
+  setResumeDefault: (id) => api.patch(`/candidate/resumes/${id}/default`),
+  deleteResume: (id) => api.delete(`/candidate/resumes/${id}`),
+
+  // Applications
+  getApplications: () => api.get('/candidate/applications'),
+  applyForJob: (data) => api.post('/candidate/applications', data),
+  withdrawApplication: (id) => api.patch(`/candidate/applications/${id}/withdraw`),
+  getSavedJobs: () => api.get('/candidate/saved-jobs'),
+  toggleSaveJob: (jobId) => api.post('/candidate/saved-jobs', { job_id: jobId }),
 }
 
-export const jobsApi = {
-  getAll: () => api.get('/jobs'),
-  getById: (id) => api.get(`/jobs/${id}`),
-  getActive: () => api.get('/jobs?status=active'),
-  getByEmployer: (employerId) => api.get(`/jobs?employer_id=${employerId}`),
-  getByCategory: (categoryId) => api.get(`/jobs?category_id=${categoryId}`),
-  create: (data) => api.post('/jobs', data),
-  update: (id, data) => api.patch(`/jobs/${id}`, data),
-  delete: (id) => api.delete(`/jobs/${id}`),
+export const employerApi = {
+  getProfile: () => api.get('/employer/profile'),
+  updateProfile: (data) => api.put('/employer/profile', data),
+  getJobs: () => api.get('/employer/jobs'),
+  createJob: (data) => api.post('/employer/jobs', data),
+  updateJob: (id, data) => api.put(`/employer/jobs/${id}`, data),
+  getApplications: (params) => api.get('/employer/applications', { params }),
+  updateAppStatus: (id, statusData) => api.patch(`/employer/applications/${id}/status`, statusData),
+  scheduleInterview: (appId, data) => api.post(`/employer/applications/${appId}/interviews`, data),
 }
 
-export const categoriesApi = {
-  getAll: () => api.get('/categories'),
-  getById: (id) => api.get(`/categories/${id}`),
-  getActive: () => api.get('/categories?is_active=true'),
+export const adminApi = {
+  // --- US2: Admin Taxonomy Control ---
+  // Categories
+  createCategory: (data) => api.post('/admin/categories', data),
+  updateCategory: (id, data) => api.put(`/admin/categories/${id}`, data),
+  deleteCategory: (id) => api.delete(`/admin/categories/${id}`),
+
+  // Skills
+  createSkill: (data) => api.post('/admin/skills', data),
+  updateSkill: (id, data) => api.put(`/admin/skills/${id}`, data),
+  deleteSkill: (id) => api.delete(`/admin/skills/${id}`),
+
+  // General Admin Tasks
+  getStats: () => api.get('/admin/dashboard'),
+  getUsers: (params) => api.get('/admin/users', { params }),
+  updateUserStatus: (id, status) => api.patch(`/admin/users/${id}/status`, { status }),
+  getPendingJobs: () => api.get('/admin/jobs?status=pending'),
+  approveJob: (id) => api.patch(`/admin/jobs/${id}/status`, { status: 'active' }),
+  getPendingReviews: () => api.get('/admin/reviews'),
+  approveReview: (id) => api.patch(`/admin/reviews/${id}/approve`),
 }
 
-export const applicationsApi = {
-  getAll: () => api.get('/applications'),
-  getById: (id) => api.get(`/applications/${id}`),
-  getByJob: (jobId) => api.get(`/applications?job_id=${jobId}`),
-  getByCandidate: (candidateId) => api.get(`/applications?candidate_id=${candidateId}`),
-  create: (data) => api.post('/applications', data),
-  updateStatus: (id, status) => api.patch(`/applications/${id}`, { status }),
-  delete: (id) => api.delete(`/applications/${id}`),
-}
-
-export const skillsApi = {
-  getAll: () => api.get('/skills'),
-}
-
-export const candidateSkillsApi = {
-  getByCandidate: (candidateId) => api.get(`/candidate_skills?candidate_id=${candidateId}`),
-}
-
-export const jobSkillsApi = {
-  getByJob: (jobId) => api.get(`/job_skills?job_id=${jobId}`),
-  create: (data) => api.post('/job_skills', data),
-  delete: (id) => api.delete(`/job_skills/${id}`),
+export const notificationsApi = {
+  getAll: () => api.get('/notifications'),
+  markRead: (id) => api.patch(`/notifications/${id}/read`),
+  getUnreadCount: () => api.get('/notifications/unread-count'),
 }
 
 export default api

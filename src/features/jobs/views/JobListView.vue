@@ -206,7 +206,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useJobsStore } from '@/stores/jobs'
+import { useJobsStore } from '@/stores/JobStore'
 
 const route = useRoute()
 const jobStore = useJobsStore()

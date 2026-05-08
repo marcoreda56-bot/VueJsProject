@@ -173,8 +173,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useCandidateStore } from '@/stores/candidate.store'
-import { useJobsStore } from '@/stores/jobs'
+import { useCandidateStore } from '@/stores/CandidateStore'
+import { useJobsStore } from '@/stores/JobStore'
 import Swal from 'sweetalert2'
 
 const candidateStore = useCandidateStore()

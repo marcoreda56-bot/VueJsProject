@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useAdminStore } from '@/stores/admin.store'
+import { useAdminStore } from '@/stores/AdminStore'
 import { useAuthStore } from '@/stores/auth.store'
 import Swal from 'sweetalert2'
 
@@ -236,7 +236,9 @@ const formatDate = (dateString) => {
               <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
                 Professional Title
               </p>
-              <p class="font-bold text-indigo-600">{{ profileData.headline || profileData.title || 'N/A' }}</p>
+              <p class="font-bold text-indigo-600">
+                {{ profileData.headline || profileData.title || 'N/A' }}
+              </p>
             </div>
           </div>
 

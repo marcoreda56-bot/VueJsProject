@@ -10,9 +10,13 @@
           >
             <i class="pi pi-arrow-left text-sm"></i>
           </button>
-          <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Back to My Jobs</p>
+          <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">
+            Back to My Jobs
+          </p>
         </div>
-        <h1 class="text-5xl font-black text-slate-900 dark:text-white tracking-tighter italic leading-tight">
+        <h1
+          class="text-5xl font-black text-slate-900 dark:text-white tracking-tighter italic leading-tight"
+        >
           Edit <span class="text-indigo-600">Job</span>
         </h1>
         <p class="text-slate-500 font-medium mt-2">Update your job listing details below.</p>
@@ -25,7 +29,9 @@
 
       <!-- Not Found -->
       <div v-else-if="!form" class="text-center py-24">
-        <h3 class="text-3xl font-black text-slate-900 dark:text-white italic mb-4">Job Not Found</h3>
+        <h3 class="text-3xl font-black text-slate-900 dark:text-white italic mb-4">
+          Job Not Found
+        </h3>
         <button
           @click="$router.push({ name: 'employer.manage-jobs' })"
           class="px-8 py-4 bg-indigo-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-indigo-500 transition-all"
@@ -35,60 +41,83 @@
       </div>
 
       <!-- Form Card -->
-      <form v-else @submit.prevent="handleSubmit" class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] p-10 shadow-sm space-y-8">
-
+      <form
+        v-else
+        @submit.prevent="handleSubmit"
+        class="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-[2.5rem] p-10 shadow-sm space-y-8"
+      >
         <!-- Section: Basic Details -->
         <div>
-          <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
+          <h3
+            class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-5 flex items-center gap-3"
+          >
             <span class="w-6 h-[2px] bg-indigo-600"></span> Basic Details
           </h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="md:col-span-2">
-              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Job Title <span class="text-rose-500">*</span></label>
+              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2"
+                >Job Title <span class="text-rose-500">*</span></label
+              >
               <input
                 v-model="form.title"
                 type="text"
                 :class="[
-                  errors.title ? 'border-rose-500 ring-rose-500' : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
-                  'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all'
+                  errors.title
+                    ? 'border-rose-500 ring-rose-500'
+                    : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
+                  'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all',
                 ]"
               />
             </div>
             <div>
-              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Category <span class="text-rose-500">*</span></label>
+              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2"
+                >Category <span class="text-rose-500">*</span></label
+              >
               <select
                 v-model="form.category_id"
                 :class="[
-                  errors.category ? 'border-rose-500 ring-rose-500' : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
-                  'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all'
+                  errors.category
+                    ? 'border-rose-500 ring-rose-500'
+                    : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
+                  'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all',
                 ]"
               >
                 <option value="" disabled>Select category</option>
-                <option v-for="cat in employerStore.categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
+                <option v-for="cat in employerStore.categories" :key="cat.id" :value="cat.id">
+                  {{ cat.name }}
+                </option>
               </select>
             </div>
             <div>
-              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Location <span class="text-rose-500">*</span></label>
+              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2"
+                >Location <span class="text-rose-500">*</span></label
+              >
               <input
                 v-model="form.location"
                 type="text"
                 :class="[
-                  errors.location ? 'border-rose-500 ring-rose-500' : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
-                  'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all'
+                  errors.location
+                    ? 'border-rose-500 ring-rose-500'
+                    : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
+                  'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all',
                 ]"
               />
             </div>
             <div>
-              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Work Type <span class="text-rose-500">*</span></label>
+              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2"
+                >Work Type <span class="text-rose-500">*</span></label
+              >
               <div class="flex gap-3">
                 <button
                   v-for="type in workTypes"
                   :key="type.value"
                   type="button"
                   @click="form.work_type = type.value"
-                  :class="form.work_type === type.value
-                    ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg shadow-indigo-100'
-                    : 'bg-slate-50 dark:bg-slate-800 text-slate-500 border-slate-100 dark:border-slate-700 hover:border-indigo-300'"
+                  :class="
+                    form.work_type === type.value
+                      ? 'bg-indigo-600 text-white border-indigo-600 shadow-lg shadow-indigo-100'
+                      : 'bg-slate-50 dark:bg-slate-800 text-slate-500 border-slate-100 dark:border-slate-700 hover:border-indigo-300'
+                  "
                   class="flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all"
                 >
                   {{ type.label }}
@@ -96,7 +125,9 @@
               </div>
             </div>
             <div>
-              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Experience Level</label>
+              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2"
+                >Experience Level</label
+              >
               <select
                 v-model="form.experience_level"
                 class="w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
@@ -113,36 +144,49 @@
 
         <!-- Section: Salary -->
         <div>
-          <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
+          <h3
+            class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-5 flex items-center gap-3"
+          >
             <span class="w-6 h-[2px] bg-indigo-600"></span> Salary Range (EGP / Month)
           </h3>
           <div class="grid grid-cols-2 gap-6">
             <div>
-              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Min Salary</label>
+              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2"
+                >Min Salary</label
+              >
               <input
                 v-model.number="form.salary_min"
                 type="number"
                 min="0"
                 :class="[
-                  errors.salary ? 'border-rose-500 ring-rose-500' : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
-                  'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all'
+                  errors.salary
+                    ? 'border-rose-500 ring-rose-500'
+                    : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
+                  'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all',
                 ]"
               />
             </div>
             <div>
-              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2">Max Salary</label>
+              <label class="block text-xs font-black text-slate-500 uppercase tracking-widest mb-2"
+                >Max Salary</label
+              >
               <input
                 v-model.number="form.salary_max"
                 type="number"
                 min="0"
                 :class="[
-                  errors.salary ? 'border-rose-500 ring-rose-500' : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
-                  'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all'
+                  errors.salary
+                    ? 'border-rose-500 ring-rose-500'
+                    : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
+                  'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all',
                 ]"
               />
             </div>
           </div>
-          <p v-if="errors.salary" class="text-[10px] text-rose-500 mt-2 font-bold italic animate-[fadeIn_0.3s_ease-out]">
+          <p
+            v-if="errors.salary"
+            class="text-[10px] text-rose-500 mt-2 font-bold italic animate-[fadeIn_0.3s_ease-out]"
+          >
             <i class="pi pi-exclamation-circle text-[9px] mr-1"></i> {{ errors.salary }}
           </p>
         </div>
@@ -156,42 +200,56 @@
             required
             placeholder="Select required tech stack..."
           />
-          <p class="text-[10px] text-slate-400 mt-2 font-medium italic">Update the required technologies for this role.</p>
+          <p class="text-[10px] text-slate-400 mt-2 font-medium italic">
+            Update the required technologies for this role.
+          </p>
         </div>
 
         <!-- Section: Description -->
         <div>
-          <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
-            <span class="w-6 h-[2px] bg-indigo-600"></span> Job Description <span class="text-rose-500">*</span>
+          <h3
+            class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-5 flex items-center gap-3"
+          >
+            <span class="w-6 h-[2px] bg-indigo-600"></span> Job Description
+            <span class="text-rose-500">*</span>
           </h3>
           <textarea
             v-model="form.description"
             rows="5"
             :class="[
-              errors.description ? 'border-rose-500 ring-rose-500' : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
-              'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all resize-none leading-relaxed'
+              errors.description
+                ? 'border-rose-500 ring-rose-500'
+                : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
+              'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all resize-none leading-relaxed',
             ]"
           ></textarea>
         </div>
 
         <!-- Section: Requirements -->
         <div>
-          <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
-            <span class="w-6 h-[2px] bg-indigo-600"></span> Requirements <span class="text-rose-500">*</span>
+          <h3
+            class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-5 flex items-center gap-3"
+          >
+            <span class="w-6 h-[2px] bg-indigo-600"></span> Requirements
+            <span class="text-rose-500">*</span>
           </h3>
           <textarea
             v-model="form.requirements"
             rows="5"
             :class="[
-              errors.requirements ? 'border-rose-500 ring-rose-500' : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
-              'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all resize-none leading-relaxed'
+              errors.requirements
+                ? 'border-rose-500 ring-rose-500'
+                : 'border-slate-100 dark:border-slate-700 focus:ring-indigo-500',
+              'w-full px-5 py-4 bg-slate-50 dark:bg-slate-800 border rounded-2xl font-medium text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 transition-all resize-none leading-relaxed',
             ]"
           ></textarea>
         </div>
 
         <!-- Section: Benefits -->
         <div>
-          <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
+          <h3
+            class="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] mb-5 flex items-center gap-3"
+          >
             <span class="w-6 h-[2px] bg-indigo-600"></span> Benefits
           </h3>
           <textarea
@@ -202,7 +260,9 @@
         </div>
 
         <!-- Actions -->
-        <div class="flex items-center justify-between pt-6 border-t border-slate-50 dark:border-slate-800">
+        <div
+          class="flex items-center justify-between pt-6 border-t border-slate-50 dark:border-slate-800"
+        >
           <button
             type="button"
             @click="$router.push({ name: 'employer.manage-jobs' })"
@@ -227,7 +287,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useEmployerStore } from '@/stores/employer.store'
+import { useEmployerStore } from '@/stores/EmployerStore'
 import { jobsApi, jobSkillsApi } from '@/api/services/api'
 import SkillsSelector from '@/components/shared/SkillsSelector.vue'
 import Swal from 'sweetalert2'
@@ -274,7 +334,7 @@ onMounted(async () => {
     let jobSkillIds = []
     try {
       const skillsRes = await jobSkillsApi.getByJob(job.id)
-      jobSkillIds = skillsRes.data.map(s => s.skill_id)
+      jobSkillIds = skillsRes.data.map((s) => s.skill_id)
     } catch (err) {
       console.error('Failed to fetch job skills:', err)
     }
@@ -297,19 +357,19 @@ onMounted(async () => {
 
 const validateForm = () => {
   const errs = {}
-  
+
   if (!form.value.title?.trim()) errs.title = 'Job title is required'
   if (!form.value.category_id) errs.category = 'Please select a category'
   if (!form.value.location?.trim()) errs.location = 'Location is required'
   if (!form.value.description?.trim()) errs.description = 'Job description is required'
   if (!form.value.requirements?.trim()) errs.requirements = 'Requirements are required'
-  
+
   if (form.value.salary_min && form.value.salary_max) {
     if (Number(form.value.salary_min) >= Number(form.value.salary_max)) {
       errs.salary = 'Minimum salary must be less than maximum salary'
     }
   }
-  
+
   errors.value = errs
   return Object.keys(errs).length === 0
 }
@@ -324,12 +384,12 @@ const handleSubmit = async () => {
     })
     return
   }
-  
+
   saving.value = true
   try {
     // Sync technologies array for backward compatibility
-    const selectedSkills = employerStore.skills.filter(s => form.value.skills.includes(s.id))
-    form.value.technologies = selectedSkills.map(s => s.name)
+    const selectedSkills = employerStore.skills.filter((s) => form.value.skills.includes(s.id))
+    form.value.technologies = selectedSkills.map((s) => s.name)
 
     await employerStore.updateJob(route.params.id, form.value)
 

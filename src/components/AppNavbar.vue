@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { useAuthStore } from '@/stores/auth.store'
+import { useAuthStore } from '@/stores/AuthStore'
 import { useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import Avatar from 'primevue/avatar'
@@ -103,13 +103,13 @@ onMounted(() => {
 
         <template v-else>
           <div class="flex items-center gap-2">
-            <router-link to="/auth/login"
+            <router-link to="/login"
               ><Button
                 label="Login"
                 class="!text-slate-600 dark:!text-slate-300 !border-none !text-[10px] !font-black !uppercase"
                 text
             /></router-link>
-            <router-link to="/auth/register"
+            <router-link to="/register"
               ><Button
                 label="Join"
                 class="!bg-indigo-600 !text-white !border-none !px-5 !py-2.5 !rounded-xl !text-[10px] !font-black !uppercase shadow-lg shadow-indigo-600/20"

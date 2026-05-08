@@ -106,7 +106,7 @@
 <script setup>
 import { reactive, onMounted, ref, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth.store'
-import { useCandidateStore } from '@/stores/candidate.store'
+import { useCandidateStore } from '@/stores/CandidateStore'
 import { skillsApi } from '@/api/services/api'
 import SkillSelector from '@/components/shared/SkillsSelector.vue'
 import Swal from 'sweetalert2'
