@@ -115,6 +115,7 @@ const isMobileOpen = ref(false)
 
 const menuItems = [
   { name: 'Dashboard', path: '/employer/dashboard', icon: 'pi pi-th-large' },
+  { name: 'Company Profile', path: '/employer/profile', icon: 'pi pi-building' }, // جديد
   { name: 'Post Job', path: '/employer/post-job', icon: 'pi pi-plus-circle' },
   { name: 'My Jobs', path: '/employer/manage-jobs', icon: 'pi pi-briefcase' },
   { name: 'Applications', path: '/employer/applications', icon: 'pi pi-inbox', badge: '3' },
