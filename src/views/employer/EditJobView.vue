@@ -153,6 +153,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { employerApi, publicApi } from '@/api/services/api'
+import Swal from 'sweetalert2' // استيراد SweetAlert
 
 const route = useRoute()
 const router = useRouter()
@@ -167,15 +168,33 @@ const form = ref({
   category_id: '',
   description: '',
   requirements: 'N/A',
-  type: '',
+  responsibilities: '',
+  benefits: '',
+  type: 'full_time',
   workplace_type: 'on_site',
-  experience_level: '',
+  experience_level: 'junior',
+  salary_min: 0,
+  salary_max: 0,
+  location: '',
+  city: '',
   vacancies: 1,
   status: '',
   skills: [],
 })
 
 const isJobActive = computed(() => form.value.status === 'active')
+
+// دالة التنبيهات الموحدة
+const notify = (icon, title, text) => {
+  Swal.fire({
+    icon,
+    title,
+    text,
+    confirmButtonColor: '#6366f1',
+    background: document.documentElement.classList.contains('dark') ? '#0f172a' : '#fff',
+    color: document.documentElement.classList.contains('dark') ? '#fff' : '#000',
+  })
+}
 
 onMounted(async () => {
   try {
@@ -186,14 +205,12 @@ onMounted(async () => {
       publicApi.getSkills(),
     ])
 
-    // بما أن الـ Interceptor عمل "Unpacking" فعلياً:
-    // jobData هنا هو الـ Object اللي فيه الـ title والـ description مباشرة
-
     categories.value = Array.isArray(categoriesData) ? categoriesData : categoriesData?.data || []
     availableSkills.value = Array.isArray(skillsData) ? skillsData : skillsData?.data || []
 
     if (!jobData) throw new Error('Job data not found')
 
+    // تعبئة الفورم مع التأكد من وجود القيم
     form.value = {
       title: jobData.title || '',
       category_id: jobData.category_id || '',
@@ -203,7 +220,7 @@ onMounted(async () => {
       benefits: jobData.benefits || '',
       type: jobData.type || 'full_time',
       workplace_type: jobData.workplace_type || 'on_site',
-      experience_level: jobData.experience_level || '',
+      experience_level: jobData.experience_level || 'junior',
       salary_min: jobData.salary_min || 0,
       salary_max: jobData.salary_max || 0,
       location: jobData.location || '',
@@ -212,50 +229,89 @@ onMounted(async () => {
       status: jobData.status || 'draft',
       skills: Array.isArray(jobData.skills)
         ? jobData.skills.map((s) => ({
-            skill_id: s.skill_id || s.id,
+            skill_id: s.skill_id || s.id, // التعامل مع اختلاف مسميات الـ API
             is_required: s.is_required ?? true,
           }))
         : [],
     }
   } catch (err) {
     console.error('Fetch Error:', err)
-    alert('Failed to load job details')
+    notify('error', 'Fetch Failed', 'Could not load job details.')
   } finally {
     pageLoading.value = false
   }
 })
 
 const addSkill = () => {
-  if (
-    selectedSkillId.value &&
-    !form.value.skills.some((s) => s.skill_id === selectedSkillId.value)
-  ) {
-    form.value.skills.push({ skill_id: selectedSkillId.value, is_required: true })
+  if (!selectedSkillId.value) return
+
+  if (!form.value.skills.some((s) => s.skill_id === selectedSkillId.value)) {
+    form.value.skills.push({
+      skill_id: selectedSkillId.value,
+      is_required: true,
+    })
     selectedSkillId.value = ''
+  } else {
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'warning',
+      title: 'Skill already added',
+      showConfirmButton: false,
+      timer: 2000,
+    })
   }
 }
 
 const getSkillName = (id) => availableSkills.value.find((s) => s.id === id)?.name || 'Skill'
 
 const handleUpdate = async () => {
+  // التحقق من الحقول الإجبارية قبل الإرسال
+  if (form.value.skills.length === 0) {
+    notify('warning', 'Missing Skills', 'Please add at least one required skill.')
+    return
+  }
+
   loading.value = true
   try {
-    // استبعاد الحقول غير المطلوبة في الـ PUT
-    const { id, employer_id, created_at, updated_at, skills, ...payload } = form.value
-
-    // إرسال المهارات بالتنسيق الصحيح (array of objects)
-    const finalPayload = {
-      ...payload,
+    // 1. تجهيز الـ Payload الأساسي
+    const payload = {
+      title: form.value.title,
+      category_id: form.value.category_id,
+      description: form.value.description,
+      requirements: form.value.requirements,
+      responsibilities: form.value.responsibilities,
+      benefits: form.value.benefits,
+      type: form.value.type,
+      workplace_type: form.value.workplace_type,
+      experience_level: form.value.experience_level,
+      salary_min: form.value.salary_min,
+      salary_max: form.value.salary_max,
+      location: form.value.location,
+      city: form.value.city,
+      vacancies: form.value.vacancies,
+      // نرسل المهارات بـ ID فقط كما يتوقع Laravel Sync
       skills: form.value.skills.map((s) => ({
         skill_id: s.skill_id,
         is_required: s.is_required,
       })),
     }
 
-    await employerApi.updateJob(route.params.id, finalPayload)
+    await employerApi.updateJob(route.params.id, payload)
+
+    await Swal.fire({
+      icon: 'success',
+      title: 'Job Updated!',
+      text: 'The listing has been successfully modified.',
+      timer: 2000,
+      showConfirmButton: false,
+    })
+
     router.push('/employer/manage-jobs')
   } catch (err) {
-    alert(err.response?.data?.message || 'Update failed')
+    console.error('Update Error:', err)
+    const errorMsg = err.response?.data?.message || 'Check your inputs and try again.'
+    notify('error', 'Update Failed', errorMsg)
   } finally {
     loading.value = false
   }
