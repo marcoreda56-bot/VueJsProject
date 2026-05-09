@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { publicApi, employerApi } from '@/api/services/api'
-
+import api from '@/api/services/api'
 export const useJobStore = defineStore('jobs', {
   state: () => ({
     jobs: [],
@@ -42,14 +42,15 @@ export const useJobStore = defineStore('jobs', {
       }
     },
 
-    async fetchJobBySlug(slug) {
+    async fetchJobById(id) {
       this.loading = true
       try {
-        this.currentJob = await publicApi.getJobBySlug(slug)
-        return this.currentJob
-      } catch (err) {
-        this.error = 'Job not found'
-        throw err
+        const data = await api.get(`/jobs/${id}`)
+        this.currentJob = data
+        return data
+      } catch (error) {
+        console.error('Error fetching job details:', error)
+        throw error
       } finally {
         this.loading = false
       }

@@ -6,21 +6,19 @@ import { useAuthStore } from '@/stores/AuthStore'
 const authStore = useAuthStore()
 const router = useRouter()
 
-// الحقول هنا متقسمة عشان Laravel يرضى علينا
 const form = ref({
   first_name: '',
   last_name: '',
   email: '',
   password: '',
   password_confirmation: '',
-  role: 'candidate', // Default role
+  role: 'candidate',
 })
 
 const handleRegister = async () => {
   try {
     await authStore.register(form.value)
 
-    // لو مفيش أخطاء في الـ Store بعد المحاولة، حول المستخدم
     if (!authStore.error) {
       if (form.value.role === 'employer') {
         router.push('/employer/dashboard')

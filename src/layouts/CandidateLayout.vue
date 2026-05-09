@@ -121,7 +121,7 @@ const navLinks = [
   { name: 'Dashboard', path: '/candidate/dashboard', icon: 'pi pi-th-large' },
   { name: 'Applications', path: '/candidate/applications', icon: 'pi pi-send' },
   { name: 'Profile', path: '/candidate/profile', icon: 'pi pi-user' },
-  { name: 'Find Jobs', path: '/candidate/find-jobs', icon: 'pi pi-search' },
+  { name: 'Find Jobs', path: '/jobs', icon: 'pi pi-search' },
 ]
 
 const userAvatar = computed(

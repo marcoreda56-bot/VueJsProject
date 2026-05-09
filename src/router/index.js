@@ -9,6 +9,11 @@ const routes = [
     component: () => import('@/views/HomeView.vue'),
   },
   {
+    path: '/about',
+    name: 'about',
+    component: () => import('@/views/AboutView.vue'),
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('@/views/auth/LoginView.vue'),
@@ -26,11 +31,13 @@ const routes = [
     component: () => import('@/views/jobs/JobListView.vue'),
   },
   {
-    path: '/jobs/:slug',
+    path: '/jobs/:id',
     name: 'job-details',
     component: () => import('@/views/jobs/JobDetailView.vue'),
+    props: true,
   },
 
+  // --- Candidate Routes ---
   {
     path: '/candidate',
     component: () => import('@/layouts/CandidateLayout.vue'),
@@ -93,6 +100,7 @@ const routes = [
     ],
   },
 
+  // --- Admin Routes ---
   {
     path: '/admin',
     component: () => import('@/layouts/AdminLayout.vue'),
@@ -121,7 +129,6 @@ const routes = [
     ],
   },
 
-  // --- 404 Route ---
   {
     path: '/:pathMatch(.*)*',
     name: 'not-found',
@@ -132,9 +139,8 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  // Add scroll behavior for better UX
   scrollBehavior(to, from, savedPosition) {
-    return savedPosition || { top: 0 }
+    return savedPosition || { top: 0, behavior: 'smooth' }
   },
 })
 
@@ -142,20 +148,20 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const auth = useAuthStore()
 
-  // 1. Check if route requires authentication
   if (to.meta.requiresAuth && !auth.isAuthenticated) {
-    return next({ name: 'login' })
+    return next({ name: 'login', query: { redirect: to.fullPath } })
   }
 
-  // 2. Prevent authenticated users from visiting guest pages (Login/Register)
   if (to.meta.guest && auth.isAuthenticated) {
-    // Redirect based on role instead of just home
-    if (auth.userRole === 'admin') return next({ name: 'admin-dashboard' })
-    if (auth.userRole === 'employer') return next({ name: 'employer-dashboard' })
-    return next({ name: 'candidate-dashboard' })
+    const dash =
+      auth.userRole === 'admin'
+        ? 'admin-dashboard'
+        : auth.userRole === 'employer'
+          ? 'employer-dashboard'
+          : 'candidate-dashboard'
+    return next({ name: dash })
   }
 
-  // 3. Check Role Authorization
   if (to.meta.role && auth.userRole !== to.meta.role) {
     return next({ name: 'home' })
   }

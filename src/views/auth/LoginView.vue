@@ -1,10 +1,11 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/AuthStore'
 
 const authStore = useAuthStore()
 const router = useRouter()
+const route = useRoute()
 
 const email = ref('')
 const password = ref('')
@@ -16,11 +17,19 @@ const handleLogin = async () => {
       password: password.value,
     })
 
-    if (user.role === 'admin') router.push('/admin/dashboard')
-    else if (user.role === 'employer') router.push('/employer/dashboard')
-    else router.push('/candidate/dashboard')
+    if (user) {
+      const redirectTo = route.query.redirect
+
+      if (redirectTo) {
+        router.push(redirectTo)
+      } else {
+        if (user.role === 'admin') router.push('/admin/dashboard')
+        else if (user.role === 'employer') router.push('/employer/dashboard')
+        else router.push('/candidate/dashboard')
+      }
+    }
   } catch (err) {
-    console.error('Login error')
+    console.error('Login error:', err)
   }
 }
 </script>
@@ -41,6 +50,7 @@ const handleLogin = async () => {
         class="bg-white dark:bg-slate-900 p-10 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-2xl shadow-indigo-500/5"
       >
         <form @submit.prevent="handleLogin" class="space-y-6">
+          <!-- Error Message -->
           <div
             v-if="authStore.error"
             class="p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 rounded-2xl text-red-600 dark:text-red-400 text-xs font-bold uppercase tracking-widest text-center"

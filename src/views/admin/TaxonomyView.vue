@@ -1,6 +1,5 @@
 <template>
   <div class="space-y-12 font-['Outfit'] pb-20">
-    <!-- --- SECTION 1: CATEGORIES --- -->
     <section class="space-y-8">
       <header class="flex justify-between items-end">
         <div>
@@ -19,7 +18,6 @@
         </button>
       </header>
 
-      <!-- Categories Grid -->
       <div
         v-if="adminStore.categories.length > 0"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
@@ -41,7 +39,7 @@
                 <i class="pi pi-pencil text-xs"></i>
               </button>
               <button
-                @click="handleDeleteCategory(cat.id)"
+                @click="handleDeleteCategory(cat)"
                 class="w-10 h-10 rounded-xl bg-red-50 text-red-400 hover:text-red-600 transition-colors"
               >
                 <i class="pi pi-trash text-xs"></i>
@@ -56,7 +54,6 @@
       </div>
     </section>
 
-    <!-- --- SECTION 2: SKILLS --- -->
     <section class="space-y-8">
       <header class="flex justify-between items-end">
         <div>
@@ -91,7 +88,7 @@
               </p>
             </div>
             <button
-              @click="handleDeleteSkill(skill.id)"
+              @click="handleDeleteSkill(skill)"
               class="text-red-300 hover:text-red-600 transition-colors"
             >
               <i class="pi pi-times-circle"></i>
@@ -104,9 +101,6 @@
       </div>
     </section>
 
-    <!-- --- MODALS --- -->
-
-    <!-- Category Modal -->
     <Transition name="modal">
       <div
         v-if="modals.category"
@@ -163,7 +157,6 @@
       </div>
     </Transition>
 
-    <!-- Skill Modal -->
     <Transition name="modal">
       <div v-if="modals.skill" class="fixed inset-0 z-[100] flex items-center justify-center p-6">
         <div
@@ -216,6 +209,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useAdminStore } from '@/stores/AdminStore'
+import Swal from 'sweetalert2'
 
 const adminStore = useAdminStore()
 const loading = ref(false)
@@ -239,12 +233,18 @@ const availableIcons = [
 const catForm = reactive({ name: '', icon: 'pi-code' })
 const skillForm = reactive({ name: '', category_id: '' })
 
-// 1. Fetch data on mount (Layout handles most, but we call skills here)
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+})
+
 onMounted(async () => {
   if (adminStore.fetchSkills) await adminStore.fetchSkills()
 })
 
-// --- Category Logic ---
 const openCategoryModal = (cat = null) => {
   if (cat) {
     isEditing.value = true
@@ -260,24 +260,48 @@ const openCategoryModal = (cat = null) => {
 }
 
 const handleCategorySubmit = async () => {
-  if (!catForm.name) return
+  if (!catForm.name) {
+    Toast.fire({ icon: 'warning', title: 'Please enter a name' })
+    return
+  }
   loading.value = true
   try {
-    if (isEditing.value) await adminStore.updateCategory(editingId.value, { ...catForm })
-    else await adminStore.addCategory({ ...catForm })
+    if (isEditing.value) {
+      await adminStore.updateCategory(editingId.value, { ...catForm })
+      Toast.fire({ icon: 'success', title: 'Category updated!' })
+    } else {
+      await adminStore.addCategory({ ...catForm })
+      Toast.fire({ icon: 'success', title: 'Category created!' })
+    }
     modals.category = false
   } catch (e) {
-    alert('Category action failed')
+    Swal.fire('Error', 'Could not save category', 'error')
   } finally {
     loading.value = false
   }
 }
 
-const handleDeleteCategory = async (id) => {
-  if (confirm('Delete category?')) await adminStore.deleteCategory(id)
+const handleDeleteCategory = async (cat) => {
+  const result = await Swal.fire({
+    title: `Delete ${cat.name}?`,
+    text: 'This action cannot be undone!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#4f46e5',
+    cancelButtonColor: '#ef4444',
+    confirmButtonText: 'Yes, delete it!',
+  })
+
+  if (result.isConfirmed) {
+    try {
+      await adminStore.deleteCategory(cat.id)
+      Toast.fire({ icon: 'success', title: 'Deleted successfully' })
+    } catch (e) {
+      Swal.fire('Error', 'Could not delete category', 'error')
+    }
+  }
 }
 
-// --- Skill Logic ---
 const openSkillModal = () => {
   skillForm.name = ''
   skillForm.category_id = adminStore.categories[0]?.id || ''
@@ -285,20 +309,41 @@ const openSkillModal = () => {
 }
 
 const handleSkillSubmit = async () => {
-  if (!skillForm.name || !skillForm.category_id) return
+  if (!skillForm.name || !skillForm.category_id) {
+    Toast.fire({ icon: 'warning', title: 'Fill all fields' })
+    return
+  }
   loading.value = true
   try {
     await adminStore.addSkill({ ...skillForm })
+    Toast.fire({ icon: 'success', title: 'Skill added to inventory' })
     modals.skill = false
   } catch (e) {
-    alert('Skill creation failed')
+    Swal.fire('Error', 'Skill creation failed', 'error')
   } finally {
     loading.value = false
   }
 }
 
-const handleDeleteSkill = async (id) => {
-  if (confirm('Delete skill?')) await adminStore.deleteSkill(id)
+const handleDeleteSkill = async (skill) => {
+  const result = await Swal.fire({
+    title: 'Remove Skill?',
+    text: `Are you sure you want to remove ${skill.name}?`,
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#0f172a',
+    cancelButtonColor: '#cbd5e1',
+    confirmButtonText: 'Remove',
+  })
+
+  if (result.isConfirmed) {
+    try {
+      await adminStore.deleteSkill(skill.id)
+      Toast.fire({ icon: 'success', title: 'Skill removed' })
+    } catch (e) {
+      Swal.fire('Error', 'Deletion failed', 'error')
+    }
+  }
 }
 </script>
 
@@ -311,5 +356,10 @@ const handleDeleteSkill = async (id) => {
 .modal-leave-to {
   opacity: 0;
   transform: scale(0.95);
+}
+
+:deep(.swal2-popup) {
+  border-radius: 2rem !important;
+  font-family: 'Outfit', sans-serif !important;
 }
 </style>

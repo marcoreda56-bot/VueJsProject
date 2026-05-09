@@ -1,259 +1,256 @@
+<template>
+  <div class="min-h-screen bg-slate-50 py-12 px-4">
+    <div class="max-w-5xl mx-auto">
+      <!-- حالة التحميل -->
+      <div v-if="loading" class="flex justify-center py-20">
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-4 border-indigo-600 border-t-transparent"
+        ></div>
+      </div>
+
+      <div v-else-if="job" class="space-y-8">
+        <!-- Header Section -->
+        <div
+          class="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-sm border border-slate-200/60 relative overflow-hidden"
+        >
+          <div class="absolute top-0 right-0 p-8">
+            <span
+              class="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-full text-sm font-bold uppercase tracking-wider"
+            >
+              {{ job.type }}
+            </span>
+          </div>
+
+          <div class="flex flex-col md:flex-row gap-8 items-start md:items-center">
+            <div
+              class="w-24 h-24 bg-white rounded-3xl shadow-md border p-4 flex items-center justify-center"
+            >
+              <img
+                :src="job.employer?.logo || '/default-logo.png'"
+                class="max-w-full max-h-full object-contain"
+              />
+            </div>
+
+            <div class="flex-1">
+              <h1 class="text-4xl font-black text-slate-900 leading-tight mb-2">{{ job.title }}</h1>
+              <p class="text-xl text-indigo-600 font-bold flex items-center gap-2">
+                {{ job.employer?.company_name }}
+                <span class="text-slate-300 font-light">|</span>
+                <span class="text-slate-500 text-lg flex items-center gap-1 font-medium">
+                  <i class="pi pi-map-marker"></i> {{ job.location }}
+                </span>
+              </p>
+            </div>
+
+            <div class="w-full md:w-auto pt-4 md:pt-0">
+              <button
+                @click="handleApplyClick"
+                class="w-full md:w-auto px-12 py-5 bg-indigo-600 text-white rounded-2xl font-black text-lg hover:bg-indigo-700 transition-all shadow-xl shadow-indigo-200 active:scale-95"
+              >
+                Apply Now
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Details Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Main Content (Left) -->
+          <div class="lg:col-span-2 space-y-8">
+            <div class="bg-white rounded-[2rem] p-10 shadow-sm border border-slate-200/60">
+              <h3 class="text-2xl font-black text-slate-900 mb-6 italic">About the Role</h3>
+              <div
+                class="prose prose-indigo max-w-none text-slate-600 leading-relaxed text-lg"
+                v-html="job.description"
+              ></div>
+
+              <!-- Skills Section -->
+              <div v-if="job.skills?.length" class="mt-10">
+                <h4 class="text-lg font-bold text-slate-900 mb-4">Required Skills</h4>
+                <div class="flex flex-wrap gap-2">
+                  <span
+                    v-for="skill in job.skills"
+                    :key="skill.id"
+                    class="px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-medium text-sm"
+                  >
+                    {{ skill.name }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar (Right) -->
+          <div class="space-y-6">
+            <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-slate-200/60">
+              <h4 class="font-black text-slate-900 mb-6 uppercase text-sm tracking-widest">
+                Job Summary
+              </h4>
+              <div class="space-y-6">
+                <div class="flex items-center gap-4">
+                  <div
+                    class="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600"
+                  >
+                    <i class="pi pi-money-bill text-xl"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase">Monthly Salary</p>
+                    <p class="text-lg font-black text-slate-800">
+                      ${{ job.salary_min }} - ${{ job.salary_max }}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                  <div
+                    class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600"
+                  >
+                    <i class="pi pi-briefcase text-xl"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase">Experience Level</p>
+                    <p class="text-lg font-black text-slate-800">
+                      {{ job.experience_level || 'Not Specified' }}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                  <div
+                    class="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600"
+                  >
+                    <i class="pi pi-calendar text-xl"></i>
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-slate-400 uppercase">Posted Date</p>
+                    <p class="text-lg font-black text-slate-800">
+                      {{ new Date(job.created_at).toLocaleDateString() }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Apply Modal (Simple Implementation) -->
+    <div
+      v-if="showApplyModal"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"
+    >
+      <div
+        class="bg-white rounded-[2.5rem] p-10 max-w-md w-full shadow-2xl animate-in zoom-in duration-300"
+      >
+        <h2 class="text-2xl font-black text-slate-900 mb-2">Submit Application</h2>
+        <p class="text-slate-500 mb-8">
+          Apply for <span class="font-bold text-indigo-600">{{ job.title }}</span>
+        </p>
+
+        <div class="space-y-6">
+          <div>
+            <label class="block text-sm font-black text-slate-400 uppercase mb-2"
+              >Select Your Resume</label
+            >
+            <select
+              v-model="selectedResume"
+              class="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 ring-indigo-500 outline-none"
+            >
+              <option value="" disabled>Choose a resume...</option>
+              <option v-for="res in resumes" :key="res.id" :value="res.id">
+                {{ res.name || 'My Resume' }}
+              </option>
+            </select>
+          </div>
+
+          <button
+            @click="submitApplication"
+            :disabled="submitting"
+            class="w-full py-5 bg-indigo-600 text-white rounded-2xl font-black hover:bg-indigo-700 transition-all disabled:bg-slate-300"
+          >
+            {{ submitting ? 'Sending...' : 'Confirm Application' }}
+          </button>
+
+          <button
+            @click="showApplyModal = false"
+            class="w-full text-slate-400 font-bold text-sm hover:text-slate-600"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup>
-import { onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useJobStore } from '@/stores/JobStore'
-import { useAuthStore } from '@/stores/AuthStore'
-import { useCandidateStore } from '@/stores/CandidateStore'
+import { candidateApi } from '@/api/services/api' // تأكد من استيراد الـ API
 
 const route = useRoute()
 const router = useRouter()
 const jobStore = useJobStore()
-const authStore = useAuthStore()
-const candidateStore = useCandidateStore()
 
-const job = computed(() => jobStore.currentJob)
+const job = ref(null)
+const loading = ref(true)
+const showApplyModal = ref(false)
+const resumes = ref([])
+const selectedResume = ref('')
+const submitting = ref(false)
 
 onMounted(async () => {
+  const jobId = route.params.id
+  loading.value = true
   try {
-    // جلب بيانات الوظيفة بناءً على الـ Slug من الرابط
-    await jobStore.fetchJobBySlug(route.params.slug)
-  } catch (err) {
-    router.push({ name: 'not-found' })
+    const data = await jobStore.fetchJobById(jobId)
+    if (data) job.value = data
+  } catch (error) {
+    console.error('Error:', error)
+  } finally {
+    loading.value = false
   }
 })
 
-const handleApply = async () => {
-  // 1. التحقق من تسجيل الدخول
-  if (!authStore.isAuthenticated) {
+const handleApplyClick = async () => {
+  const token = localStorage.getItem('token')
+
+  if (!token) {
     router.push({ name: 'login', query: { redirect: route.fullPath } })
     return
   }
 
-  // 2. التحقق من دور المستخدم (يجب أن يكون Candidate)
-  if (authStore.userRole !== 'candidate') {
-    alert('Only tech candidates can apply for elite positions.')
+  showApplyModal.value = true
+  try {
+    const resData = await candidateApi.getResumes()
+    resumes.value = resData
+    const defaultResume = resData.find((r) => r.is_default)
+    if (defaultResume) selectedResume.value = defaultResume.id
+  } catch (err) {
+    console.error('Failed to load resumes', err)
+  }
+}
+
+const submitApplication = async () => {
+  if (!selectedResume.value) {
+    alert('Please select a resume first')
     return
   }
 
-  // 3. إرسال طلب التوظيف
+  submitting.value = true
   try {
-    // نرسل الـ UUID الخاص بالوظيفة
-    await candidateStore.applyForJob(job.value.id)
-    alert('Success! Your application has been sent to the employer. 🚀')
+    await candidateApi.applyForJob({
+      job_id: job.value.id,
+      resume_id: selectedResume.value,
+    })
+    alert('Application submitted successfully!')
+    showApplyModal.value = false
   } catch (err) {
-    alert(err.response?.data?.message || 'Failed to submit application.')
+    alert(err.response?.data?.message || 'Something went wrong')
+  } finally {
+    submitting.value = false
   }
 }
 </script>
-
-<template>
-  <!-- Loading State -->
-  <div
-    v-if="jobStore.loading"
-    class="min-h-screen flex items-center justify-center bg-[#FAFAFA] dark:bg-slate-950"
-  >
-    <div class="flex flex-col items-center gap-4">
-      <div
-        class="w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"
-      ></div>
-      <p class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
-        Loading Opportunity...
-      </p>
-    </div>
-  </div>
-
-  <div v-else-if="job" class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Outfit'] pb-20">
-    <!-- Header: Hero Area -->
-    <header
-      class="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800 pt-20 pb-12 px-6"
-    >
-      <div class="max-w-7xl mx-auto">
-        <button
-          @click="router.back()"
-          class="flex items-center gap-2 text-slate-400 hover:text-indigo-600 transition-colors mb-8 group"
-        >
-          <i class="pi pi-arrow-left group-hover:-translate-x-1 transition-transform"></i>
-          <span class="text-xs font-black uppercase tracking-widest">Back to Search</span>
-        </button>
-
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-          <div class="flex items-center gap-6">
-            <div
-              class="w-24 h-24 bg-slate-50 dark:bg-slate-800 rounded-[2rem] border border-slate-100 dark:border-slate-700 flex items-center justify-center overflow-hidden shadow-sm"
-            >
-              <img
-                :src="
-                  job.employer?.logo ||
-                  `https://ui-avatars.com/api/?name=${job.employer?.company_name}&background=6366f1&color=fff`
-                "
-                class="w-full h-full object-cover"
-              />
-            </div>
-            <div>
-              <div class="flex items-center gap-3 mb-2">
-                <span
-                  class="px-3 py-1 bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 text-[10px] font-black uppercase tracking-widest rounded-lg"
-                >
-                  {{ job.type }}
-                </span>
-                <span class="text-slate-400 text-xs font-bold" v-if="job.category"
-                  >• {{ job.category.name }}</span
-                >
-              </div>
-              <h1
-                class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tighter italic"
-              >
-                {{ job.title }}
-              </h1>
-              <p class="text-indigo-600 font-black text-lg mt-1 tracking-tight">
-                {{ job.employer?.company_name }}
-              </p>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-4 w-full md:w-auto">
-            <button
-              @click="handleApply"
-              :disabled="candidateStore.loading"
-              class="flex-1 md:flex-none px-12 py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-indigo-600/20 transition-all active:scale-95 disabled:opacity-50"
-            >
-              {{ candidateStore.loading ? 'Applying...' : 'Apply Now' }}
-            </button>
-            <button
-              class="w-16 h-16 rounded-2xl border border-slate-200 dark:border-slate-700 flex items-center justify-center hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-slate-400 hover:text-indigo-600"
-            >
-              <i class="pi pi-bookmark text-xl"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <!-- Content Area -->
-    <main class="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-3 gap-16">
-      <div class="lg:col-span-2 space-y-12 animate-[fadeIn_0.5s_ease-out]">
-        <section>
-          <h3
-            class="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-3"
-          >
-            <span class="w-8 h-[2px] bg-indigo-600"></span> Job Description
-          </h3>
-          <div
-            class="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 leading-relaxed font-medium"
-            v-html="job.description"
-          ></div>
-        </section>
-
-        <section v-if="job.requirements">
-          <h3
-            class="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-6 flex items-center gap-3"
-          >
-            <span class="w-8 h-[2px] bg-indigo-600"></span> Key Requirements
-          </h3>
-          <div
-            class="prose dark:prose-invert max-w-none text-slate-600 dark:text-slate-400 leading-relaxed font-medium"
-            v-html="job.requirements"
-          ></div>
-        </section>
-      </div>
-
-      <!-- Right Sidebar: Fast Info -->
-      <aside class="space-y-8 animate-[fadeIn_0.5s_ease-out_0.2s]">
-        <div
-          class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-xl shadow-indigo-500/5 space-y-8"
-        >
-          <div class="flex items-center gap-4">
-            <div
-              class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center"
-            >
-              <i class="pi pi-wallet text-emerald-600"></i>
-            </div>
-            <div>
-              <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                Salary Range
-              </p>
-              <p class="text-lg font-black text-slate-900 dark:text-white tracking-tight">
-                {{ job.salary_min }} - {{ job.salary_max }}
-                <span class="text-xs opacity-50 uppercase">{{ job.currency }}</span>
-              </p>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-4">
-            <div
-              class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center"
-            >
-              <i class="pi pi-map-marker text-blue-600"></i>
-            </div>
-            <div>
-              <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                Location
-              </p>
-              <p class="text-lg font-black text-slate-900 dark:text-white tracking-tight">
-                {{ job.location || 'Remote' }}
-              </p>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-4">
-            <div
-              class="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-500/10 flex items-center justify-center"
-            >
-              <i class="pi pi-briefcase text-purple-600"></i>
-            </div>
-            <div>
-              <p class="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                Experience Level
-              </p>
-              <p class="text-lg font-black text-slate-900 dark:text-white tracking-tight">
-                {{ job.experience_level || 'Mid-Senior' }}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Company Card -->
-        <div
-          class="p-8 rounded-[2.5rem] bg-indigo-600 text-white shadow-2xl shadow-indigo-600/20 text-center relative overflow-hidden group"
-        >
-          <div
-            class="absolute inset-0 bg-black/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500"
-          ></div>
-          <div class="relative z-10">
-            <h4 class="text-xl font-black italic mb-4">About {{ job.employer?.company_name }}</h4>
-            <p class="text-indigo-100 text-sm mb-6 leading-relaxed">
-              {{ job.employer?.bio || 'Leading technology partner in Egypt.' }}
-            </p>
-            <button
-              class="w-full py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl text-xs font-black uppercase tracking-widest transition-all"
-            >
-              View Company Profile
-            </button>
-          </div>
-        </div>
-      </aside>
-    </main>
-  </div>
-</template>
-
-<style scoped>
-:deep(ul) {
-  list-style-type: disc;
-  padding-left: 1.5rem;
-  margin-top: 1rem;
-  color: inherit;
-}
-:deep(li) {
-  margin-bottom: 0.5rem;
-}
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-</style>

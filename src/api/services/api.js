@@ -19,7 +19,6 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (response) => {
-    // بناءً على الـ Postman، البيانات تأتي دائماً داخل response.data.data
     return response.data?.success ? response.data.data : response.data
   },
   (error) => {
@@ -42,13 +41,11 @@ export const authApi = {
 }
 
 export const publicApi = {
-  // --- US2: Categories & Skills ---
   getCategories: () => api.get('/categories'),
   getCategoryBySlug: (slug) => api.get(`/categories/${slug}`),
   getSkills: (categoryId = null) => api.get('/skills', { params: { category_id: categoryId } }),
   getSkillsAutocomplete: (query) => api.get('/skills/autocomplete', { params: { q: query } }),
 
-  // Jobs & Employers
   getJobs: (params) => api.get('/jobs', { params }),
   getJobBySlug: (slug) => api.get(`/jobs/${slug}`),
   getEmployers: (params) => api.get('/employers', { params }),
@@ -59,13 +56,11 @@ export const candidateApi = {
   getProfile: () => api.get('/candidate/profile'),
   updateProfile: (data) => api.put('/candidate/profile', data),
 
-  // Skills & Experience (US3.9 - 3.11)
   addSkills: (data) => api.post('/candidate/skills', data),
   deleteSkill: (skillId) => api.delete(`/candidate/skills/${skillId}`),
   addExperience: (data) => api.post('/candidate/experience', data),
   deleteExperience: (id) => api.delete(`/candidate/experience/${id}`),
 
-  // Resumes
   uploadResume: (formData) =>
     api.post('/candidate/resumes', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
@@ -87,9 +82,9 @@ export const employerApi = {
   updateProfile: (data) => api.put('/employer/profile', data),
   getJobs: () => api.get('/employer/jobs'),
   createJob: (data) => api.post('/employer/jobs', data),
-  getJobDetails: (id) => api.get(`/employer/jobs/${id}`), // Added
+  getJobDetails: (id) => api.get(`/employer/jobs/${id}`),
   updateJob: (id, data) => api.put(`/employer/jobs/${id}`, data),
-  updateJobStatus: (id, status) => api.patch(`/employer/jobs/${id}/status`, { status }), // Added
+  updateJobStatus: (id, status) => api.patch(`/employer/jobs/${id}/status`, { status }),
   deleteJob: (id) => api.delete(`/employer/jobs/${id}`),
   getApplications: (params) => api.get('/employer/applications', { params }),
   updateAppStatus: (id, statusData) => api.patch(`/employer/applications/${id}/status`, statusData),

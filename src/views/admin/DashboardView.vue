@@ -6,7 +6,6 @@
       </h2>
     </header>
 
-    <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <div
         v-for="(val, label) in adminStore.stats"
@@ -22,7 +21,6 @@
       </div>
     </div>
 
-    <!-- Quick Actions or Recent Activity -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       <div
         class="lg:col-span-2 bg-indigo-600 rounded-[3rem] p-10 text-white relative overflow-hidden group"

@@ -153,7 +153,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { employerApi, publicApi } from '@/api/services/api'
-import Swal from 'sweetalert2' // استيراد SweetAlert
+import Swal from 'sweetalert2'
 
 const route = useRoute()
 const router = useRouter()
@@ -184,7 +184,6 @@ const form = ref({
 
 const isJobActive = computed(() => form.value.status === 'active')
 
-// دالة التنبيهات الموحدة
 const notify = (icon, title, text) => {
   Swal.fire({
     icon,
@@ -210,7 +209,6 @@ onMounted(async () => {
 
     if (!jobData) throw new Error('Job data not found')
 
-    // تعبئة الفورم مع التأكد من وجود القيم
     form.value = {
       title: jobData.title || '',
       category_id: jobData.category_id || '',
@@ -229,7 +227,7 @@ onMounted(async () => {
       status: jobData.status || 'draft',
       skills: Array.isArray(jobData.skills)
         ? jobData.skills.map((s) => ({
-            skill_id: s.skill_id || s.id, // التعامل مع اختلاف مسميات الـ API
+            skill_id: s.skill_id || s.id,
             is_required: s.is_required ?? true,
           }))
         : [],
@@ -266,7 +264,6 @@ const addSkill = () => {
 const getSkillName = (id) => availableSkills.value.find((s) => s.id === id)?.name || 'Skill'
 
 const handleUpdate = async () => {
-  // التحقق من الحقول الإجبارية قبل الإرسال
   if (form.value.skills.length === 0) {
     notify('warning', 'Missing Skills', 'Please add at least one required skill.')
     return
@@ -274,7 +271,6 @@ const handleUpdate = async () => {
 
   loading.value = true
   try {
-    // 1. تجهيز الـ Payload الأساسي
     const payload = {
       title: form.value.title,
       category_id: form.value.category_id,
@@ -290,7 +286,6 @@ const handleUpdate = async () => {
       location: form.value.location,
       city: form.value.city,
       vacancies: form.value.vacancies,
-      // نرسل المهارات بـ ID فقط كما يتوقع Laravel Sync
       skills: form.value.skills.map((s) => ({
         skill_id: s.skill_id,
         is_required: s.is_required,
