@@ -4,9 +4,7 @@
 
     <main
       :class="[
-        !$route.meta.hideNavbar
-          ? 'w-full max-w-[1800px] mx-auto pt-12 pb-8 px-4 md:px-8'
-          : 'w-full',
+        !$route.meta.hideNavbar ? 'w-full max-w-450 mx-auto pt-12 pb-8 px-4 md:px-8' : 'w-full',
       ]"
     >
       <router-view v-slot="{ Component }">

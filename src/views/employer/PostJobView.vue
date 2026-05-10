@@ -11,7 +11,9 @@
 
     <form @submit.prevent="handleSubmit" class="space-y-8">
       <!-- General Info -->
-      <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 space-y-6">
+      <div
+        class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 space-y-6"
+      >
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="space-y-2">
             <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest">
@@ -25,7 +27,9 @@
               :class="errors.title ? 'ring-2 ring-rose-500' : ''"
               placeholder="e.g. Senior Vue Developer"
             />
-            <p v-if="errors.title" class="text-[10px] text-rose-500 font-bold ml-2">{{ errors.title }}</p>
+            <p v-if="errors.title" class="text-[10px] text-rose-500 font-bold ml-2">
+              {{ errors.title }}
+            </p>
           </div>
           <div class="space-y-2">
             <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest">
@@ -37,9 +41,13 @@
               :class="errors.category_id ? 'ring-2 ring-rose-500' : ''"
             >
               <option value="">Select category...</option>
-              <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
+              <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+                {{ cat.name }}
+              </option>
             </select>
-            <p v-if="errors.category_id" class="text-[10px] text-rose-500 font-bold ml-2">{{ errors.category_id }}</p>
+            <p v-if="errors.category_id" class="text-[10px] text-rose-500 font-bold ml-2">
+              {{ errors.category_id }}
+            </p>
           </div>
         </div>
 
@@ -53,7 +61,9 @@
             class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl px-6 py-4 text-sm font-bold"
             :class="errors.description ? 'ring-2 ring-rose-500' : ''"
           ></textarea>
-          <p v-if="errors.description" class="text-[10px] text-rose-500 font-bold ml-2">{{ errors.description }}</p>
+          <p v-if="errors.description" class="text-[10px] text-rose-500 font-bold ml-2">
+            {{ errors.description }}
+          </p>
         </div>
 
         <div class="space-y-2">
@@ -66,12 +76,16 @@
             class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl px-6 py-4 text-sm font-bold"
             :class="errors.requirements ? 'ring-2 ring-rose-500' : ''"
           ></textarea>
-          <p v-if="errors.requirements" class="text-[10px] text-rose-500 font-bold ml-2">{{ errors.requirements }}</p>
+          <p v-if="errors.requirements" class="text-[10px] text-rose-500 font-bold ml-2">
+            {{ errors.requirements }}
+          </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest">Responsibilities</label>
+            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest"
+              >Responsibilities</label
+            >
             <textarea
               v-model="form.responsibilities"
               rows="3"
@@ -79,7 +93,9 @@
             ></textarea>
           </div>
           <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest">Benefits</label>
+            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest"
+              >Benefits</label
+            >
             <textarea
               v-model="form.benefits"
               rows="3"
@@ -90,8 +106,12 @@
       </div>
 
       <!-- Skills Section -->
-      <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 space-y-6">
-        <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest">Required Skills</label>
+      <div
+        class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 space-y-6"
+      >
+        <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest"
+          >Required Skills</label
+        >
         <div class="flex gap-2">
           <select
             v-model="selectedSkillId"
@@ -126,13 +146,18 @@
           >
             {{ getSkillName(s.skill_id) }}
             <span v-if="s.min_proficiency" class="text-indigo-400">({{ s.min_proficiency }})</span>
-            <i @click="form.skills.splice(i, 1)" class="pi pi-times cursor-pointer hover:text-rose-500"></i>
+            <i
+              @click="form.skills.splice(i, 1)"
+              class="pi pi-times cursor-pointer hover:text-rose-500"
+            ></i>
           </span>
         </div>
       </div>
 
       <!-- Job Meta -->
-      <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 space-y-6">
+      <div
+        class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 space-y-6"
+      >
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="space-y-2">
             <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest">
@@ -181,7 +206,9 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest">Career Level</label>
+            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest"
+              >Career Level</label
+            >
             <input
               v-model="form.career_level"
               type="text"
@@ -191,7 +218,9 @@
             />
           </div>
           <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest">Education Level</label>
+            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest"
+              >Education Level</label
+            >
             <select
               v-model="form.education_level"
               class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-xs font-bold"
@@ -205,7 +234,9 @@
             </select>
           </div>
           <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest">Vacancies</label>
+            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest"
+              >Vacancies</label
+            >
             <input
               v-model.number="form.vacancies"
               type="number"
@@ -228,10 +259,14 @@
               :class="errors.location ? 'ring-2 ring-rose-500' : ''"
               placeholder="e.g. Cairo, Egypt"
             />
-            <p v-if="errors.location" class="text-[10px] text-rose-500 font-bold ml-2">{{ errors.location }}</p>
+            <p v-if="errors.location" class="text-[10px] text-rose-500 font-bold ml-2">
+              {{ errors.location }}
+            </p>
           </div>
           <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest">City</label>
+            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest"
+              >City</label
+            >
             <input
               v-model="form.city"
               type="text"
@@ -244,7 +279,9 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest">Min Salary</label>
+            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest"
+              >Min Salary</label
+            >
             <input
               v-model.number="form.salary_min"
               type="number"
@@ -254,7 +291,9 @@
             />
           </div>
           <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest">Max Salary</label>
+            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest"
+              >Max Salary</label
+            >
             <input
               v-model.number="form.salary_max"
               type="number"
@@ -262,7 +301,9 @@
               class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-xs font-bold"
               :class="errors.salary_max ? 'ring-2 ring-rose-500' : ''"
             />
-            <p v-if="errors.salary_max" class="text-[10px] text-rose-500 font-bold ml-2">{{ errors.salary_max }}</p>
+            <p v-if="errors.salary_max" class="text-[10px] text-rose-500 font-bold ml-2">
+              {{ errors.salary_max }}
+            </p>
           </div>
           <div class="flex items-center gap-3 pt-6">
             <input
@@ -271,7 +312,10 @@
               type="checkbox"
               class="w-5 h-5 rounded-lg border-slate-300 text-indigo-600 focus:ring-indigo-500"
             />
-            <label for="is_salary_visible" class="text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer">
+            <label
+              for="is_salary_visible"
+              class="text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer"
+            >
               Show salary publicly
             </label>
           </div>
@@ -279,7 +323,9 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest">Expires At</label>
+            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest"
+              >Expires At</label
+            >
             <input
               v-model="form.expires_at"
               type="date"
@@ -287,7 +333,9 @@
             />
           </div>
           <div class="space-y-2">
-            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest">Save As</label>
+            <label class="text-[10px] font-black uppercase text-slate-400 ml-2 tracking-widest"
+              >Save As</label
+            >
             <select
               v-model="form.status"
               class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-xs font-bold"
@@ -303,7 +351,7 @@
       <button
         type="submit"
         :disabled="!isValid || employerStore.loading"
-        class="w-full bg-indigo-600 text-white py-6 rounded-[2rem] font-black uppercase tracking-[0.3em] shadow-xl shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 transition-all disabled:bg-slate-300 disabled:cursor-not-allowed"
+        class="w-full bg-indigo-600 text-white py-6 rounded-4xl font-black uppercase tracking-[0.3em] shadow-xl shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 transition-all disabled:bg-slate-300 disabled:cursor-not-allowed"
       >
         {{ employerStore.loading ? 'Processing...' : 'Publish Job Listing' }}
       </button>
@@ -400,11 +448,17 @@ const isValid = computed(() => {
   // Trigger validation silently to compute state
   const e = {}
 
-  if (!form.value.title || form.value.title.trim().length < 2 || form.value.title.length > 200) return false
+  if (!form.value.title || form.value.title.trim().length < 2 || form.value.title.length > 200)
+    return false
   if (!form.value.category_id) return false
   if (!form.value.description || form.value.description.trim().length < 5) return false
   if (!form.value.requirements || form.value.requirements.trim().length < 5) return false
-  if (!form.value.location || form.value.location.trim().length < 1 || form.value.location.length > 200) return false
+  if (
+    !form.value.location ||
+    form.value.location.trim().length < 1 ||
+    form.value.location.length > 200
+  )
+    return false
 
   const min = form.value.salary_min
   const max = form.value.salary_max

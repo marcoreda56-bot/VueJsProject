@@ -141,13 +141,17 @@ export const adminApi = {
   getJobs: (params) => api.get('/admin/jobs', { params }),
 
   confirmJob: (id) => api.patch(`/admin/jobs/${id}/confirm`),
-  rejectJob: (id, data) => api.patch(`/admin/jobs/${id}/reject`, data),
-  // Skills
+  rejectJob: (id, reason) =>
+    api.patch(`/admin/jobs/${id}/reject`, {
+      rejection_reason: reason,
+    }),
   createSkill: (data) => api.post('/admin/skills', data),
   updateSkill: (id, data) => api.put(`/admin/skills/${id}`, data),
   deleteSkill: (id) => api.delete(`/admin/skills/${id}`),
   updateJobStatus: (id, data) => api.patch(`/admin/jobs/${id}/status`, data),
-
+  deleteJob: (id) => api.delete(`/admin/jobs/${id}`),
+  getAdminJobs: (params) => api.get('/admin/jobs', { params }),
+  updateJobStatus: (id, data) => api.patch(`/admin/jobs/${id}/status`, data),
   // General Admin Tasks
   getStats: () => api.get('/admin/dashboard'),
   getUsers: (params) => api.get('/admin/users', { params }),

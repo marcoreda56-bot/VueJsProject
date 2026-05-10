@@ -58,9 +58,9 @@ const goToJob = (slug) => router.push(`/jobs/${slug}`)
 
 <template>
   <div class="min-h-screen bg-[#FAFAFA] dark:bg-slate-950 font-['Outfit']">
-    <div class="max-w-[1800px] mx-auto p-6">
+    <div class="max-w-450 mx-auto p-6">
       <section
-        class="relative h-[650px] overflow-hidden rounded-[4rem] shadow-2xl group animate-[fadeIn_0.8s]"
+        class="relative h-162.5 overflow-hidden rounded-[4rem] shadow-2xl group animate-[fadeIn_0.8s]"
       >
         <transition-group name="fade" tag="div">
           <div
@@ -105,7 +105,7 @@ const goToJob = (slug) => router.push(`/jobs/${slug}`)
     </div>
 
     <!-- Featured Jobs Preview -->
-    <section class="max-w-[1800px] mx-auto px-10 py-20">
+    <section class="max-w-450 mx-auto px-10 py-20">
       <h2 class="text-4xl font-black text-slate-900 mb-12 italic tracking-tighter">
         Featured Opportunities
       </h2>

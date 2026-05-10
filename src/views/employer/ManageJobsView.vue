@@ -23,11 +23,11 @@
       <div
         v-for="job in employerStore.myJobs"
         :key="job.id"
-        class="bg-white dark:bg-slate-900 p-6 rounded-[2rem] border border-slate-100 dark:border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 group hover:border-indigo-200 transition-all shadow-sm"
+        class="bg-white dark:bg-slate-900 p-6 rounded-4xl border border-slate-100 dark:border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 group hover:border-indigo-200 transition-all shadow-sm"
       >
         <div class="flex items-center gap-4 flex-1 min-w-0">
           <div
-            class="w-14 h-14 bg-indigo-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-indigo-600 font-black text-xl group-hover:bg-indigo-600 group-hover:text-white transition-all flex-shrink-0"
+            class="w-14 h-14 bg-indigo-50 dark:bg-slate-800 rounded-2xl flex items-center justify-center text-indigo-600 font-black text-xl group-hover:bg-indigo-600 group-hover:text-white transition-all shrink-0"
           >
             {{ job.title.charAt(0) }}
           </div>
