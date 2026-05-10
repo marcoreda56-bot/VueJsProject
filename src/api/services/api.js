@@ -38,6 +38,8 @@ export const authApi = {
   register: (data) => api.post('auth/register', data),
   logout: () => api.post('auth/logout'),
   me: () => api.get('/auth/me'),
+  forgotPassword: (data) => api.post('auth/forgot-password', data),
+  resetPassword: (data) => api.post('auth/reset-password', data),
 }
 
 export const publicApi = {
@@ -50,31 +52,54 @@ export const publicApi = {
   getJobBySlug: (slug) => api.get(`/jobs/${slug}`),
   getEmployers: (params) => api.get('/employers', { params }),
   getEmployerBySlug: (slug) => api.get(`/employers/${slug}`),
+  getEmployerReviews: (slug) => api.get(`/employers/${slug}/reviews`),
 }
 
 export const candidateApi = {
   getProfile: () => api.get('/candidate/profile'),
   updateProfile: (data) => api.put('/candidate/profile', data),
 
-  addSkills: (data) => api.post('/candidate/skills', data),
-  deleteSkill: (skillId) => api.delete(`/candidate/skills/${skillId}`),
+  // Education
+  getEducation: () => api.get('/candidate/education'),
+  addEducation: (data) => api.post('/candidate/education', data),
+  updateEducation: (id, data) => api.put(`/candidate/education/${id}`, data),
+  deleteEducation: (id) => api.delete(`/candidate/education/${id}`),
+
+  // Experience
   addExperience: (data) => api.post('/candidate/experience', data),
+  updateExperience: (id, data) => api.put(`/candidate/experience/${id}`, data),
   deleteExperience: (id) => api.delete(`/candidate/experience/${id}`),
 
+  // Skills
+  addSkills: (data) => api.post('/candidate/skills', data),
+  deleteSkill: (skillId) => api.delete(`/candidate/skills/${skillId}`),
+
+  // Resumes
   uploadResume: (formData) =>
     api.post('/candidate/resumes', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     }),
   getResumes: () => api.get('/candidate/resumes'),
+  updateResume: (id, data) => api.put(`/candidate/resumes/${id}`, data),
   setResumeDefault: (id) => api.patch(`/candidate/resumes/${id}/default`),
   deleteResume: (id) => api.delete(`/candidate/resumes/${id}`),
 
   // Applications
-  getApplications: () => api.get('/candidate/applications'),
+  getApplications: (params) => api.get('/candidate/applications', { params }),
+  getApplication: (id) => api.get(`/candidate/applications/${id}`),
   applyForJob: (data) => api.post('/candidate/applications', data),
-  withdrawApplication: (id) => api.patch(`/candidate/applications/${id}/withdraw`),
+  withdrawApplication: (id, reason) => api.patch(`/candidate/applications/${id}/withdraw`, { reason }),
+
+  // Saved Jobs
   getSavedJobs: () => api.get('/candidate/saved-jobs'),
-  toggleSaveJob: (jobId) => api.post('/candidate/saved-jobs', { job_id: jobId }),
+  saveJob: (jobId, notes = '') => api.post('/candidate/saved-jobs', { job_id: jobId, notes }),
+  unsaveJob: (jobId) => api.delete(`/candidate/saved-jobs/${jobId}`),
+
+  // Reviews
+  getReviews: () => api.get('/candidate/reviews'),
+  submitReview: (data) => api.post('/candidate/reviews', data),
+  updateReview: (id, data) => api.put(`/candidate/reviews/${id}`, data),
+  deleteReview: (id) => api.delete(`/candidate/reviews/${id}`),
 }
 
 export const employerApi = {
@@ -116,7 +141,23 @@ export const adminApi = {
 export const notificationsApi = {
   getAll: () => api.get('/notifications'),
   markRead: (id) => api.patch(`/notifications/${id}/read`),
+  markAllRead: () => api.patch('/notifications/read-all'),
   getUnreadCount: () => api.get('/notifications/unread-count'),
+}
+
+// Helper: Ensure a file URL is usable by the frontend.
+// The backend stores paths like /storage/avatar/uuid.jpg.
+// Vite's dev-server proxy forwards /storage/* to the Laravel backend
+// (port 8000) which serves files from storage/app/private via the
+// built-in storage/{path} route. In production, /storage is served by
+// the web server (e.g. Nginx) or Laravel itself.
+export function getFileUrl(path) {
+  if (!path) return ''
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('file://')) return path
+
+  // Ensure the path starts with a leading slash so the browser
+  // resolves it from the domain root (e.g. http://localhost:3001/)
+  return path.startsWith('/') ? path : `/${path}`
 }
 
 export default api

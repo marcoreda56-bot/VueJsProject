@@ -47,11 +47,11 @@
       <div class="mt-auto p-8 border-t border-gray-50">
         <div class="flex items-center gap-4 mb-6">
           <img
-            :src="userAvatar"
+            :src="getFileUrl(userAvatar)"
             class="w-10 h-10 rounded-full object-cover border border-gray-100"
           />
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-bold text-slate-900 truncate">{{ authStore.user?.name }}</p>
+            <p class="text-sm font-bold text-slate-900 truncate">{{ (authStore.user?.first_name || '') + ' ' + (authStore.user?.last_name || '') }}</p>
             <p class="text-[10px] font-bold text-indigo-600 uppercase tracking-wider">
               Super Admin
             </p>
@@ -102,6 +102,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/AuthStore'
 import { useAdminStore } from '@/stores/AdminStore'
 import { useRouter } from 'vue-router'
+import { getFileUrl } from '@/api/services/api'
 
 const authStore = useAuthStore()
 const adminStore = useAdminStore()
@@ -115,10 +116,16 @@ const navItems = [
   { label: 'Manage Users', path: '/admin/management/users', icon: 'pi pi-users' },
 ]
 
+const userFullName = computed(() => {
+  const first = authStore.user?.first_name || ''
+  const last = authStore.user?.last_name || ''
+  return `${first} ${last}`.trim()
+})
+
 const userAvatar = computed(
   () =>
-    authStore.user?.avatar ||
-    `https://ui-avatars.com/api/?name=${authStore.user?.name}&background=6366f1&color=fff`,
+    authStore.user?.avatar_url ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(userFullName.value)}&background=6366f1&color=fff`,
 )
 
 onMounted(() => adminStore.fetchAllData())

@@ -1,0 +1,384 @@
+# HireMasr — Employer Functionalities
+**For:** Vue 3 frontend agent/developer
+**Role:** employer
+**Scope:** Everything an employer can see and do on the platform
+
+---
+
+## Overview
+
+An employer registers on the platform, sets up their company profile, posts jobs, manages the hiring pipeline for each job, reviews applications, schedules interviews, and responds to company reviews. All employer actions require authentication and the employer role.
+
+---
+
+## 1. Authentication
+
+### 1.1 Register
+- Form fields: First Name, Last Name, Email, Password, Password Confirmation
+- Role is fixed to `employer` on this registration path
+- On success: employer is logged in immediately, redirected to complete company profile
+- Backend auto-creates an empty employer/company record on registration
+
+**Endpoint:** `POST /api/v1/auth/register`
+**Payload:** `{ first_name, last_name, email, password, password_confirmation, role: "employer" }`
+**Response:** `{ access_token, user: { id, first_name, last_name, email, role, avatar_url } }`
+
+### 1.2 Login
+**Endpoint:** `POST /api/v1/auth/login`
+On success: redirect to `/employer/dashboard`
+
+### 1.3 Logout
+**Endpoint:** `POST /api/v1/auth/logout`
+
+### 1.4 Forgot / Reset Password
+**Endpoints:** `POST /api/v1/auth/forgot-password`, `POST /api/v1/auth/reset-password`
+
+### 1.5 Update Account Info
+Employer can update their personal info (first name, last name, phone, avatar). Separate from company profile.
+
+**Endpoint:** `PATCH /api/v1/auth/me`
+
+---
+
+## 2. Company Profile
+
+The employer's company profile is their public identity on the platform. It is shown on the public employer page and on every job listing.
+
+### 2.1 View Company Profile
+Returns company info plus team members.
+
+**Endpoint:** `GET /api/v1/employer/profile`
+**Response shape:**
+```json
+{
+  "id": "uuid",
+  "company_name": "TechCorp Egypt",
+  "slug": "techcorp-egypt",
+  "logo_url": "...",
+  "cover_image_url": "...",
+  "industry": "Technology",
+  "company_size": "51-200",
+  "founded_year": 2015,
+  "website": "https://techcorp.eg",
+  "description": "...",
+  "headquarters": "Smart Village, Giza",
+  "city": "Giza",
+  "country": "EG",
+  "is_verified": false,
+  "average_rating": 4.1,
+  "total_reviews": 12,
+  "team_members": [
+    {
+      "id": "uuid",
+      "user": { "id": "uuid", "first_name": "Mostafa", "last_name": "Ali", "email": "hr@techcorp.eg", "avatar_url": "..." },
+      "role_in_company": "HR Manager",
+      "is_primary": true
+    }
+  ]
+}
+```
+
+### 2.2 Update Company Profile
+Updates all company fields. Logo and cover image are uploaded as files.
+
+**Endpoint:** `PUT /api/v1/employer/profile`
+**Editable fields:** company_name, industry, company_size, founded_year, website, description, headquarters, address, city, country
+**File uploads:**
+- Logo: multipart upload, stored via file service, `logo_url` updated
+- Cover image: same, `cover_image_url` updated
+
+**UI:** The company profile edit screen should show a cover image banner at the top (clickable to upload) and a logo circle (clickable to upload), same pattern as LinkedIn/Facebook company pages.
+
+---
+
+## 3. Job Management
+
+Employers create and manage job listings. Jobs go through an approval workflow: draft → pending_review → (admin approves) → active.
+
+### 3.1 List My Jobs
+Paginated list of all jobs posted by this employer with status, application count, and view count.
+
+**Endpoint:** `GET /api/v1/employer/jobs`
+**Query params:** page, per_page, status (optional filter)
+
+**Job statuses and what they mean for UI:**
+| Status | Meaning | Color |
+|---|---|---|
+| draft | Saved but not submitted | gray |
+| pending_review | Waiting for admin approval | yellow |
+| active | Live and accepting applications | green |
+| paused | Temporarily hidden | orange |
+| closed | Hiring closed by employer | gray |
+| rejected | Rejected by admin | red |
+| expired | Past expiry date | gray muted |
+
+### 3.2 Create a Job
+**Endpoint:** `POST /api/v1/employer/jobs`
+**Status after creation:** `pending_review` (default) or `draft` if employer saves without submitting
+
+**Full payload:**
+```json
+{
+  "title": "Senior Frontend Developer",
+  "category_id": "uuid",
+  "description": "...",
+  "requirements": "...",
+  "responsibilities": "...",
+  "benefits": "...",
+  "type": "full_time",
+  "workplace_type": "hybrid",
+  "experience_level": "senior",
+  "career_level": "Senior",
+  "education_level": "bachelor",
+  "salary_min": 25000,
+  "salary_max": 40000,
+  "is_salary_visible": true,
+  "location": "Smart Village, Giza",
+  "city": "Giza",
+  "vacancies": 2,
+  "skills": [
+    { "skill_id": "uuid", "is_required": true, "min_proficiency": "expert" },
+    { "skill_id": "uuid", "is_required": false }
+  ]
+}
+```
+
+**Validation the frontend must enforce before submission:**
+- salary_max must be >= salary_min if both provided
+- At least one skill is recommended
+- Skills come from the taxonomy (skill_id UUIDs from `GET /api/v1/skills`)
+
+**On success:** slug is auto-generated by backend. Employer is redirected to job detail or jobs list.
+
+### 3.3 View Job Detail (Employer)
+Full job with application count and skills.
+
+**Endpoint:** `GET /api/v1/employer/jobs/:id`
+
+### 3.4 Edit a Job
+**Endpoint:** `PUT /api/v1/employer/jobs/:id`
+
+**Edit restrictions by status:**
+- `draft` or `pending_review` → all fields editable
+- `active` → only: description, requirements, benefits, responsibilities, salary_min, salary_max, is_salary_visible, vacancies, expires_at, skills
+- `closed`, `rejected`, `expired` → cannot edit → show 409 error
+
+### 3.5 Change Job Status
+**Endpoint:** `PATCH /api/v1/employer/jobs/:id/status`
+**Payload:** `{ status: "closed" }`
+
+**Allowed transitions (employer-initiated):**
+- active → closed
+- active → paused
+- paused → active
+- closed → active
+- draft → pending_review (submit for review)
+
+**Forbidden (employer cannot do these):**
+- Any → rejected (admin only)
+- expired → anything (must create new job)
+
+**UI:** Show a status toggle or action button per job card. On the job detail page, show a dropdown or set of action buttons reflecting what's possible from the current status.
+
+### 3.6 Delete a Job
+**Endpoint:** `DELETE /api/v1/employer/jobs/:id`
+Soft-delete. When a job is deleted, active applications are preserved (job_removed_at is set on each, candidate is notified via the history log).
+
+---
+
+## 4. Application Pipeline
+
+The core of the employer workflow. Employers receive applications, move them through stages, and schedule interviews.
+
+### 4.1 Global Applications Inbox
+All applications across all the employer's jobs. Good for a dashboard overview.
+
+**Endpoint:** `GET /api/v1/employer/applications`
+**Query params:** `status` (optional), `job_id` (optional filter by one job), `sort` (applied_at_desc default, applied_at_asc, updated_at_desc), `page`, `per_page`
+
+**Each item includes:** candidate_snapshot (name, headline, skills, location, resume_url), job_snapshot (title), current_status, applied_at, cover_letter (truncated), resume_url
+
+### 4.2 Per-Job Pipeline View
+Applications scoped to one specific job. Includes pipeline summary counts.
+
+**Endpoint:** `GET /api/v1/employer/jobs/:job_id/applications`
+**Query params:** `status`, `sort`, `page`, `per_page`
+
+**Response includes pipeline_summary:**
+```json
+{
+  "pipeline_summary": {
+    "applied": 12,
+    "reviewed": 5,
+    "shortlisted": 3,
+    "interviewed": 2,
+    "offered": 1,
+    "hired": 0,
+    "rejected": 4,
+    "withdrawn": 2,
+    "job_removed": 0
+  },
+  "data": [],
+  "meta": {}
+}
+```
+
+**UI:** Render pipeline_summary as a row of clickable stage chips at the top. Clicking a chip filters the list to that stage. Clicking the active chip again clears the filter.
+
+### 4.3 Application Detail
+Full detail of one application: candidate profile, cover letter, resume, history timeline, and interviews.
+
+**Endpoint:** `GET /api/v1/employer/applications/:id`
+**Returns:** candidate_snapshot (full), job_snapshot, employer_snapshot, cover_letter, resume_url, history array, interviews array (including cancelled)
+
+**History timeline rendering:**
+- actor_role = system → gear icon, gray
+- actor_role = employer → briefcase icon, blue
+- actor_role = candidate → person icon, green
+
+### 4.4 Move Application Through Pipeline
+**Endpoint:** `PATCH /api/v1/employer/applications/:id/status`
+**Payload:** `{ status: "shortlisted", notes: "Strong Vue.js background" }`
+
+**Forward-only transition map (enforce on frontend):**
+| Current | Allowed next |
+|---|---|
+| applied | reviewed, shortlisted, rejected |
+| reviewed | shortlisted, interviewed, rejected |
+| shortlisted | interviewed, rejected |
+| interviewed | offered, rejected |
+| offered | hired, rejected |
+| hired | none (terminal) |
+| rejected | none (terminal) |
+| withdrawn | none (terminal) |
+| job_removed | none (terminal) |
+
+**UI pipeline controls per current_status:**
+| current_status | Buttons to show |
+|---|---|
+| applied | "Mark Reviewed", "Shortlist", "Reject" |
+| reviewed | "Shortlist", "Move to Interview", "Reject" |
+| shortlisted | "Move to Interview", "Reject" |
+| interviewed | "Extend Offer", "Reject" |
+| offered | "Mark as Hired", "Reject" |
+| hired | No buttons — show "Hired" badge |
+| rejected | No buttons — show "Rejected" notice |
+| withdrawn | No buttons — show "Withdrawn by candidate" notice |
+| job_removed | No buttons — show "Job removed" notice |
+
+Each button opens a confirmation modal with the target status label and an optional notes textarea. On confirm: call E-4. On success: replace current_status and history in the store reactively.
+
+**Response:** `{ id, current_status, history: [] }` — history is the full updated array, replace it in store.
+
+### 4.5 Schedule an Interview
+**Endpoint:** `POST /api/v1/employer/applications/:id/interviews`
+
+Only available when application `current_status` is `shortlisted` or `interviewed`.
+
+**Payload:**
+```json
+{
+  "scheduled_at": "2026-05-10T14:00:00Z",
+  "duration_minutes": 60,
+  "location_type": "video_call",
+  "location_details": "https://zoom.us/j/123456",
+  "notes": "Technical discussion"
+}
+```
+
+**location_type options:** video_call, phone, in_person
+
+**Business rules:**
+- `scheduled_at` must be in the future (validate client-side before submit)
+- If current_status is `shortlisted`, backend auto-advances to `interviewed`
+- Response includes `application_current_status` — check this and update store if it changed
+
+**UI:** Show a "Schedule Interview" button only when status is shortlisted or interviewed. Button opens a modal form.
+
+### 4.6 Reschedule an Interview
+**Endpoint:** `PATCH /api/v1/employer/applications/:id/interviews/:interview_id/reschedule`
+
+Only for interviews with `status = scheduled` and `deleted_at = null`. At least one field must change.
+
+### 4.7 Cancel an Interview
+**Endpoint:** `PATCH /api/v1/employer/applications/:id/interviews/:interview_id/cancel`
+**Payload:** `{ cancellation_note: "optional message" }`
+
+Only for scheduled interviews. Sets status to cancelled, soft-deletes the interview row. The interview remains visible in the list with cancelled style.
+
+### 4.8 Mark Interview Outcome
+**Endpoint:** `PATCH /api/v1/employer/applications/:id/interviews/:interview_id/outcome`
+**Payload:** `{ status: "completed", notes: "Strong technical skills" }`
+
+`status` can be `completed` or `no_show`. Does not soft-delete. Does not auto-advance application status — employer does that separately via 4.4.
+
+**Interview card actions (show only for employer):**
+- scheduled + not deleted → "Reschedule", "Cancel", "Mark Outcome" buttons
+- completed or no_show → read-only
+- deleted_at set → muted cancelled style, no buttons
+
+---
+
+## 5. Company Reviews
+
+### 5.1 View Reviews About My Company
+**Endpoint:** `GET /api/v1/employer/reviews`
+Shows all reviews including pending, approved, and rejected. Employer can see moderation status.
+
+### 5.2 Reply to a Review
+**Endpoint:** `POST /api/v1/employer/reviews/:id/reply`
+Official company response to a review. Appears publicly on the review.
+
+---
+
+## 6. Notifications
+
+Employers receive in-app notifications for:
+- New application received on a job
+- Job approved by admin
+- Job rejected by admin (with reason)
+
+### 6.1 List Notifications
+**Endpoint:** `GET /api/v1/notifications`
+
+### 6.2 Unread Count
+**Endpoint:** `GET /api/v1/notifications/unread-count`
+Used for bell badge in header.
+
+### 6.3 Mark as Read / Mark All Read
+**Endpoints:** `PATCH /api/v1/notifications/:id/read`, `PATCH /api/v1/notifications/read-all`
+
+---
+
+## 7. Screens Summary
+
+| Screen | Route | Endpoint(s) |
+|---|---|---|
+| Register | `/auth/register` | POST /auth/register |
+| Login | `/auth/login` | POST /auth/login |
+| Dashboard | `/employer/dashboard` | GET /notifications/unread-count |
+| Company Profile | `/employer/profile` | GET+PUT /employer/profile |
+| My Jobs | `/employer/jobs` | GET /employer/jobs |
+| Create Job | `/employer/jobs/create` | POST /employer/jobs |
+| Edit Job | `/employer/jobs/:id/edit` | GET+PUT /employer/jobs/:id |
+| Job Detail | `/employer/jobs/:id` | GET /employer/jobs/:id |
+| Applications Inbox | `/employer/applications` | GET /employer/applications |
+| Job Pipeline | `/employer/jobs/:jobId/applications` | GET /employer/jobs/:jobId/applications |
+| Application Detail | `/employer/applications/:id` | GET /employer/applications/:id + PATCH status + interview endpoints |
+| Company Reviews | `/employer/reviews` | GET /employer/reviews |
+| Notifications | `/employer/notifications` | GET+PATCH /notifications |
+
+---
+
+## 8. Key Business Rules for Frontend
+
+- `employer_id` is never sent in the job creation payload. The backend resolves it from the authenticated token.
+- Job status transitions are forward-only for employers. Never show a button for a transition the API would reject.
+- When a job is deleted, do not remove it from the UI immediately — wait for API confirmation. The observer that sets `job_removed_at` on all related applications runs asynchronously.
+- Skills are selected from the taxonomy only. The employer cannot type free-form skill names on job creation.
+- In the per-job pipeline view, `pipeline_summary` counts are always from the full job (not filtered by current page). They come from the E-2 response regardless of which status filter is active.
+- The interview `scheduled_at` must be validated as a future date on the frontend before submitting — do not rely solely on backend validation for this.
+- After E-4 status update, replace the entire `history` array in the store with what the response returns. Do not append manually.
+- After E-5 schedule interview, check `application_current_status` in the response and update `current_status` in the store if it changed (auto-advance from shortlisted to interviewed).
+- For application detail (E-3), load interviews with `withTrashed()` on the backend — soft-deleted interviews are included. Show them in cancelled style.
+- 404 is returned (not 403) when an employer tries to access another employer's resources.

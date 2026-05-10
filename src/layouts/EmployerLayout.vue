@@ -48,11 +48,11 @@
         </button>
 
         <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50">
-          <img :src="userAvatar" class="w-10 h-10 rounded-xl object-cover" />
-          <div class="min-w-0">
-            <p class="text-xs font-black text-slate-900 dark:text-white truncate">
-              {{ authStore.user?.name }}
-            </p>
+        <img :src="getFileUrl(userAvatar)" class="w-10 h-10 rounded-xl object-cover" />
+        <div class="min-w-0">
+          <p class="text-xs font-black text-slate-900 dark:text-white truncate">
+            {{ (authStore.user?.first_name || '') + ' ' + (authStore.user?.last_name || '') }}
+          </p>
             <p class="text-[9px] font-bold text-slate-400 uppercase">Employer Account</p>
           </div>
         </div>
@@ -72,7 +72,7 @@
             <h1 class="text-sm font-bold text-slate-400">
               Welcome back,
               <span class="text-slate-900 dark:text-white font-black">{{
-                authStore.user?.name?.split(' ')[0]
+                authStore.user?.first_name
               }}</span>
             </h1>
           </div>
@@ -108,6 +108,7 @@
 import { ref, computed } from 'vue'
 import { useAuthStore } from '@/stores/AuthStore'
 import { useRouter } from 'vue-router'
+import { getFileUrl } from '@/api/services/api'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -121,10 +122,16 @@ const menuItems = [
   { name: 'Applications', path: '/employer/applications', icon: 'pi pi-inbox', badge: '3' },
 ]
 
+const userFullName = computed(() => {
+  const first = authStore.user?.first_name || ''
+  const last = authStore.user?.last_name || ''
+  return `${first} ${last}`.trim()
+})
+
 const userAvatar = computed(
   () =>
-    authStore.user?.avatar ||
-    `https://ui-avatars.com/api/?name=${authStore.user?.name}&background=6366f1&color=fff`,
+    authStore.user?.avatar_url ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(userFullName.value)}&background=6366f1&color=fff`,
 )
 
 const handleLogout = async () => {
