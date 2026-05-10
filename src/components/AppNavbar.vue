@@ -2,6 +2,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useAuthStore } from '@/stores/AuthStore'
 import { useRouter } from 'vue-router'
+import { getFileUrl } from '@/api/services/api'
 import Button from 'primevue/button'
 import Avatar from 'primevue/avatar'
 
@@ -64,6 +65,7 @@ onMounted(() => {
           v-for="link in [
             { n: 'Home', p: '/' },
             { n: 'Jobs', p: '/jobs' },
+            { n: 'Employers', p: '/employers' },
             { n: 'About', p: '/about' },
           ]"
           :key="link.n"
@@ -88,7 +90,7 @@ onMounted(() => {
         <template v-if="isLoggedIn">
           <div class="flex items-center gap-3">
             <Avatar
-              :image="`https://ui-avatars.com/api/?name=${currentUser?.name}&background=6366f1&color=fff`"
+              :image="getFileUrl(currentUser?.avatar_url) || `https://ui-avatars.com/api/?name=${encodeURIComponent((currentUser?.first_name || '') + ' ' + (currentUser?.last_name || ''))}&background=6366f1&color=fff`"
               shape="circle"
               class="cursor-pointer ring-2 ring-transparent hover:ring-indigo-500 transition-all !w-8 !h-8"
               @click="router.push(`/${currentUser?.role}/dashboard`)"
@@ -127,6 +129,7 @@ onMounted(() => {
         v-for="link in [
           { n: 'Home', p: '/' },
           { n: 'Jobs', p: '/jobs' },
+          { n: 'Employers', p: '/employers' },
           { n: 'About', p: '/about' },
         ]"
         :key="link.n"

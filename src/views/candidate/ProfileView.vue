@@ -12,11 +12,39 @@
       ></div>
 
       <div class="flex flex-col md:flex-row gap-8 items-start relative z-10">
-        <div class="relative group">
+        <!-- Avatar with upload overlay -->
+        <div class="relative group flex-shrink-0">
           <img
-            :src="userAvatar"
+          :src="getFileUrl(userAvatar)"
             class="w-36 h-36 rounded-[32px] object-cover border-4 border-white dark:border-slate-800 shadow-2xl transition-transform group-hover:scale-105 duration-500"
           />
+          <button
+            @click="$refs.avatarInput.click()"
+            class="absolute inset-0 bg-black/40 rounded-[32px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+          >
+            <i class="pi pi-camera text-white text-2xl"></i>
+          </button>
+          <input
+            ref="avatarInput"
+            type="file"
+            class="hidden"
+            accept="image/*"
+            @change="handleAvatarUpload"
+          />
+          <div
+            v-if="avatarUploading"
+            class="absolute inset-0 bg-black/50 rounded-[32px] flex items-center justify-center"
+          >
+            <i class="pi pi-spin pi-spinner text-white text-xl"></i>
+          </div>
+          <button
+            v-if="authStore.user?.avatar_url"
+            @click="deleteAvatar"
+            class="absolute -top-2 -right-2 w-8 h-8 bg-rose-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-rose-600 transition-colors z-20"
+            title="Remove avatar"
+          >
+            <i class="pi pi-trash text-xs"></i>
+          </button>
           <div
             v-if="candidateStore.profile?.is_open_to_work"
             class="absolute -bottom-2 -right-2 bg-green-500 px-3 py-1 border-4 border-white dark:border-slate-900 rounded-full text-[8px] font-black text-white uppercase tracking-tighter"
@@ -29,7 +57,7 @@
           <div class="flex flex-col sm:flex-row justify-between items-start gap-4">
             <div>
               <h2 class="text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-                {{ authStore.user?.name }}
+                {{ fullName }}
               </h2>
               <div class="flex items-center gap-2 mt-1">
                 <p class="text-indigo-600 font-bold text-lg italic">
@@ -109,7 +137,7 @@
     </section>
 
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      <!-- 2. Left Sidebar: Skills & Job Preferences -->
+      <!-- 2. Left Sidebar: Skills, Education, Resumes -->
       <div class="lg:col-span-4 space-y-8">
         <!-- Job Preferences Card -->
         <section
@@ -153,7 +181,7 @@
             <h3
               class="font-black text-slate-900 dark:text-white italic text-xs uppercase tracking-widest"
             >
-              Expertise
+              Skills
             </h3>
             <button
               @click="openSkillModal"
@@ -162,9 +190,12 @@
               <i class="pi pi-plus text-[10px]"></i>
             </button>
           </div>
-          <div class="flex flex-wrap gap-2">
+          <div v-if="!candidateStore.profile?.skills?.length" class="text-center py-4">
+            <p class="text-xs text-slate-400 font-bold">No skills added yet.</p>
+          </div>
+          <div v-else class="flex flex-wrap gap-2">
             <div
-              v-for="skill in candidateStore.profile?.skills"
+              v-for="skill in candidateStore.profile.skills"
               :key="skill.skill_id"
               class="px-3 py-2 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-100 dark:border-slate-700 flex flex-col gap-1"
             >
@@ -181,6 +212,64 @@
           </div>
         </section>
 
+        <!-- Education Card -->
+        <section
+          class="bg-white dark:bg-slate-900 rounded-[35px] p-8 border border-slate-100 dark:border-slate-800 shadow-sm"
+        >
+          <div class="flex justify-between items-center mb-8">
+            <h3
+              class="font-black text-slate-900 dark:text-white italic text-xs uppercase tracking-widest"
+            >
+              Education
+            </h3>
+            <button
+              @click="openEducationModal"
+              class="w-8 h-8 flex items-center justify-center rounded-full bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all"
+            >
+              <i class="pi pi-plus text-[10px]"></i>
+            </button>
+          </div>
+          <div v-if="!candidateStore.profile?.education?.length" class="text-center py-4">
+            <p class="text-xs text-slate-400 font-bold">No education records yet.</p>
+          </div>
+          <div v-else class="space-y-4">
+            <div
+              v-for="edu in candidateStore.profile.education"
+              :key="edu.id"
+              class="group p-4 border border-slate-50 dark:border-slate-800 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-all"
+            >
+              <div class="flex justify-between items-start">
+                <div>
+                  <h4 class="text-xs font-black text-slate-900 dark:text-white uppercase tracking-tight">
+                    {{ edu.degree }}
+                  </h4>
+                  <p class="text-[10px] font-bold text-indigo-600 mt-1">{{ edu.institution }}</p>
+                  <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1">
+                    {{ edu.start_year }} — {{ edu.is_current ? 'Present' : edu.end_year }}
+                  </p>
+                  <p v-if="edu.field_of_study" class="text-[9px] text-slate-500 mt-1">
+                    {{ edu.field_of_study }}
+                  </p>
+                </div>
+                <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button
+                    @click="editEducation(edu)"
+                    class="text-slate-400 hover:text-indigo-600"
+                  >
+                    <i class="pi pi-pencil text-xs"></i>
+                  </button>
+                  <button
+                    @click="deleteEducationItem(edu.id)"
+                    class="text-slate-400 hover:text-rose-500"
+                  >
+                    <i class="pi pi-trash text-xs"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <!-- Resumes Card -->
         <section
           class="bg-white dark:bg-slate-900 rounded-[35px] p-8 border border-slate-100 dark:border-slate-800 shadow-sm"
@@ -190,14 +279,21 @@
           >
             Resumes
           </h3>
-          <div class="space-y-3">
+          <div v-if="!resumes.length" class="text-center py-4">
+            <p class="text-xs text-slate-400 font-bold mb-4">No resumes uploaded yet.</p>
+          </div>
+          <div v-else class="space-y-3">
             <div
               v-for="resume in resumes"
               :key="resume.id"
-              class="group p-4 border border-slate-50 dark:border-slate-800 rounded-2xl flex items-center justify-between hover:bg-slate-50 transition-all"
+              class="group p-4 border border-slate-50 dark:border-slate-800 rounded-2xl flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-all"
             >
-              <div class="flex items-center gap-3 overflow-hidden">
-                <i class="pi pi-file-pdf text-rose-500"></i>
+              <a
+                :href="getFileUrl(resume.file?.url)"
+                target="_blank"
+                class="flex items-center gap-3 overflow-hidden min-w-0"
+              >
+                <i class="pi pi-file-pdf text-rose-500 text-xl flex-shrink-0"></i>
                 <div class="min-w-0">
                   <p
                     class="text-[10px] font-black text-slate-800 dark:text-white truncate uppercase"
@@ -209,29 +305,31 @@
                     class="text-[8px] font-black text-indigo-600 uppercase"
                     >Default CV</span
                   >
+                  <span v-else class="text-[8px] font-black text-slate-400 uppercase">CV</span>
                 </div>
-              </div>
-              <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              </a>
+              <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
                 <button
                   v-if="!resume.is_default"
                   @click="setDefaultResume(resume.id)"
                   class="text-slate-400 hover:text-indigo-600"
+                  title="Set as default"
                 >
                   <i class="pi pi-check"></i>
                 </button>
-                <button @click="deleteResume(resume.id)" class="text-slate-400 hover:text-rose-500">
+                <button @click="deleteResume(resume.id)" class="text-slate-400 hover:text-rose-500" title="Delete">
                   <i class="pi pi-trash"></i>
                 </button>
               </div>
             </div>
-            <label
-              class="w-full flex flex-col items-center justify-center py-8 border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-[24px] cursor-pointer hover:bg-slate-50 transition-all"
-            >
-              <i class="pi pi-cloud-upload text-slate-300 mb-2"></i>
-              <span class="text-[9px] font-black text-slate-400 uppercase">Upload PDF</span>
-              <input type="file" class="hidden" @change="handleResumeUpload" accept=".pdf" />
-            </label>
           </div>
+          <label
+            class="w-full flex flex-col items-center justify-center py-8 border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-[24px] cursor-pointer hover:bg-slate-50 transition-all mt-4"
+          >
+            <i class="pi pi-cloud-upload text-slate-300 mb-2"></i>
+            <span class="text-[9px] font-black text-slate-400 uppercase">Upload PDF</span>
+            <input type="file" class="hidden" @change="handleResumeUpload" accept=".pdf" />
+          </label>
         </section>
       </div>
 
@@ -254,9 +352,12 @@
             </button>
           </div>
 
-          <div class="space-y-12">
+          <div v-if="!candidateStore.profile?.experience?.length" class="text-center py-12">
+            <p class="text-slate-400 font-bold text-sm">No work experience added yet.</p>
+          </div>
+          <div v-else class="space-y-12">
             <div
-              v-for="exp in candidateStore.profile?.experience"
+              v-for="exp in candidateStore.profile.experience"
               :key="exp.id"
               class="relative pl-12 group"
             >
@@ -283,14 +384,23 @@
                     {{ exp.is_current ? 'Present' : formatDate(exp.end_date) }}
                   </p>
                 </div>
-                <button
-                  @click="deleteExperience(exp.id)"
-                  class="text-slate-300 hover:text-rose-500 transition-colors"
-                >
-                  <i class="pi pi-trash text-sm"></i>
-                </button>
+                <div class="flex gap-3">
+                  <button
+                    @click="editExperience(exp)"
+                    class="text-slate-300 hover:text-indigo-500 transition-colors"
+                  >
+                    <i class="pi pi-pencil text-sm"></i>
+                  </button>
+                  <button
+                    @click="deleteExperience(exp.id)"
+                    class="text-slate-300 hover:text-rose-500 transition-colors"
+                  >
+                    <i class="pi pi-trash text-sm"></i>
+                  </button>
+                </div>
               </div>
               <p
+                v-if="exp.description"
                 class="mt-6 text-sm text-slate-500 dark:text-slate-400 font-medium leading-relaxed bg-slate-50 dark:bg-slate-800/50 p-6 rounded-[24px]"
               >
                 {{ exp.description }}
@@ -307,9 +417,9 @@
       class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/40 backdrop-blur-sm animate-in fade-in duration-300"
     >
       <div
-        class="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-[40px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300"
+        class="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-[40px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 max-h-[90vh] flex flex-col"
       >
-        <div class="p-10 pb-0 flex justify-between items-center">
+        <div class="p-10 pb-0 flex justify-between items-center flex-shrink-0">
           <h3
             class="text-3xl font-black italic uppercase tracking-tighter text-slate-900 dark:text-white"
           >
@@ -320,7 +430,7 @@
           </button>
         </div>
 
-        <div class="p-10 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
+        <div class="p-10 space-y-6 overflow-y-auto custom-scrollbar">
           <!-- Global Error State -->
           <div
             v-if="Object.keys(vErrors).length"
@@ -409,6 +519,7 @@
                       <option value="part_time">Part Time</option>
                       <option value="contract">Contract</option>
                       <option value="freelance">Freelance</option>
+                      <option value="internship">Internship</option>
                     </select>
                   </div>
                   <div class="space-y-1">
@@ -452,22 +563,25 @@
               />
               <div
                 v-if="skillResults.length"
-                class="absolute z-50 w-full mt-2 bg-white dark:bg-slate-800 shadow-2xl rounded-2xl p-2 border border-slate-100"
+                class="absolute z-50 w-full mt-2 bg-white dark:bg-slate-800 shadow-2xl rounded-2xl p-2 border border-slate-100 dark:border-slate-700 max-h-60 overflow-y-auto"
               >
                 <div
                   v-for="s in skillResults"
                   :key="s.id"
                   @click="selectSkill(s)"
-                  class="p-3 hover:bg-indigo-50 rounded-xl cursor-pointer text-xs font-black uppercase"
+                  class="p-3 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl cursor-pointer text-xs font-black uppercase"
                 >
                   {{ s.name }}
                 </div>
               </div>
             </div>
-            <div class="flex flex-col gap-3 mt-6">
+            <div v-if="!selectedSkills.length" class="text-center py-8">
+              <p class="text-xs text-slate-400 font-bold">Search and select skills above.</p>
+            </div>
+            <div v-else class="flex flex-col gap-3 mt-6">
               <div
                 v-for="(s, i) in selectedSkills"
-                :key="i"
+                :key="s.skill_id"
                 class="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl"
               >
                 <span class="text-xs font-black text-slate-800 dark:text-white uppercase">{{
@@ -500,12 +614,16 @@
                 placeholder="Job Title (e.g. Backend Developer)"
                 class="form-input"
               />
+              <span v-if="vErrors.title" class="error-text">{{ vErrors.title[0] }}</span>
+
               <input
                 v-model="form.company_name"
                 :class="{ 'border-rose-400': vErrors.company_name }"
                 placeholder="Company Name"
                 class="form-input"
               />
+              <span v-if="vErrors.company_name" class="error-text">{{ vErrors.company_name[0] }}</span>
+
               <div class="grid grid-cols-2 gap-4">
                 <input v-model="form.start_date" type="date" class="form-input" />
                 <input
@@ -516,7 +634,7 @@
                 />
               </div>
               <div class="flex items-center gap-2 px-2">
-                <input type="checkbox" v-model="form.is_current" id="c" class="accent-indigo-600" />
+                <input type="checkbox" v-model="form.is_current" id="c" class="accent-indigo-600 w-4 h-4" />
                 <label for="c" class="text-[10px] font-black uppercase text-slate-500"
                   >I currently work here</label
                 >
@@ -529,9 +647,68 @@
               ></textarea>
             </div>
           </template>
+
+          <!-- Education Form -->
+          <template v-if="activeModal === 'education'">
+            <div class="space-y-4">
+              <input
+                v-model="form.degree"
+                :class="{ 'border-rose-400': vErrors.degree }"
+                placeholder="Degree (e.g. Bachelor of Science)"
+                class="form-input"
+              />
+              <span v-if="vErrors.degree" class="error-text">{{ vErrors.degree[0] }}</span>
+
+              <input
+                v-model="form.institution"
+                :class="{ 'border-rose-400': vErrors.institution }"
+                placeholder="Institution Name"
+                class="form-input"
+              />
+              <span v-if="vErrors.institution" class="error-text">{{ vErrors.institution[0] }}</span>
+
+              <input
+                v-model="form.field_of_study"
+                placeholder="Field of Study"
+                class="form-input"
+              />
+              <div class="grid grid-cols-2 gap-4">
+                <input
+                  v-model.number="form.start_year"
+                  type="number"
+                  placeholder="Start Year"
+                  class="form-input"
+                />
+                <input
+                  v-model.number="form.end_year"
+                  type="number"
+                  placeholder="End Year"
+                  :disabled="form.is_current"
+                  class="form-input"
+                />
+              </div>
+              <div class="flex items-center gap-2 px-2">
+                <input type="checkbox" v-model="form.is_current" id="eduCurrent" class="accent-indigo-600 w-4 h-4" />
+                <label for="eduCurrent" class="text-[10px] font-black uppercase text-slate-500"
+                  >Currently studying here</label
+                >
+              </div>
+              <input
+                v-model="form.grade"
+                placeholder="Grade / GPA (optional)"
+                class="form-input"
+              />
+              <textarea
+                v-model="form.description"
+                rows="3"
+                placeholder="Description, achievements, activities..."
+                class="form-input resize-none"
+              ></textarea>
+            </div>
+          </template>
         </div>
 
-        <div class="p-10 pt-0 flex gap-4">
+        <div class="p-10 pt-0 flex gap-4 flex-shrink-0">
           <button
             @click="closeModal"
             class="flex-1 py-4 font-black text-slate-400 uppercase text-[11px] tracking-[0.2em] hover:text-slate-900 transition-colors"
@@ -565,7 +742,7 @@
 import { ref, onMounted, computed, reactive } from 'vue'
 import { useCandidateStore } from '@/stores/CandidateStore'
 import { useAuthStore } from '@/stores/AuthStore'
-import api from '@/api/services/api'
+import api, { getFileUrl } from '@/api/services/api'
 
 const candidateStore = useCandidateStore()
 const authStore = useAuthStore()
@@ -573,29 +750,83 @@ const authStore = useAuthStore()
 const activeModal = ref(null)
 const modalTitle = ref('')
 const isSaving = ref(false)
+const avatarUploading = ref(false)
 const vErrors = ref({})
 const form = reactive({})
 const resumes = ref([])
 const skillResults = ref([])
 const selectedSkills = ref([])
+const editingEducationId = ref(null)
 
-const userAvatar = computed(
-  () =>
-    authStore.user?.avatar ||
-    `https://ui-avatars.com/api/?name=${authStore.user?.name}&background=6366f1&color=fff&bold=true`,
-)
+const fullName = computed(() => {
+  const first = authStore.user?.first_name || ''
+  const last = authStore.user?.last_name || ''
+  return `${first} ${last}`.trim() || 'Candidate'
+})
+
+const userAvatar = computed(() => {
+  return (
+    authStore.user?.avatar_url ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName.value)}&background=6366f1&color=fff&bold=true`
+  )
+})
 
 onMounted(async () => {
   await candidateStore.fetchProfile()
-  fetchResumes()
+  await fetchResumes()
 })
 
 const fetchResumes = async () => {
   try {
     const res = await api.get('/candidate/resumes')
-    resumes.value = res.data.data || []
+    // Response interceptor unwraps: { success: true, data: [...] } -> [...]
+    resumes.value = Array.isArray(res) ? res : res.data || []
   } catch (err) {
+    console.error('Failed to fetch resumes', err)
     resumes.value = []
+  }
+}
+
+const handleAvatarUpload = async (e) => {
+  const file = e.target.files[0]
+  if (!file) return
+
+  avatarUploading.value = true
+  const fd = new FormData()
+  fd.append('avatar', file)
+
+  try {
+    const updatedUser = await api.patch('/auth/me', fd, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    // Response interceptor unwraps to UserResource
+    if (updatedUser && updatedUser.avatar_url) {
+      authStore.user = { ...authStore.user, ...updatedUser }
+      localStorage.setItem('user', JSON.stringify(authStore.user))
+    }
+  } catch (err) {
+    console.error('Avatar upload failed', err.response?.data)
+    alert(err.response?.data?.message || 'Failed to upload avatar')
+  } finally {
+    avatarUploading.value = false
+    e.target.value = ''
+  }
+}
+
+const deleteAvatar = async () => {
+  if (!confirm('Remove your profile picture?')) return
+  avatarUploading.value = true
+  try {
+    const updatedUser = await api.patch('/auth/me', { remove_avatar: true })
+    if (updatedUser) {
+      authStore.user = { ...authStore.user, ...updatedUser }
+      localStorage.setItem('user', JSON.stringify(authStore.user))
+    }
+  } catch (err) {
+    console.error('Avatar deletion failed', err.response?.data)
+    alert(err.response?.data?.message || 'Failed to remove avatar')
+  } finally {
+    avatarUploading.value = false
   }
 }
 
@@ -604,18 +835,19 @@ const openProfileModal = () => {
   activeModal.value = 'profile'
   vErrors.value = {}
   Object.assign(form, {
-    headline: candidateStore.profile.headline,
-    bio: candidateStore.profile.bio,
-    location: candidateStore.profile.location,
-    experience_years: candidateStore.profile.experience_years,
+    headline: candidateStore.profile.headline || '',
+    bio: candidateStore.profile.bio || '',
+    location: candidateStore.profile.location || '',
+    city: candidateStore.profile.city || '',
+    experience_years: candidateStore.profile.experience_years || '',
     education_level: candidateStore.profile.education_level || 'bachelor',
-    linkedin_url: candidateStore.profile.linkedin_url,
-    github_url: candidateStore.profile.github_url,
-    portfolio_url: candidateStore.profile.portfolio_url,
+    linkedin_url: candidateStore.profile.linkedin_url || '',
+    github_url: candidateStore.profile.github_url || '',
+    portfolio_url: candidateStore.profile.portfolio_url || '',
     preferred_job_type: candidateStore.profile.preferred_job_type || 'full_time',
     is_open_to_work: candidateStore.profile.is_open_to_work ?? true,
-    expected_salary_min: candidateStore.profile.expected_salary_min,
-    expected_salary_max: candidateStore.profile.expected_salary_max,
+    expected_salary_min: candidateStore.profile.expected_salary_min || '',
+    expected_salary_max: candidateStore.profile.expected_salary_max || '',
     currency: candidateStore.profile.currency || 'EGP',
   })
 }
@@ -623,17 +855,21 @@ const openProfileModal = () => {
 const openSkillModal = () => {
   modalTitle.value = 'Skills Sync'
   activeModal.value = 'skills'
+  skillResults.value = []
   selectedSkills.value = (candidateStore.profile?.skills || []).map((s) => ({
     skill_id: s.skill_id,
     name: s.name,
-    proficiency_level: s.proficiency_level,
+    proficiency_level: s.proficiency_level || 'intermediate',
+    years_experience: s.years_experience || 1,
   }))
 }
 
 const openExperienceModal = () => {
   modalTitle.value = 'Add Career Step'
   activeModal.value = 'experience'
+  vErrors.value = {}
   Object.assign(form, {
+    id: null,
     title: '',
     company_name: '',
     employment_type: 'full_time',
@@ -644,9 +880,50 @@ const openExperienceModal = () => {
   })
 }
 
+const openEducationModal = () => {
+  modalTitle.value = 'Add Education'
+  activeModal.value = 'education'
+  editingEducationId.value = null
+  vErrors.value = {}
+  Object.assign(form, {
+    degree: '',
+    institution: '',
+    field_of_study: '',
+    start_year: '',
+    end_year: '',
+    is_current: false,
+    grade: '',
+    description: '',
+  })
+}
+
+const editEducation = (edu) => {
+  modalTitle.value = 'Edit Education'
+  activeModal.value = 'education'
+  editingEducationId.value = edu.id
+  vErrors.value = {}
+  Object.assign(form, {
+    degree: edu.degree,
+    institution: edu.institution,
+    field_of_study: edu.field_of_study || '',
+    start_year: edu.start_year,
+    end_year: edu.end_year || '',
+    is_current: edu.is_current,
+    grade: edu.grade || '',
+    description: edu.description || '',
+  })
+}
+
+const deleteEducationItem = async (id) => {
+  if (confirm('Delete this education record?')) {
+    await candidateStore.deleteEducation(id)
+  }
+}
+
 const closeModal = () => {
   activeModal.value = null
   vErrors.value = {}
+  skillResults.value = []
 }
 
 const searchSkills = async (e) => {
@@ -655,8 +932,14 @@ const searchSkills = async (e) => {
     skillResults.value = []
     return
   }
-  const res = await api.get(`/skills/autocomplete?q=${q}`)
-  skillResults.value = res.data
+  try {
+    const res = await api.get(`/skills/autocomplete?q=${encodeURIComponent(q)}`)
+    // Interceptor unwraps: { success: true, data: [...] } -> [...]
+    skillResults.value = Array.isArray(res) ? res : res.data || []
+  } catch (err) {
+    console.error('Skill search failed', err)
+    skillResults.value = []
+  }
 }
 
 const selectSkill = (skill) => {
@@ -665,6 +948,7 @@ const selectSkill = (skill) => {
       skill_id: skill.id,
       name: skill.name,
       proficiency_level: 'intermediate',
+      years_experience: 1,
     })
   }
   skillResults.value = []
@@ -681,18 +965,43 @@ const saveData = async () => {
         skills: selectedSkills.value.map((s) => ({
           skill_id: s.skill_id,
           proficiency_level: s.proficiency_level,
-          years_experience: 1,
+          years_experience: s.years_experience || 1,
         })),
       })
     } else if (activeModal.value === 'experience') {
       const data = { ...form }
       if (data.is_current) delete data.end_date
-      await api.post('/candidate/experience', data)
+      delete data.id
+      if (form.id) {
+        await api.put(`/candidate/experience/${form.id}`, data)
+      } else {
+        await api.post('/candidate/experience', data)
+      }
+    } else if (activeModal.value === 'education') {
+      const data = { ...form }
+      if (data.is_current) delete data.end_year
+      if (editingEducationId.value) {
+        await api.put(`/candidate/education/${editingEducationId.value}`, data)
+      } else {
+        await api.post('/candidate/education', data)
+      }
     }
     await candidateStore.fetchProfile()
-    closeModal()
+    if (activeModal.value !== 'skills') {
+      closeModal()
+    } else {
+      // For skills modal, keep it open but refresh selected skills from profile
+      selectedSkills.value = (candidateStore.profile?.skills || []).map((s) => ({
+        skill_id: s.skill_id,
+        name: s.name,
+        proficiency_level: s.proficiency_level || 'intermediate',
+        years_experience: s.years_experience || 1,
+      }))
+      skillResults.value = []
+    }
   } catch (e) {
     if (e.response?.status === 422) vErrors.value = e.response.data.errors
+    console.error('Save failed', e)
   } finally {
     isSaving.value = false
   }
@@ -703,49 +1012,83 @@ const handleResumeUpload = async (e) => {
   if (!file) return
 
   const fd = new FormData()
-
   fd.append('file', file)
-  fd.append('title', file.name.split('.')[0].toUpperCase())
-
-  fd.append('is_default', resumes.value.length === 0 ? 1 : 0)
+  fd.append('title', file.name.replace(/\.[^/.]+$/, '').toUpperCase())
+  fd.append('is_default', resumes.value.length === 0 ? '1' : '0')
 
   try {
     isSaving.value = true
     await api.post('/candidate/resumes', fd, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
-
-    fetchResumes()
+    await fetchResumes()
     await candidateStore.fetchProfile()
   } catch (err) {
     console.error('Upload failed', err.response?.data)
     if (err.response?.status === 422) {
       vErrors.value = err.response.data.errors
     }
+    alert(err.response?.data?.message || 'Failed to upload resume')
   } finally {
     isSaving.value = false
+    e.target.value = ''
   }
 }
 
 const setDefaultResume = async (id) => {
-  await api.patch(`/candidate/resumes/${id}/default`)
-  fetchResumes()
-}
-const deleteResume = async (id) => {
-  if (confirm('Delete Resume?')) {
-    await api.delete(`/candidate/resumes/${id}`)
-    fetchResumes()
+  try {
+    await api.patch(`/candidate/resumes/${id}/default`)
+    await fetchResumes()
+  } catch (err) {
+    console.error('Failed to set default', err)
+    alert('Failed to set default resume')
   }
 }
+
+const deleteResume = async (id) => {
+  if (confirm('Delete this resume? This cannot be undone.')) {
+    try {
+      await api.delete(`/candidate/resumes/${id}`)
+      await fetchResumes()
+      await candidateStore.fetchProfile()
+    } catch (err) {
+      console.error('Delete failed', err)
+      alert('Failed to delete resume')
+    }
+  }
+}
+
+const editExperience = (exp) => {
+  modalTitle.value = 'Edit Experience'
+  activeModal.value = 'experience'
+  vErrors.value = {}
+  Object.assign(form, {
+    id: exp.id,
+    title: exp.title,
+    company_name: exp.company_name,
+    employment_type: exp.employment_type || 'full_time',
+    start_date: exp.start_date,
+    end_date: exp.end_date || '',
+    is_current: exp.is_current,
+    description: exp.description || '',
+  })
+}
+
 const deleteExperience = async (id) => {
-  if (confirm('Delete Experience?')) {
-    await api.delete(`/candidate/experience/${id}`)
-    candidateStore.fetchProfile()
+  if (confirm('Delete this experience record?')) {
+    try {
+      await api.delete(`/candidate/experience/${id}`)
+      await candidateStore.fetchProfile()
+    } catch (err) {
+      console.error('Delete failed', err)
+      alert('Failed to delete experience')
+    }
   }
 }
 
 const formatDate = (d) =>
   d ? new Date(d).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : '...'
+
 const getProficiencyClass = (lvl) => {
   const m = {
     beginner: 'bg-slate-100 text-slate-500',

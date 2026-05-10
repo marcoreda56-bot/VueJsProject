@@ -45,7 +45,15 @@
             'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50',
           ]"
         >
-          <i :class="[link.icon, 'text-lg']"></i>
+          <div class="relative">
+            <i :class="[link.icon, 'text-lg']"></i>
+            <span
+              v-if="link.badge && link.badge.value > 0 && !isCollapsed"
+              class="absolute -top-2 -right-3 w-5 h-5 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center"
+            >
+              {{ link.badge.value > 9 ? '9+' : link.badge.value }}
+            </span>
+          </div>
           <span v-if="!isCollapsed" class="whitespace-nowrap">{{ link.name }}</span>
         </router-link>
       </nav>
@@ -79,10 +87,10 @@
         </div>
         <div class="flex items-center gap-4">
           <span class="text-sm font-bold text-slate-400 hidden sm:block"
-            >Welcome, {{ authStore.user?.name?.split(' ')[0] }}</span
+            >Welcome, {{ authStore.user?.first_name }}</span
           >
           <img
-            :src="userAvatar"
+            :src="getFileUrl(userAvatar)"
             class="w-10 h-10 rounded-xl border-2 border-white dark:border-slate-800 shadow-sm"
           />
         </div>
@@ -108,30 +116,60 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/AuthStore'
 import { useRouter } from 'vue-router'
+import { notificationsApi, getFileUrl } from '@/api/services/api'
 
 const authStore = useAuthStore()
 const router = useRouter()
 const isCollapsed = ref(false)
 const isMobileOpen = ref(false)
+const unreadCount = ref(0)
+let unreadInterval = null
 
 const navLinks = [
   { name: 'Dashboard', path: '/candidate/dashboard', icon: 'pi pi-th-large' },
   { name: 'Applications', path: '/candidate/applications', icon: 'pi pi-send' },
+  { name: 'Saved Jobs', path: '/candidate/saved-jobs', icon: 'pi pi-bookmark' },
   { name: 'Profile', path: '/candidate/profile', icon: 'pi pi-user' },
+  { name: 'My Reviews', path: '/candidate/reviews', icon: 'pi pi-star' },
+  { name: 'Notifications', path: '/candidate/notifications', icon: 'pi pi-bell', badge: unreadCount },
   { name: 'Find Jobs', path: '/jobs', icon: 'pi pi-search' },
 ]
 
+const userFullName = computed(() => {
+  const first = authStore.user?.first_name || ''
+  const last = authStore.user?.last_name || ''
+  return `${first} ${last}`.trim()
+})
+
 const userAvatar = computed(
   () =>
-    authStore.user?.avatar ||
-    `https://ui-avatars.com/api/?name=${authStore.user?.name}&background=6366f1&color=fff`,
+    authStore.user?.avatar_url ||
+    `https://ui-avatars.com/api/?name=${encodeURIComponent(userFullName.value)}&background=6366f1&color=fff`,
 )
 
 const handleLogout = async () => {
   await authStore.logout()
   router.push('/login')
 }
+
+const fetchUnreadCount = async () => {
+  try {
+    const data = await notificationsApi.getUnreadCount()
+    unreadCount.value = data.count || 0
+  } catch (err) {
+    console.error('Failed to fetch unread count', err)
+  }
+}
+
+onMounted(() => {
+  fetchUnreadCount()
+  unreadInterval = setInterval(fetchUnreadCount, 30000)
+})
+
+onUnmounted(() => {
+  if (unreadInterval) clearInterval(unreadInterval)
+})
 </script>

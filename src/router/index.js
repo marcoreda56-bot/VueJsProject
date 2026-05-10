@@ -26,6 +26,18 @@ const routes = [
     meta: { guest: true },
   },
   {
+    path: '/auth/forgot-password',
+    name: 'forgot-password',
+    component: () => import('@/views/auth/ForgotPasswordView.vue'),
+    meta: { guest: true },
+  },
+  {
+    path: '/auth/reset-password',
+    name: 'reset-password',
+    component: () => import('@/views/auth/ResetPasswordView.vue'),
+    meta: { guest: true },
+  },
+  {
     path: '/jobs',
     name: 'jobs',
     component: () => import('@/views/jobs/JobListView.vue'),
@@ -34,6 +46,17 @@ const routes = [
     path: '/jobs/:id',
     name: 'job-details',
     component: () => import('@/views/jobs/JobDetailView.vue'),
+    props: true,
+  },
+  {
+    path: '/employers',
+    name: 'employers',
+    component: () => import('@/views/employer/EmployerListView.vue'),
+  },
+  {
+    path: '/employers/:slug',
+    name: 'employer-public-profile',
+    component: () => import('@/views/employer/EmployerPublicProfileView.vue'),
     props: true,
   },
 
@@ -56,7 +79,28 @@ const routes = [
       {
         path: 'applications',
         name: 'candidate-applications',
-        component: () => import('@/views/candidate/DashboardView.vue'),
+        component: () => import('@/views/candidate/ApplicationsView.vue'),
+      },
+      {
+        path: 'applications/:id',
+        name: 'candidate-application-detail',
+        component: () => import('@/views/candidate/ApplicationDetailView.vue'),
+        props: true,
+      },
+      {
+        path: 'saved-jobs',
+        name: 'candidate-saved-jobs',
+        component: () => import('@/views/candidate/SavedJobsView.vue'),
+      },
+      {
+        path: 'notifications',
+        name: 'candidate-notifications',
+        component: () => import('@/views/candidate/NotificationsView.vue'),
+      },
+      {
+        path: 'reviews',
+        name: 'candidate-reviews',
+        component: () => import('@/views/candidate/ReviewsView.vue'),
       },
     ],
   },

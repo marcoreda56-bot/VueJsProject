@@ -164,6 +164,7 @@ onMounted(async () => {
 })
 
 const userAvatar = computed(() => {
+  console.log("Avatar image : ");
   if (auth.user?.avatar) return auth.user.avatar
   const name = auth.user?.name || 'User'
   return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=6366f1&color=fff&bold=true`
