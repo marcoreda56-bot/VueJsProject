@@ -47,7 +47,7 @@
       <div class="mt-auto p-8 border-t border-gray-50">
         <div class="flex items-center gap-4 mb-6">
           <img
-            :src="getFileUrl(userAvatar)"
+            :src="userAvatar"
             class="w-10 h-10 rounded-full object-cover border border-gray-100"
           />
           <div class="flex-1 min-w-0">
@@ -102,7 +102,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/AuthStore'
 import { useAdminStore } from '@/stores/AdminStore'
 import { useRouter } from 'vue-router'
-import { getFileUrl } from '@/api/services/api'
+
 
 const authStore = useAuthStore()
 const adminStore = useAdminStore()

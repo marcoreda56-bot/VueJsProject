@@ -105,15 +105,26 @@ export const candidateApi = {
 export const employerApi = {
   getProfile: () => api.get('/employer/profile'),
   updateProfile: (data) => api.put('/employer/profile', data),
-  getJobs: () => api.get('/employer/jobs'),
+
+  getJobs: (params) => api.get('/employer/jobs', { params }),
   createJob: (data) => api.post('/employer/jobs', data),
   getJobDetails: (id) => api.get(`/employer/jobs/${id}`),
   updateJob: (id, data) => api.put(`/employer/jobs/${id}`, data),
   updateJobStatus: (id, status) => api.patch(`/employer/jobs/${id}/status`, { status }),
   deleteJob: (id) => api.delete(`/employer/jobs/${id}`),
+
   getApplications: (params) => api.get('/employer/applications', { params }),
-  updateAppStatus: (id, statusData) => api.patch(`/employer/applications/${id}/status`, statusData),
+  getJobApplications: (jobId, params) => api.get(`/employer/jobs/${jobId}/applications`, { params }),
+  getApplicationDetail: (id) => api.get(`/employer/applications/${id}`),
+  updateAppStatus: (id, data) => api.patch(`/employer/applications/${id}/status`, data),
+
   scheduleInterview: (appId, data) => api.post(`/employer/applications/${appId}/interviews`, data),
+  rescheduleInterview: (appId, interviewId, data) => api.patch(`/employer/applications/${appId}/interviews/${interviewId}/reschedule`, data),
+  cancelInterview: (appId, interviewId, data) => api.patch(`/employer/applications/${appId}/interviews/${interviewId}/cancel`, data),
+  markInterviewOutcome: (appId, interviewId, data) => api.patch(`/employer/applications/${appId}/interviews/${interviewId}/outcome`, data),
+
+  getReviews: () => api.get('/employer/reviews'),
+  replyToReview: (id, data) => api.post(`/employer/reviews/${id}/reply`, data),
 }
 
 export const adminApi = {

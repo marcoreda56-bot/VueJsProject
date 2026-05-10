@@ -48,7 +48,7 @@
         </button>
 
         <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50">
-        <img :src="getFileUrl(userAvatar)" class="w-10 h-10 rounded-xl object-cover" />
+        <img :src="userAvatar" class="w-10 h-10 rounded-xl object-cover" />
         <div class="min-w-0">
           <p class="text-xs font-black text-slate-900 dark:text-white truncate">
             {{ (authStore.user?.first_name || '') + ' ' + (authStore.user?.last_name || '') }}
@@ -105,22 +105,26 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/AuthStore'
+import { useNotificationStore } from '@/stores/NotificationStore'
 import { useRouter } from 'vue-router'
-import { getFileUrl } from '@/api/services/api'
+
 
 const authStore = useAuthStore()
+const notificationStore = useNotificationStore()
 const router = useRouter()
 const isMobileOpen = ref(false)
 
-const menuItems = [
+const menuItems = computed(() => [
   { name: 'Dashboard', path: '/employer/dashboard', icon: 'pi pi-th-large' },
-  { name: 'Company Profile', path: '/employer/profile', icon: 'pi pi-building' }, // جديد
+  { name: 'Company Profile', path: '/employer/profile', icon: 'pi pi-building' },
   { name: 'Post Job', path: '/employer/post-job', icon: 'pi pi-plus-circle' },
   { name: 'My Jobs', path: '/employer/manage-jobs', icon: 'pi pi-briefcase' },
-  { name: 'Applications', path: '/employer/applications', icon: 'pi pi-inbox', badge: '3' },
-]
+  { name: 'Applications', path: '/employer/applications', icon: 'pi pi-inbox', badge: notificationStore.unreadCount || undefined },
+  { name: 'Reviews', path: '/employer/reviews', icon: 'pi pi-star' },
+  { name: 'Notifications', path: '/employer/notifications', icon: 'pi pi-bell' },
+])
 
 const userFullName = computed(() => {
   const first = authStore.user?.first_name || ''
@@ -133,6 +137,16 @@ const userAvatar = computed(
     authStore.user?.avatar_url ||
     `https://ui-avatars.com/api/?name=${encodeURIComponent(userFullName.value)}&background=6366f1&color=fff`,
 )
+
+let pollInterval = null
+onMounted(() => {
+  notificationStore.fetchUnreadCount()
+  pollInterval = setInterval(() => notificationStore.fetchUnreadCount(), 30000)
+})
+
+onUnmounted(() => {
+  if (pollInterval) clearInterval(pollInterval)
+})
 
 const handleLogout = async () => {
   await authStore.logout()

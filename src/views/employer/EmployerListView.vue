@@ -29,7 +29,7 @@
           <div class="flex items-start gap-4">
             <div class="w-16 h-16 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border p-2 flex items-center justify-center flex-shrink-0">
               <img
-                :src="getFileUrl(emp.logo) || '/default-logo.png'"
+                :src="emp.logo || '/default-logo.png'"
                 class="max-w-full max-h-full object-contain"
                 alt="Company logo"
               />
@@ -63,7 +63,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { publicApi, getFileUrl } from '@/api/services/api'
+import { publicApi } from '@/api/services/api'
 
 const employers = ref([])
 const loading = ref(false)

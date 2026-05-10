@@ -122,9 +122,22 @@ const routes = [
         component: () => import('@/views/employer/PostJobView.vue'),
       },
       {
-        path: 'edit-job/:id',
+        path: 'jobs/:id',
+        name: 'employer-job-detail',
+        component: () => import('@/views/employer/JobDetailView.vue'),
+        props: true,
+      },
+      {
+        path: 'jobs/:id/edit',
         name: 'job-edit',
         component: () => import('@/views/employer/EditJobView.vue'),
+        props: true,
+      },
+      {
+        path: 'jobs/:jobId/applications',
+        name: 'employer-job-applications',
+        component: () => import('@/views/employer/JobApplicationsView.vue'),
+        props: true,
       },
       {
         path: 'manage-jobs',
@@ -140,6 +153,22 @@ const routes = [
         path: 'applications',
         name: 'employer-applications',
         component: () => import('@/views/employer/ApplicationsView.vue'),
+      },
+      {
+        path: 'applications/:id',
+        name: 'employer-application-detail',
+        component: () => import('@/views/employer/ApplicationDetailView.vue'),
+        props: true,
+      },
+      {
+        path: 'reviews',
+        name: 'employer-reviews',
+        component: () => import('@/views/employer/ReviewsView.vue'),
+      },
+      {
+        path: 'notifications',
+        name: 'employer-notifications',
+        component: () => import('@/views/employer/NotificationsView.vue'),
       },
     ],
   },

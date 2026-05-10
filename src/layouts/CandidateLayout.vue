@@ -90,7 +90,7 @@
             >Welcome, {{ authStore.user?.first_name }}</span
           >
           <img
-            :src="getFileUrl(userAvatar)"
+            :src="userAvatar"
             class="w-10 h-10 rounded-xl border-2 border-white dark:border-slate-800 shadow-sm"
           />
         </div>
@@ -119,7 +119,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '@/stores/AuthStore'
 import { useRouter } from 'vue-router'
-import { notificationsApi, getFileUrl } from '@/api/services/api'
+import { notificationsApi } from '@/api/services/api'
 
 const authStore = useAuthStore()
 const router = useRouter()
