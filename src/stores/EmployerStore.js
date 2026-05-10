@@ -32,7 +32,7 @@ export const useEmployerStore = defineStore('employer', {
       this.loading = true
       try {
         let data = payload
-        // If logo or cover is a File, wrap in FormData
+        // If logo or cover is a File, wrap in FormData and tag with file_type
         if (payload.logo instanceof File || payload.cover_image instanceof File) {
           data = new FormData()
           Object.keys(payload).forEach((key) => {
@@ -40,6 +40,12 @@ export const useEmployerStore = defineStore('employer', {
               data.append(key, payload[key])
             }
           })
+          if (payload.logo instanceof File) {
+            data.append('file_type', 'company_logo')
+          }
+          if (payload.cover_image instanceof File) {
+            data.append('file_type', 'company_cover')
+          }
         }
         this.profile = await employerApi.updateProfile(data)
         return this.profile
