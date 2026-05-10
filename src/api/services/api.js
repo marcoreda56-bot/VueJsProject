@@ -88,7 +88,8 @@ export const candidateApi = {
   getApplications: (params) => api.get('/candidate/applications', { params }),
   getApplication: (id) => api.get(`/candidate/applications/${id}`),
   applyForJob: (data) => api.post('/candidate/applications', data),
-  withdrawApplication: (id, reason) => api.patch(`/candidate/applications/${id}/withdraw`, { reason }),
+  withdrawApplication: (id, reason) =>
+    api.patch(`/candidate/applications/${id}/withdraw`, { reason }),
 
   // Saved Jobs
   getSavedJobs: () => api.get('/candidate/saved-jobs'),
@@ -114,14 +115,18 @@ export const employerApi = {
   deleteJob: (id) => api.delete(`/employer/jobs/${id}`),
 
   getApplications: (params) => api.get('/employer/applications', { params }),
-  getJobApplications: (jobId, params) => api.get(`/employer/jobs/${jobId}/applications`, { params }),
+  getJobApplications: (jobId, params) =>
+    api.get(`/employer/jobs/${jobId}/applications`, { params }),
   getApplicationDetail: (id) => api.get(`/employer/applications/${id}`),
   updateAppStatus: (id, data) => api.patch(`/employer/applications/${id}/status`, data),
 
   scheduleInterview: (appId, data) => api.post(`/employer/applications/${appId}/interviews`, data),
-  rescheduleInterview: (appId, interviewId, data) => api.patch(`/employer/applications/${appId}/interviews/${interviewId}/reschedule`, data),
-  cancelInterview: (appId, interviewId, data) => api.patch(`/employer/applications/${appId}/interviews/${interviewId}/cancel`, data),
-  markInterviewOutcome: (appId, interviewId, data) => api.patch(`/employer/applications/${appId}/interviews/${interviewId}/outcome`, data),
+  rescheduleInterview: (appId, interviewId, data) =>
+    api.patch(`/employer/applications/${appId}/interviews/${interviewId}/reschedule`, data),
+  cancelInterview: (appId, interviewId, data) =>
+    api.patch(`/employer/applications/${appId}/interviews/${interviewId}/cancel`, data),
+  markInterviewOutcome: (appId, interviewId, data) =>
+    api.patch(`/employer/applications/${appId}/interviews/${interviewId}/outcome`, data),
 
   getReviews: () => api.get('/employer/reviews'),
   replyToReview: (id, data) => api.post(`/employer/reviews/${id}/reply`, data),
@@ -133,11 +138,15 @@ export const adminApi = {
   createCategory: (data) => api.post('/admin/categories', data),
   updateCategory: (id, data) => api.put(`/admin/categories/${id}`, data),
   deleteCategory: (id) => api.delete(`/admin/categories/${id}`),
+  getJobs: (params) => api.get('/admin/jobs', { params }),
 
+  confirmJob: (id) => api.patch(`/admin/jobs/${id}/confirm`),
+  rejectJob: (id, data) => api.patch(`/admin/jobs/${id}/reject`, data),
   // Skills
   createSkill: (data) => api.post('/admin/skills', data),
   updateSkill: (id, data) => api.put(`/admin/skills/${id}`, data),
   deleteSkill: (id) => api.delete(`/admin/skills/${id}`),
+  updateJobStatus: (id, data) => api.patch(`/admin/jobs/${id}/status`, data),
 
   // General Admin Tasks
   getStats: () => api.get('/admin/dashboard'),
@@ -164,7 +173,8 @@ export const notificationsApi = {
 // the web server (e.g. Nginx) or Laravel itself.
 export function getFileUrl(path) {
   if (!path) return ''
-  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('file://')) return path
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('file://'))
+    return path
 
   // Ensure the path starts with a leading slash so the browser
   // resolves it from the domain root (e.g. http://localhost:3001/)

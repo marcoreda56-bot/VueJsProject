@@ -63,6 +63,34 @@ export const useAdminStore = defineStore('admin', () => {
     return newCat
   }
 
+  const approveJob = async (id) => {
+    try {
+      await adminApi.confirmJob(id)
+      const index = jobs.value.findIndex((j) => j.id === id)
+      if (index !== -1) jobs.value[index].status = 'active'
+    } catch (err) {
+      console.error('Approve Error:', err)
+    }
+  }
+
+  const rejectJob = async (id, reason = '') => {
+    try {
+      await adminApi.rejectJob(id, { rejection_reason: reason })
+      const index = jobs.value.findIndex((j) => j.id === id)
+      if (index !== -1) jobs.value[index].status = 'rejected'
+    } catch (err) {
+      console.error('Reject Error:', err)
+    }
+  }
+
+  const deleteJob = async (id) => {
+    try {
+      await adminApi.deleteJob(id)
+      jobs.value = jobs.value.filter((j) => j.id !== id)
+    } catch (err) {
+      console.error('Delete Error:', err)
+    }
+  }
   const updateCategory = async (id, data) => {
     const res = await adminApi.updateCategory(id, data)
     const updated = res.data || res
