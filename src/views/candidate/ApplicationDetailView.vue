@@ -29,7 +29,7 @@
           <div class="flex items-center gap-6">
             <div class="w-20 h-20 bg-white dark:bg-slate-800 rounded-3xl shadow-md border p-4 flex items-center justify-center">
               <img
-                :src="getFileUrl(application.employer_snapshot?.logo_url) || '/default-logo.png'"
+                :src="application.employer_snapshot?.logo_url || '/default-logo.png'"
                 class="max-w-full max-h-full object-contain"
                 alt="Company logo"
               />

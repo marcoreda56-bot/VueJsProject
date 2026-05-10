@@ -174,7 +174,7 @@
 <script setup>
 import { onMounted, computed } from 'vue'
 import { useCandidateStore } from '@/stores/CandidateStore'
-import { getFileUrl } from '@/api/services/api'
+
 
 const candidateStore = useCandidateStore()
 

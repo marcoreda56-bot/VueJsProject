@@ -25,7 +25,7 @@
           <div class="flex flex-col md:flex-row gap-8 items-start md:items-center">
             <div class="w-24 h-24 bg-white dark:bg-slate-800 rounded-3xl shadow-md border dark:border-slate-700 p-4 flex items-center justify-center">
               <img
-                :src="getFileUrl(job.employer?.logo) || '/default-logo.png'"
+                :src="job.employer?.logo || '/default-logo.png'"
                 class="max-w-full max-h-full object-contain"
                 alt="Company logo"
               />
@@ -264,7 +264,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useJobStore } from '@/stores/JobStore'
 import { useAuthStore } from '@/stores/AuthStore'
-import { candidateApi, getFileUrl } from '@/api/services/api'
+import { candidateApi } from '@/api/services/api'
 
 const route = useRoute()
 const router = useRouter()

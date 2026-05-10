@@ -15,7 +15,7 @@
         <!-- Avatar with upload overlay -->
         <div class="relative group flex-shrink-0">
           <img
-          :src="getFileUrl(userAvatar)"
+           :src="userAvatar"
             class="w-36 h-36 rounded-[32px] object-cover border-4 border-white dark:border-slate-800 shadow-2xl transition-transform group-hover:scale-105 duration-500"
           />
           <button
