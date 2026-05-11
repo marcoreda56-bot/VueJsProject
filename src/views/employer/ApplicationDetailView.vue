@@ -53,12 +53,11 @@
       <div v-if="application.resume_url" class="bg-white dark:bg-slate-900 rounded-[2rem] p-8 shadow-sm border border-slate-100 dark:border-slate-800">
         <h3 class="font-black text-slate-900 dark:text-white uppercase tracking-widest text-xs mb-4">Submitted Resume</h3>
         <a
-          :href="getFileUrl(application.resume_url)"
-          target="_blank"
-          class="inline-flex items-center gap-3 px-6 py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 transition-all"
+          @click="viewResume"
+          class="inline-flex items-center gap-3 px-6 py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 transition-all cursor-pointer"
         >
           <i class="pi pi-file-pdf text-rose-500 text-xl"></i>
-          View Resume
+          {{ downloadingResume ? 'Opening...' : 'View Resume' }}
         </a>
       </div>
 
@@ -276,7 +275,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useEmployerStore } from '@/stores/EmployerStore'
-import { getFileUrl } from '@/api/services/api'
+import { downloadResumeBlob } from '@/api/services/api'
 import Swal from 'sweetalert2'
 
 const route = useRoute()
@@ -287,6 +286,7 @@ const showInterviewModal = ref(false)
 const showRescheduleModal = ref(false)
 const showOutcomeModal = ref(false)
 const selectedInterviewId = ref(null)
+const downloadingResume = ref(false)
 
 const interviewForm = ref({
   scheduled_at: '',
@@ -467,6 +467,20 @@ const historyDotClass = (stage) => {
     job_removed: 'bg-slate-300',
   }
   return map[stage] || 'bg-slate-400'
+}
+
+const viewResume = async () => {
+  if (!application.value?.id) return
+  downloadingResume.value = true
+  try {
+    const blobUrl = await downloadResumeBlob(application.value.id)
+    window.open(blobUrl, '_blank')
+  } catch (err) {
+    console.error('Failed to open resume', err)
+    alert('Failed to open resume. Please try again.')
+  } finally {
+    downloadingResume.value = false
+  }
 }
 
 const formatDate = (date) =>

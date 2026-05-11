@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAdminStore } from '@/stores/AdminStore'
+import { downloadResumeBlob } from '@/api/services/api'
 import Swal from 'sweetalert2'
 
 const route = useRoute()
@@ -35,6 +36,16 @@ const getStatusBadgeClass = (status) => {
       return 'bg-red-100 text-red-700'
     default:
       return 'bg-gray-100 text-gray-700'
+  }
+}
+
+const viewResume = async (applicationId) => {
+  try {
+    const blobUrl = await downloadResumeBlob(applicationId)
+    window.open(blobUrl, '_blank')
+  } catch (err) {
+    console.error('Failed to open resume', err)
+    alert('Failed to open resume. Please try again.')
   }
 }
 
@@ -344,12 +355,11 @@ const handleDelete = async () => {
                     {{ formatDate(app.created_at) }}
                   </td>
                   <td class="px-8 py-6 text-right">
-                    <a
+                    <button
                       v-if="app.resume_url"
-                      :href="app.resume_url"
-                      target="_blank"
-                      class="text-indigo-600 hover:text-indigo-800 font-black text-xs uppercase tracking-widest"
-                      >View PDF</a
+                      @click="viewResume(app.id)"
+                      class="text-indigo-600 hover:text-indigo-800 font-black text-xs uppercase tracking-widest cursor-pointer"
+                      >View PDF</button
                     >
                     <span v-else class="text-gray-300 font-black text-[10px] uppercase"
                       >No File</span

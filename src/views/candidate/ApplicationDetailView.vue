@@ -93,12 +93,11 @@
           Submitted Resume
         </h3>
         <a
-          :href="getFileUrl(application.resume_url)"
-          target="_blank"
-          class="inline-flex items-center gap-3 px-6 py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 transition-all"
+          @click="viewResume"
+          class="inline-flex items-center gap-3 px-6 py-4 bg-slate-50 dark:bg-slate-800 rounded-2xl text-sm font-bold text-slate-700 dark:text-slate-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:text-indigo-600 transition-all cursor-pointer"
         >
           <i class="pi pi-file-pdf text-rose-500 text-xl"></i>
-          View Resume
+          {{ downloadingResume ? 'Opening...' : 'View Resume' }}
         </a>
       </div>
 
@@ -245,7 +244,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCandidateStore } from '@/stores/CandidateStore'
-import { getFileUrl } from '@/api/services/api'
+import { downloadResumeBlob } from '@/api/services/api'
 
 const route = useRoute()
 const candidateStore = useCandidateStore()
@@ -253,6 +252,7 @@ const candidateStore = useCandidateStore()
 const application = computed(() => candidateStore.currentApplication)
 const showWithdrawModal = ref(false)
 const withdrawReason = ref('')
+const downloadingResume = ref(false)
 
 const canWithdraw = computed(() => {
   if (!application.value) return false
@@ -333,6 +333,20 @@ const historyDotClass = (stage) => {
     job_removed: 'bg-slate-300',
   }
   return map[stage] || 'bg-slate-400'
+}
+
+const viewResume = async () => {
+  if (!application.value?.id) return
+  downloadingResume.value = true
+  try {
+    const blobUrl = await downloadResumeBlob(application.value.id)
+    window.open(blobUrl, '_blank')
+  } catch (err) {
+    console.error('Failed to open resume', err)
+    alert('Failed to open resume. Please try again.')
+  } finally {
+    downloadingResume.value = false
+  }
 }
 
 const formatDate = (date) =>

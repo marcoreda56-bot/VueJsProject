@@ -169,6 +169,28 @@ export const notificationsApi = {
   getUnreadCount: () => api.get('/notifications/unread-count'),
 }
 
+/**
+ * Download a file by its ID as a Blob for inline viewing.
+ * Returns a Blob URL that can be opened in a new tab.
+ */
+export async function downloadFileBlob(fileId) {
+  const response = await api.get(`/files/${fileId}/download`, {
+    responseType: 'blob',
+  })
+  return URL.createObjectURL(response)
+}
+
+/**
+ * Download a resume file (attached to an application) as a Blob for inline viewing.
+ * Returns a Blob URL that can be opened in a new tab.
+ */
+export async function downloadResumeBlob(applicationId) {
+  const response = await api.get(`/applications/${applicationId}/resume`, {
+    responseType: 'blob',
+  })
+  return URL.createObjectURL(response)
+}
+
 // Helper: Ensure a file URL is usable by the frontend.
 // The backend stores paths like /storage/avatar/uuid.jpg.
 // Vite's dev-server proxy forwards /storage/* to the Laravel backend

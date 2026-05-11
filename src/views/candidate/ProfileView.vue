@@ -288,10 +288,9 @@
               :key="resume.id"
               class="group p-4 border border-slate-50 dark:border-slate-800 rounded-2xl flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-all"
             >
-              <a
-                :href="getFileUrl(resume.file?.url)"
-                target="_blank"
-                class="flex items-center gap-3 overflow-hidden min-w-0"
+              <button
+                @click="viewResumeFile(resume.file?.id)"
+                class="flex items-center gap-3 overflow-hidden min-w-0 text-left cursor-pointer"
               >
                 <i class="pi pi-file-pdf text-rose-500 text-xl flex-shrink-0"></i>
                 <div class="min-w-0">
@@ -307,7 +306,7 @@
                   >
                   <span v-else class="text-[8px] font-black text-slate-400 uppercase">CV</span>
                 </div>
-              </a>
+              </button>
               <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
                 <button
                   v-if="!resume.is_default"
@@ -742,7 +741,7 @@
 import { ref, onMounted, computed, reactive } from 'vue'
 import { useCandidateStore } from '@/stores/CandidateStore'
 import { useAuthStore } from '@/stores/AuthStore'
-import api, { getFileUrl } from '@/api/services/api'
+import api, { getFileUrl, downloadFileBlob } from '@/api/services/api'
 
 const candidateStore = useCandidateStore()
 const authStore = useAuthStore()
@@ -1032,6 +1031,17 @@ const handleResumeUpload = async (e) => {
   } finally {
     isSaving.value = false
     e.target.value = ''
+  }
+}
+
+const viewResumeFile = async (fileId) => {
+  if (!fileId) return
+  try {
+    const blobUrl = await downloadFileBlob(fileId)
+    window.open(blobUrl, '_blank')
+  } catch (err) {
+    console.error('Failed to open resume', err)
+    alert('Failed to open resume. Please try again.')
   }
 }
 
