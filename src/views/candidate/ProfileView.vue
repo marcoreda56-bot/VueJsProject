@@ -624,16 +624,29 @@
               <span v-if="vErrors.company_name" class="error-text">{{ vErrors.company_name[0] }}</span>
 
               <div class="grid grid-cols-2 gap-4">
-                <input v-model="form.start_date" type="date" class="form-input" />
-                <input
-                  v-model="form.end_date"
-                  type="date"
-                  :disabled="form.is_current"
-                  class="form-input"
-                />
+                <div>
+                  <input
+                    v-model="form.start_date"
+                    type="date"
+                    :class="{ 'border-rose-400': vErrors.start_date || dateError }"
+                    class="form-input"
+                  />
+                  <span v-if="vErrors.start_date" class="error-text">{{ vErrors.start_date[0] }}</span>
+                </div>
+                <div>
+                  <input
+                    v-model="form.end_date"
+                    type="date"
+                    :disabled="form.is_current"
+                    :class="{ 'border-rose-400': vErrors.end_date || dateError }"
+                    class="form-input"
+                  />
+                  <span v-if="vErrors.end_date" class="error-text">{{ vErrors.end_date[0] }}</span>
+                  <span v-else-if="dateError" class="error-text">{{ dateError }}</span>
+                </div>
               </div>
               <div class="flex items-center gap-2 px-2">
-                <input type="checkbox" v-model="form.is_current" id="c" class="accent-indigo-600 w-4 h-4" />
+                <input type="checkbox" v-model="form.is_current" @change="dateError = ''" id="c" class="accent-indigo-600 w-4 h-4" />
                 <label for="c" class="text-[10px] font-black uppercase text-slate-500"
                   >I currently work here</label
                 >
@@ -672,22 +685,31 @@
                 class="form-input"
               />
               <div class="grid grid-cols-2 gap-4">
-                <input
-                  v-model.number="form.start_year"
-                  type="number"
-                  placeholder="Start Year"
-                  class="form-input"
-                />
-                <input
-                  v-model.number="form.end_year"
-                  type="number"
-                  placeholder="End Year"
-                  :disabled="form.is_current"
-                  class="form-input"
-                />
+                <div>
+                  <input
+                    v-model.number="form.start_year"
+                    type="number"
+                    placeholder="Start Year"
+                    :class="{ 'border-rose-400': vErrors.start_year || yearError }"
+                    class="form-input"
+                  />
+                  <span v-if="vErrors.start_year" class="error-text">{{ vErrors.start_year[0] }}</span>
+                </div>
+                <div>
+                  <input
+                    v-model.number="form.end_year"
+                    type="number"
+                    placeholder="End Year"
+                    :disabled="form.is_current"
+                    :class="{ 'border-rose-400': vErrors.end_year || yearError }"
+                    class="form-input"
+                  />
+                  <span v-if="vErrors.end_year" class="error-text">{{ vErrors.end_year[0] }}</span>
+                  <span v-else-if="yearError" class="error-text">{{ yearError }}</span>
+                </div>
               </div>
               <div class="flex items-center gap-2 px-2">
-                <input type="checkbox" v-model="form.is_current" id="eduCurrent" class="accent-indigo-600 w-4 h-4" />
+                <input type="checkbox" v-model="form.is_current" @change="yearError = ''" id="eduCurrent" class="accent-indigo-600 w-4 h-4" />
                 <label for="eduCurrent" class="text-[10px] font-black uppercase text-slate-500"
                   >Currently studying here</label
                 >
@@ -751,6 +773,8 @@ const modalTitle = ref('')
 const isSaving = ref(false)
 const avatarUploading = ref(false)
 const vErrors = ref({})
+const dateError = ref('')
+const yearError = ref('')
 const form = reactive({})
 const resumes = ref([])
 const skillResults = ref([])
@@ -867,6 +891,7 @@ const openExperienceModal = () => {
   modalTitle.value = 'Add Career Step'
   activeModal.value = 'experience'
   vErrors.value = {}
+  dateError.value = ''
   Object.assign(form, {
     id: null,
     title: '',
@@ -884,6 +909,7 @@ const openEducationModal = () => {
   activeModal.value = 'education'
   editingEducationId.value = null
   vErrors.value = {}
+  yearError.value = ''
   Object.assign(form, {
     degree: '',
     institution: '',
@@ -901,6 +927,7 @@ const editEducation = (edu) => {
   activeModal.value = 'education'
   editingEducationId.value = edu.id
   vErrors.value = {}
+  yearError.value = ''
   Object.assign(form, {
     degree: edu.degree,
     institution: edu.institution,
@@ -955,6 +982,8 @@ const selectSkill = (skill) => {
 
 const saveData = async () => {
   vErrors.value = {}
+  dateError.value = ''
+  yearError.value = ''
   isSaving.value = true
   try {
     if (activeModal.value === 'profile') {
@@ -969,6 +998,11 @@ const saveData = async () => {
       })
     } else if (activeModal.value === 'experience') {
       const data = { ...form }
+      if (!data.is_current && data.start_date && data.end_date && new Date(data.start_date) > new Date(data.end_date)) {
+        dateError.value = 'Start date cannot be after end date'
+        isSaving.value = false
+        return
+      }
       if (data.is_current) delete data.end_date
       delete data.id
       if (form.id) {
@@ -978,6 +1012,11 @@ const saveData = async () => {
       }
     } else if (activeModal.value === 'education') {
       const data = { ...form }
+      if (!data.is_current && data.start_year && data.end_year && Number(data.start_year) > Number(data.end_year)) {
+        yearError.value = 'Start year cannot be after end year'
+        isSaving.value = false
+        return
+      }
       if (data.is_current) delete data.end_year
       if (editingEducationId.value) {
         await api.put(`/candidate/education/${editingEducationId.value}`, data)
@@ -1072,6 +1111,7 @@ const editExperience = (exp) => {
   modalTitle.value = 'Edit Experience'
   activeModal.value = 'experience'
   vErrors.value = {}
+  dateError.value = ''
   Object.assign(form, {
     id: exp.id,
     title: exp.title,
